@@ -10,7 +10,7 @@ class University(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
-    
+
 class Building(models.Model):
     name = models.CharField(max_length=30)
     university = models.ForeignKey(University)
@@ -25,4 +25,3 @@ class ClassroomAvailability(models.Model):
     classroom = models.ForeignKey(Classroom)
     date = models.DateField()
     isAvailable = models.BooleanField()
-
