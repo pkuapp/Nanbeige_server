@@ -13,3 +13,8 @@ class App(models.Model):
     version_android = models.CharField(max_length=30)
     version_ios = models.CharField(max_length=30)
 
+<<<<<<< HEAD
+=======
+class University(models.Model):
+    name = models.CharField(max_length=200)
+>>>>>>> Update model.
