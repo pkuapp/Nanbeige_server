@@ -1,5 +1,7 @@
 # Django settings for nanbeige project.
 
+API_VERSION = 2
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
