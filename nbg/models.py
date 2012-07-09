@@ -1,8 +1,6 @@
 from django.db import models
 from django.conf import settings
 
-# Create your models here.
-# Building Model
 class Building(models.Model):
     name = models.CharField(max_length=30)
     university = models.ForeignKey(University)
@@ -13,8 +11,5 @@ class App(models.Model):
     version_android = models.CharField(max_length=30)
     version_ios = models.CharField(max_length=30)
 
-<<<<<<< HEAD
-=======
 class University(models.Model):
     name = models.CharField(max_length=200)
->>>>>>> Update model.
