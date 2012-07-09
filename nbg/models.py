@@ -14,9 +14,7 @@ class App(models.Model):
 class University(models.Model):
     name = models.CharField(max_length=200)
 
-<<<<<<< HEAD
 class Classroom(models.Model):
-=======
+
 class Course(models.Model):
     name = models.CharField(max_length=200)
->>>>>>> Update model.
