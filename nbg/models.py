@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 
 # Create your models here.
-#Building Model
+# Building Model
 class Building(models.Model):
     name = models.CharField(max_length=30)
     university = models.ForeignKey(University)
