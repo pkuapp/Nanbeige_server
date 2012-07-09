@@ -13,3 +13,4 @@ class App(models.Model):
     version_android = models.CharField(max_length=30)
     version_ios = models.CharField(max_length=30)
 
+class Classroom(models.Model):
