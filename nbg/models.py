@@ -17,3 +17,6 @@ class University(models.Model):
 class Classroom(models.Model):
     name = models.CharField(max_length=30)
     building = models.ForeignKey(University)
+
+class Course(models.Model):
+    name = models.CharField(max_length=200)
