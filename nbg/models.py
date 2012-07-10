@@ -25,4 +25,3 @@ class ClassroomAvailability(models.Model):
     classroom = models.ForeignKey(Classroom)
     date = models.DateField()
     availability = models.BooleanField()
-
