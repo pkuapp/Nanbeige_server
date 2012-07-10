@@ -190,8 +190,6 @@ td:last-child {
 
 <h2>TODO</h2>
 <ul>
-  <li>课程上课周号</li>
-  <li>教学班</li>
   <li>第三方登录</li>
   <li>评论小话</li>
 </ul>
@@ -381,6 +379,12 @@ td:last-child {
     "import_course": true,
     "list_course": true
   },
+  "week":
+  {
+    "start": "2012-09-03", // 第一周周一的日期
+    "end": "2013-01-06", // 最后一周周日的日期
+    "excluded": [6, 7] // 不上课的周号
+  },
   "lessons":
   {
     "count":
@@ -449,7 +453,9 @@ td:last-child {
     "ta":
     [
       "绿豆芽"
-    ]
+    ],
+    weeks:
+    [1, 3, 5, 7, 9, 11, 13, 15, 17], // 上课的周号
     "lessons":
     [
       {
