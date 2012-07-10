@@ -15,7 +15,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'nbg',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
+        'USER': 'nbg',                      # Not used with sqlite3.
         'PASSWORD': 'd4P4eCTr4Vb4xQmL',                  # Not used with sqlite3.
         'HOST': 'pkuapp.com',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
@@ -102,7 +102,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'nanbeige.urls'
+ROOT_URLCONF = 'Nanbeige_server.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
