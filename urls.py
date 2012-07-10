@@ -1,5 +1,4 @@
 from django.conf.urls.defaults import patterns, include, url
-
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -14,13 +13,14 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
+    (r'^$','nbg.views.api_html'),
     (r'^app/version/api/$','nbg.views_app.version_api'),
     (r'^app/version/android/$','nbg.views_app.version_android'),
     (r'^app/version/ios/$','nbg.views_app.version_ios'),
     (r'^app/notice/$','nbg.views_app.notice'),
     (r'^user/login/email/$','nbg.views_user.login_email'),
     (r'^user/login/weibo/$','nbg.views_user.login_weibo'),
-    (r'^university/list/$'.'nbg.views_university.list'),
+    (r'^university/list/$','nbg.views_university.university_list'),
     (r'^university/\d+/$','nbg.views_university.detail'),
     (r'^course/list/$','nbg.views_course.list'),
     (r'^course/homework/list/$','nbg.views_course.homework_list'),
