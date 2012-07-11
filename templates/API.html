@@ -731,6 +731,41 @@ td:last-child {
 
 <h2>/event/</h2>
 
+<pre>
+查询
+/event/query/		GET	查询活动
+  * (optional)keyword: 关键词，留空返回全部活动
+  * (optional)category: Category ID
+  * (optional)after: 限定 time 在 after 之后，默认为当前时间
+  * (optional)before: 限定 time 在 before 之前
+  * (optional)start: 从满足以上全部条件的第 start 条开始返回，默认为 0
+  * (optional)batch: 从 start 开始返回的条数，默认为 10
+  返回：JSON 格式字典
+    id, title, subtitle, category_id, category_name, time, location, follow_count
+
+/event/category/ 	GET
+  返回：JSON 格式字典
+    id, name, count(在当前时间之后的活动数)
+
+/event/get/		GET
+  * (required)id: Activity ID
+  返回：JSON 格式字典
+    id, title, subtitle, category_id, category_name, time, location, organizer, content, follow_count(关注该活动的人数)
+
+
+关注
+/event/follow/	POST*
+  * (required)id: Activity ID
+  返回：整数值
+    0: 关注成功
+    404: 活动不存在
+    -1: 其他错误
+
+/event/following/	POST*
+  返回：JSON 格式字典
+    id, title, subtitle, category_id, category_name, time, location, follow_count
+</pre>
+
 <table>
 
 <thead>
