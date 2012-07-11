@@ -49,6 +49,13 @@ class Teacher(models.Model):
 class Ta(models.Model):
     name = models.CharField(max_length=50)
 
+class Homework(models.Model):
+    course = models.ForeignKey(Course)
+    due = models.DateField()
+    content = models.TextField()
+    finished = models.BooleanField()
+    last_modified = models.DateTimeField()
+
 class Building(models.Model):
     name = models.CharField(max_length=30)
     university = models.ForeignKey(University)
