@@ -6,19 +6,34 @@ class App(models.Model):
     version_android_stable = models.CharField(max_length=30)
     version_ios_beta = models.CharField(max_length=30)
     version_ios_stable = models.CharField(max_length=30)
-    notice = models.TextField()
+    notice_content = models.TextField()
+    notice_time = models.DateTimeField()
 
 class University(models.Model):
     name = models.CharField(max_length=200)
     english_name = models.CharField(max_length=200)
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
+    support_import_course = models.BooleanField()
+    support_list_course = models.BooleanField()
+    week_start = models.DateTimeField()
+    week_end = models.DateTimeField()
+    excluded = models.CommaSeparatedIntegerField(max_length=100)
+    lessons_morning = models.SmallIntegerField()
+    lessons_afternoon = models.SmallIntegerField()
+    lessons_evening = models.SmallIntegerField()
+
+class ScheduleUnit(models.Model):
+    number = models.SmallIntegerField()
+    start = models.TimeField()
+    end = models.TimeField()
+    university = models.ForeignKey(University)
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
     original_id = models.CharField(max_length=100)
     credit = models.DecimalField(max_digits=3, decimal_places=1)
-    weeks = models.CommaSeparatedIntegerField(max_length=100)
+    weeks = models.CommaSeparatedIntegerField(max_length=200)
 
 class Lesson(models.Model):
     day = models.SmallIntegerField()
