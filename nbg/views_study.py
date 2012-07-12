@@ -20,7 +20,7 @@ def building_list(request):
 def room_list(request, offset):
     building_id = int(offset)
     if building_id and request.GET.get('date', None):
-        pdate = datetime.strptime(request.GET.get('date', None), '%Y%m%d')
+        pdate = datetime.strptime(request.GET.get('date', None), '%Y-%m-%d')
         try:
             room_values = Classroom.objects.filter(building=building_id).values()
             response = [ {'id' : item['id'], 'name': item['name'], 'availability': ClassroomAvailability.objects.filter(classroom=item['id'], date=pdate).values()[0]['availability']} for item in room_values]
