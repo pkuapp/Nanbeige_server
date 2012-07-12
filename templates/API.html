@@ -184,6 +184,7 @@ td:last-child {
   <li><code>int</code> 31415926</li>
   <li><code>str</code> "this is a string"</li>
   <li><code>time</code> "2012-07-14 00:00:00"</li>
+  <li><code>date</code> "2012-07-14"</li>  
 </ul>
 
 <hr />
@@ -706,23 +707,17 @@ td:last-child {
 <tr>
   <td align="left">building/:id/room/list/</td>
   <td align="left"><code>GET</code></td>
-  <td align="left">none</td>
+  <td align="left"><code class="required">int</code> date</li></td>
   <td align="left"><pre>[
   {
     "id": 123,
     "name": "东一A 200",
-    "available":
-    [
-      true, true, ..., true
-    ]
+    "availablity": true
   },
   {
     "id": 124,
     "name": "东一A 404",
-    "available":
-    [
-      false, false, ..., false
-    ]
+    "availablity": true
   }
 ]</pre></td>
   <td align="left">返回 id 教学楼的自习室列表。</td>
