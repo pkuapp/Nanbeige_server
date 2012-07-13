@@ -54,7 +54,7 @@ class Assignment(models.Model):
     due = models.DateTimeField()
     content = models.TextField()
     finished = models.BooleanField()
-    last_modified = models.DateTimeField()
+    last_modified = models.DateTimeField()      
 
 class Building(models.Model):
     name = models.CharField(max_length=30)
