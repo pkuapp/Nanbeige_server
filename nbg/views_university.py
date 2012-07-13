@@ -10,8 +10,15 @@ from string import split
 def university_list(request):
     try:
         university_values = University.objects.values()
-        response = [{'id': item['id'], 'name': item['name'], 'location': {'latitude': float(item['latitude']), 'longitude': float(item['longitude'])}} for item in university_values]
-        return HttpResponse(simplejson.dumps(response, sort_keys=True), mimetype = 'application/json')
+        response = [{
+            'id': item['id'],
+            'name': item['name'],
+            'location': {
+                'latitude': float(item['latitude']),
+                'longitude': float(item['longitude'])
+            }
+        } for item in university_values]
+        return HttpResponse(simplejson.dumps(response), mimetype='application/json')
     except:
         return HttpResponse(simplejson.dumps({'error': '尚无数据'}), mimetype='application/json')
 
@@ -19,40 +26,45 @@ def detail(request, offset):
     university_id = int(offset)
     if university_id:
         try:
-            university_detail = University.objects.get(pk=university_id)
-            schedule_unit = ScheduleUnit.objects.filter(university_id=university_id).values()
-            excluded = split(university_detail.excluded, ',')
+            university = University.objects.get(pk=university_id)
+            schedule_unit = university.scheduleunit_set.values()
+            
+            excluded = split(university.excluded, ',')
             if excluded[0] == "":
                 excluded = []
             else:
                 excluded = map(int, excluded)
-                lessons_total = university_detail.lessons_morning + university_detail.lessons_afternoon + university_detail.lessons_evening
-                response = {
-                'name': university_detail.name,
+            
+            lessons_total = university.lessons_morning + university.lessons_afternoon + university.lessons_evening
+            response = {
+                'name': university.name,
                 'location': {
-                    'latitude': float(university_detail.latitude),
-                    'longitude': float(university_detail.longitude)},
+                    'latitude': float(university.latitude),
+                    'longitude': float(university.longitude),
+                },
                 'support': {
-                    'import_course': university_detail.support_import_course,
-                    'list_course': university_detail.support_list_course},
+                    'import_course': university.support_import_course,
+                    'list_course': university.support_list_course,
+                },
                 'week': {
-                    'start': datetime.strftime(university_detail.week_start , '%Y-%m-%d'),
-                    'end': datetime.strftime(university_detail.week_end, '%Y-%m-%d'),
-                    'excluded': excluded,},
+                    'start': datetime.strftime(university.week_start , '%Y-%m-%d'),
+                    'end': datetime.strftime(university.week_end, '%Y-%m-%d'),
+                    'excluded': excluded,
+                },
                 'lessons': {
                     'count': {
                         'total': lessons_total,
-                        'morning': university_detail.lessons_morning,
-                        'afternoon': university_detail.lessons_afternoon,
-                        'evening': university_detail.lessons_evening,},
-                    'detail': [
-                    {
+                        'morning': university.lessons_morning,
+                        'afternoon': university.lessons_afternoon,
+                        'evening': university.lessons_evening,
+                    },
+                    'detail': [{
                         'number': item['number'],
                         'start': time.strftime(item['start'], "%H:%M"),
                         'end': time.strftime(item['end'], "%H:%M"),
                     } for item in schedule_unit]
                 }
-                }
+            }
             return HttpResponse(simplejson.dumps(response), mimetype = 'application/json')
         except:
             raise
@@ -62,8 +74,3 @@ def detail(request, offset):
             pass
     else:
         return HttpResponse("haha")
-
-
-#def detail(request):
- #   return HttpResponse(simplejson.dumps({'name':'Peking University','location':{'latitude':'116.3018 E','longitude':'39.9712 N'},
-  #          'support':{'import_course':'fill in a boolean variant','list_course':'fill in a boolean variant'},'week':{'start':'yyyy-mm-dd','end':'yyyy-mm-dd','excluded':'[xxxx]'},'lessons':{'count':{'total':'13','morning':'5','afternoon':'5','night':'3'}},'detail':[{'number':'1','start':'0800','end':'0845'},'...',{'number':'13','start':'2010','end':'2055'}]}),mimetype='application/json',)
