@@ -74,7 +74,3 @@ def detail(request, offset):
             pass
     else:
         return HttpResponse("haha")
-<<<<<<< HEAD
-
-=======
->>>>>>> 754f8906cde59f6ea6324529ab8554b7639872ba
