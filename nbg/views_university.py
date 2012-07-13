@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from django.utils import simplejson
 from nbg.models import *
 from datetime import datetime
+from datetime import time
+from string import split
 
 def university_list(request):
     try:
@@ -17,19 +19,40 @@ def detail(request, offset):
     university_id = int(offset)
     if university_id:
         try:
-            university_detail = University.objects.filter(id=university_id).values()
-            response = [{
-                'name': item['name'],
+            university_detail = University.objects.get(pk=university_id)
+            schedule_unit = ScheduleUnit.objects.filter(university_id=university_id).values()
+            excluded = split(university_detail.excluded, ',')
+            if excluded[0] == "":
+                excluded = []
+            else:
+                excluded = map(int, excluded)
+                lessons_total = university_detail.lessons_morning + university_detail.lessons_afternoon + university_detail.lessons_evening
+                response = {
+                'name': university_detail.name,
                 'location': {
-                    'latitude': float(item['latitude']),
-                    'longitude': float(item['longitude'])},
+                    'latitude': float(university_detail.latitude),
+                    'longitude': float(university_detail.longitude)},
                 'support': {
-                    'import_course': item['support_import_course'],
-                    'list_course': item['support_list_course']},
+                    'import_course': university_detail.support_import_course,
+                    'list_course': university_detail.support_list_course},
                 'week': {
-                    'start': datetime.strftime(item['week_start'] , '%Y-%m-%d'),
+                    'start': datetime.strftime(university_detail.week_start , '%Y-%m-%d'),
+                    'end': datetime.strftime(university_detail.week_end, '%Y-%m-%d'),
+                    'excluded': excluded,},
+                'lessons': {
+                    'count': {
+                        'total': lessons_total,
+                        'morning': university_detail.lessons_morning,
+                        'afternoon': university_detail.lessons_afternoon,
+                        'evening': university_detail.lessons_evening,},
+                    'detail': [
+                    {
+                        'number': item['number'],
+                        'start': time.strftime(item['start'], "%H:%M"),
+                        'end': time.strftime(item['end'], "%H:%M"),
+                    } for item in schedule_unit]
                 }
-            } for item in university_detail]
+                }
             return HttpResponse(simplejson.dumps(response), mimetype = 'application/json')
         except:
             raise
