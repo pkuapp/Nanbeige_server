@@ -730,6 +730,61 @@ td:last-child {
 
 <h2>/event/</h2>
 
+<table>
+
+<thead>
+<tr>
+<th align="left">Address</th>
+<th align="left">Method</th>
+<th align="left">Parameter</th>
+<th align="left">Return</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+  <td align="left">query/</td>
+  <td align="left"><code>GET</code></td>
+  <td align="left">
+    <ul>
+      <li><code class="optional">str</code> keyword</li>
+      <li><code class="optional">int</code> category_id</li>
+      <li><code class="optional">time</code> after</li>
+      <li><code class="optional">time</code> before</li>
+      <li><code class="optional">int</code> start</li>
+      <li><code class="optional">int</code> batch</li>
+    </ul>
+  </td>
+  <td align="left"><pre>[
+  {
+    "id": 200,
+    "title": "这是一个活动饭粒。",
+    "subtitle": "这个活动没有任何意义。",
+    "category_id": 2,
+    "category_name": "聚餐",
+    "time": "2012-07-13 19:00:00",
+    "location": "随便",
+    "follow_count": 16
+  },
+  {
+    "id": 206,
+    "title": "这是另一个活动饭粒。",
+    "subtitle": "这个活动同样没有任何意义。",
+    "category_id": 2,
+    "category_name": "聚餐",
+    "time": "2012-07-14 19:00:00", 
+    "location": "随便",
+    "follow_count": 32
+  },
+  ...
+]
+  </pre>
+  </td>
+</tr>
+</tbody>
+</table>
 <pre>
 查询
 /event/query/		GET	查询活动
