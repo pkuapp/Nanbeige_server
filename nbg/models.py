@@ -70,3 +70,17 @@ class ClassroomAvailability(models.Model):
     classroom = models.ForeignKey(Classroom)
     date = models.DateField()
     availability = models.BooleanField()
+
+class WikiNode(models.Model):
+    TYPE_CHOICES = (
+        ('A', 'Article'),
+        ('L', 'List'),
+    )
+    title = models.CharField(max_length=200)
+    father = models.ForeignKey('self', null=True)
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES)
+    content = models.TextField()
+
+class Wiki(models.Model):
+    university = models.ForeignKey(University)
+    node = models.ForeignKey(WikiNode)
