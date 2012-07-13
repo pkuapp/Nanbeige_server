@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from datetime import datetime
+from django.contrib.auth.models import User
 
 class App(models.Model):
     version_android_beta = models.CharField(max_length=30)
@@ -70,6 +72,25 @@ class ClassroomAvailability(models.Model):
     classroom = models.ForeignKey(Classroom)
     date = models.DateField()
     availability = models.BooleanField()
+
+class EventCategory(models.Model):
+    name = models.CharField(max_length=200)
+    
+    def count(self):
+        return self.event_set.filter(time__gte=datetime.now()).count()
+
+class Event(models.Model):
+    title = models.CharField(max_length=200)
+    subtitle = models.CharField(max_length=200)
+    category = models.ForeignKey(EventCategory)
+    time = models.DateTimeField()
+    location = models.CharField(max_length=200)
+    organizer = models.CharField(max_length=200)
+    content = models.TextField()
+    follower = models.ManyToManyField(User)
+    
+    def follow_count(self):
+        return self.follower.count()
 
 class WikiNode(models.Model):
     TYPE_CHOICES = (

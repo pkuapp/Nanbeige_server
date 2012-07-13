@@ -25,7 +25,7 @@ urlpatterns = patterns('',
     (r'^university/list/$', 'nbg.views_university.university_list'),
     (r'^university/(\d+)/$', 'nbg.views_university.detail'),
 
-    (r'^course/list/$', 'nbg.views_course.list'),
+    (r'^course/list/$', 'nbg.views_course.course_list'),
     (r'^course/assignment/list/$', 'nbg.views_course.assignment_list'),
     (r'^course/assignment/(\d+)/finish/$', 'nbg.views_course.assignment_finish'),
     (r'^course/assignment/(\d+)/delete/$', 'nbg.views_course.assignment_delete'),
