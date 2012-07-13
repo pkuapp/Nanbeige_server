@@ -6,8 +6,8 @@ class App(models.Model):
     version_android_stable = models.CharField(max_length=30)
     version_ios_beta = models.CharField(max_length=30)
     version_ios_stable = models.CharField(max_length=30)
-    notice_content = models.TextField()
     notice_time = models.DateTimeField()
+    notice_content = models.TextField()
 
 class University(models.Model):
     name = models.CharField(max_length=200)
