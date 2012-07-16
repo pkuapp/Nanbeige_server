@@ -3,9 +3,9 @@
 from django.http import HttpResponse
 from django.utils import simplejson
 from nbg.models import *
+from nbg.helpers import listify
 from datetime import datetime
 from datetime import time
-from string import split
 
 def university_list(request):
     try:
@@ -28,12 +28,8 @@ def detail(request, offset):
         try:
             university = University.objects.get(pk=university_id)
             schedule_unit = university.scheduleunit_set.values()
-            
-            excluded = split(university.excluded, ',')
-            if excluded[0] == "":
-                excluded = []
-            else:
-                excluded = map(int, excluded)
+
+            excluded = listify(university.excluded)
 
             lessons_total = university.lessons_morning + university.lessons_afternoon + university.lessons_evening
             response = {
