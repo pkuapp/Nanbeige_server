@@ -57,7 +57,7 @@ class Assignment(models.Model):
     due = models.DateTimeField()
     content = models.TextField()
     finished = models.BooleanField()
-    last_modified = models.DateTimeField()      
+    last_modified = models.DateTimeField()
 
 class Building(models.Model):
     name = models.CharField(max_length=30)
@@ -76,7 +76,7 @@ class ClassroomAvailability(models.Model):
 
 class EventCategory(models.Model):
     name = models.CharField(max_length=200)
-    
+
     def count(self):
         return self.event_set.filter(time__gte=datetime.now()).count()
 
@@ -89,7 +89,7 @@ class Event(models.Model):
     organizer = models.CharField(max_length=200)
     content = models.TextField()
     follower = models.ManyToManyField(User)
-    
+
     def follow_count(self):
         return self.follower.count()
 

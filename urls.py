@@ -12,7 +12,8 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 
-    (r'^$', 'nbg.views.api_html'),
+    (r'^$', 'nbg.views.doc_html'),
+    (r'^status/$', 'nbg.views.status_html'),
 
     (r'^app/version/api/$', 'nbg.views_app.version_api'),
     (r'^app/version/android/$', 'nbg.views_app.version_android'),

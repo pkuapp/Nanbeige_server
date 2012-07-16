@@ -34,7 +34,7 @@ def detail(request, offset):
                 excluded = []
             else:
                 excluded = map(int, excluded)
-            
+
             lessons_total = university.lessons_morning + university.lessons_afternoon + university.lessons_evening
             response = {
                 'name': university.name,

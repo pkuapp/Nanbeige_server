@@ -1,4 +1,7 @@
 from django.shortcuts import render_to_response
 
-def api_html(request):
-    return render_to_response('API.html')
+def doc_html(request):
+    return render_to_response('doc.html')
+
+def status_html(request):
+    return render_to_response('status.html')
