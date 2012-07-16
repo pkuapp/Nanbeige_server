@@ -2,7 +2,8 @@
 from django.http import HttpResponse
 from django.utils import simplejson
 from nbg.models import *
-
+from datetime import datetime
+from datetime import time
 
 def course_list(request):
     course_values = Course.objects.all()
@@ -24,4 +25,17 @@ def course_list(request):
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def assignment_list(request):
-    return HttpResponse(simplejson.dumps({'xxx': 'yyy'}),mimetype='application/json')
+    #course_id = int(offset)
+  #  if course_id:
+    #    pdate = datetime.strptime(request.GET.get('date' ,None), %Y-%m-%d %H-%M-%S)
+  #      assignment_values = Assignment.objects.filter(course = course_id).values()
+    assignment_values = Assignment.objects.all()
+    response = [{
+        'id' : item.id,
+        'course' : item.course.name,
+        'due' : datetime.strftime(item.due, '%Y-%m-%D %H:%M:%S'),
+        'content' : item.content, 
+        'finished' : Assignment.objects.filter(course = item.id).values()[0]['finished'],
+        'last_modified' : datetime.strftime(item.last_modified, '%Y-%m-%D %H:%M:%S'),
+    } for item in assignment_values]
+    return HttpResponse(simplejson.dumps(response),mimetype='application/json')
