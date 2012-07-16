@@ -18,7 +18,7 @@
 
 ## /university/
 
-<d>✓</d> /university/list
+<d>✓</d> /university/list/
 
 <d>✓</d> /university/:id/
 
