@@ -24,7 +24,7 @@
 
 ## /course/
 
-<t>✗</t> /course/list/
+<c>pseudo</c> /course/list/
 
 <t>✗</t> /course/assignment/list/
 
