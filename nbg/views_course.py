@@ -1,9 +1,10 @@
 # -*- coding:UTF-8 -*-
 from django.http import HttpResponse
 from django.utils import simplejson
-from nbg.models import *
 from datetime import datetime
 from datetime import time
+from nbg.models import *
+from nbg.helpers import listify
 
 def course_list(request):
     course_values = Course.objects.all()
@@ -14,7 +15,7 @@ def course_list(request):
         'credit' : float(item.credit),
         'teacher' : [ teacher.name for teacher in item.teacher_set.all() ],
         'ta' : [ ta.name for ta in item.ta_set.all() ],
-        'week' : item.weeks,
+        'week' : listify(item.weeks),
         'lessons': [{
             'day': lesson.day,
             'start' : lesson.start,
