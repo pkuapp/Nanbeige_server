@@ -1,0 +1,268 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+/* -- topmarks.css - Stuart frisby, mrfrisby.com -- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+		margin: 0;
+		padding: 0;
+}
+body {
+		font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+		font-size: 14px;
+		line-height: 21px;
+		color: #666;
+		margin: 10px 13px 10px 13px;
+}
+::selection {
+		background: rgba(0,0,0,.7);
+		color: #fff;
+}
+::-moz-selection {
+		background: rgba(0,0,0,.7);
+		color: #fff;
+}
+a {
+		color: #0069d6;
+}
+a:hover {
+		color: #0050a3;
+		text-decoration: none;
+}
+a img {
+		border: none;
+}
+p {
+		margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+		color: #6c71c4;
+		line-height: 36px;
+}
+h1 {
+		margin-bottom: 18px;
+		font-size: 30px;
+}
+h2 {
+		font-size: 24px;
+		margin: 14px auto 10px auto;
+}
+h3 {
+		font-size: 18px;
+}
+h4 {
+		font-size: 16px;
+}
+h5 {
+		font-size: 14px;
+}
+h6 {
+		font-size: 13px;
+}
+hr {
+		margin: 0 0 19px;
+		border: 0;
+		border-bottom: 1px solid #ccc;
+}
+blockquote {
+		padding: 13px 13px 21px 15px;
+		margin-bottom: 18px;
+		font-family:georgia,serif;
+		font-style: italic;
+}
+blockquote:before {
+		content:"\201C";
+		font-size:40px;
+		margin-left:-10px;
+		font-family:georgia,serif;
+		color:#eee;
+}
+blockquote p {
+		font-size: 14px;
+		font-weight: 300;
+		line-height: 18px;
+		margin-bottom: 0;
+		font-style: italic;
+}
+code, pre {
+		font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+		background-color: #fee9cc;
+		color: rgba(0, 0, 0, 0.75);
+		padding: 1px 3px;
+		border-radius: 3px;
+}
+em {
+		font-style: normal;
+		font-weight: bold;
+		color: #555;
+		border-radius: 3px;
+		background-color: #fffdf7;
+}
+pre {
+		background-color: #fffdf7;
+		display: block;
+		padding: 14px;
+		margin: 0 0 18px;
+		line-height: 21px;
+		font-size: 15px;
+		border: 1px solid #d9d9d9;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+}
+pre code {
+		background-color: transparent;
+		color: #bc670f;
+		font-size: 14px;
+		padding: 0;
+}
+li {
+		margin-bottom: 5px;
+}
+@media screen and (min-width: 768px) {
+		body {
+				width: 748px;
+				margin:10px auto;
+		}
+}
+
+/* Document Mode: TodoList */
+* {
+	line-height: 22px;
+}
+
+d,c,t {
+	text-align: center; 
+	display: inline-block; 
+	width: 45px; 
+	height: 17px;
+	padding: 0 5px 2px; 
+	border-radius: 6px; 
+	color: #fff; 
+	font-weight: bold;
+	font-size: 75%;
+	font-style: normal;
+	text-transform: uppercase;
+	text-shadow: 0 1px 0 rgba(0,0,0,.1);
+	box-shadow: 0 1px 0 rgba(0,0,0,.1);
+	margin-right: 6px;
+	line-height: 20px;
+}
+
+d {background-color: #3ebb00;}
+c {background-color: #ffa300;}
+t {
+	background-color: whitesmoke;
+	color: #888;
+}
+h5 {
+	display: block;
+	width: 100%;
+	background-color: whitesmoke;
+	margin: 20px 0 12px;
+	text-indent: 8px;
+	font-size: 90%;
+	font-weight: bold;
+	color: #666;
+	border-top: 1px solid #CCC;
+	padding: 6px 0;
+	font-size: 125%;
+}
+a {
+	text-decoration: none;
+	padding: 0 3px 0 22px;
+	display: inline-block;
+	margin-left: 3px;
+}
+#todo a:link, #todo  a:visited {color: #737373;}
+
+
+background-image:url(
+
+a:hover {color: #0896FF !important;}
+a[href^=http]:not([href$=inline]) {background: transparent url(i/doc.png) no-repeat -1px 2px;}
+a[href^=file] 		{background: transparent url(i/folder.png) no-repeat -1px 3px;}
+a[href^=ical] 	 	{background: transparent url(i/cal.png) no-repeat 0 2px;}
+a[href^=message] 	{background: transparent url(i/email.png) no-repeat 0 2px;}
+a[href$=inline] 	{padding: 0; margin: 0;}
+</style>
+<title>南北阁 API 工作进度</title>
+</head>
+<body>
+<h1>南北阁 API 工作进度</h1>
+
+<h2>/app/</h2>
+
+<p><d>✓</d> /app/version/api/</p>
+
+<p><d>✓</d> /app/version/android/</p>
+
+<p><d>✓</d> /app/version/ios/</p>
+
+<p><d>✓</d> /app/notice/</p>
+
+<h2>/user/</h2>
+
+<p><t>✗</t> /user/login/email/</p>
+
+<p><t>✗</t> /user/login/weibo/</p>
+
+<h2>/university/</h2>
+
+<p><d>✓</d> /university/list</p>
+
+<p><d>✓</d> /university/:id/</p>
+
+<h2>/course/</h2>
+
+<p><t>✗</t> /course/list/</p>
+
+<p><t>✗</t> /course/assignment/list/</p>
+
+<p><t>✗</t> /course/assignment/:id/finish/</p>
+
+<p><t>✗</t> /course/assignment/:id/delete/</p>
+
+<p><t>✗</t> /course/assignment/:id/modify/</p>
+
+<p><t>✗</t> /course/assignment/add/</p>
+
+<p><t>✗</t> /course/:id/comment/add/</p>
+
+<p><t>✗</t> /course/:id/comment/list/</p>
+
+<h2>/comment/</h2>
+
+<p><t>✗</t></p>
+
+<h2>/study/</h2>
+
+<p><d>✓</d> /study/building/list/</p>
+
+<p><d>✓</d> /study/building/:id/room/list/</p>
+
+<h2>/event/</h2>
+
+<p><t>✗</t></p>
+
+<h2>/wiki/</h2>
+
+<p><c>pseudo</c> /wiki/list/:university_id/</p>
+
+<p><c>pseudo</c> /wiki/node/:id/</p>
+</body>
+</html>

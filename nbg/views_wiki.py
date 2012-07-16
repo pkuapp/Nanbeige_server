@@ -3,7 +3,7 @@
 from django.http import HttpResponse
 from django.utils import simplejson
 
-def wiki_list(request):
+def wiki_list(request, university_id):
     return HttpResponse(simplejson.dumps([
         {'title': 'info of school bus', 'node_id': '111'},
         {'title': 'info of the campus', 'node_id': '222'}
