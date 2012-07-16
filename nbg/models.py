@@ -51,6 +51,7 @@ class Teacher(models.Model):
 
 class Ta(models.Model):
     name = models.CharField(max_length=50)
+    course = models.ForeignKey(Course)
 
 class Assignment(models.Model):
     course = models.ForeignKey(Course)
