@@ -41,10 +41,10 @@ urlpatterns = patterns('',
     (r'^study/building/(\d+)/room/list/$', 'nbg.views_study.room_list'),
 
     (r'^event/query/$','nbg.views_event.query'),
-    (r'^event/category/$','nbg.view_event.category')
-    (r'^event/get/$','nbg.view_event.get')
-    (r'^event/follow/$','nbg.view_event.follow')
-    (r'^event/following/$','nbg.view_event.following')
+    (r'^event/category/$','nbg.view_event.category'),
+    (r'^event/get/$','nbg.view_event.get_event'),
+    (r'^event/follow/$','nbg.view_event.follow'),
+    (r'^event/following/$','nbg.view_event.following'),
 
     (r'^wiki/list/(\d+)/$', 'nbg.views_wiki.wiki_list'),
     (r'^wiki/node/(\d+)/$', 'nbg.views_wiki.wiki_node'),

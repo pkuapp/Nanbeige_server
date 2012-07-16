@@ -54,7 +54,7 @@ def category(request):
         category_values[i]['count'] = category_values[i].count()
     return HttpResponse(simplejson.dumps(list(category_values)),mimetype = 'application/json')
 
-def get(request):
+def get_event(request):
     event_id = request.GET.get('id',None)
 
     if event_id:
