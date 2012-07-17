@@ -5,6 +5,8 @@ from datetime import datetime
 from datetime import time
 from nbg.models import *
 from nbg.helpers import listify
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 
 def course_list(request):
     course_values = Course.objects.all()
@@ -34,9 +36,25 @@ def assignment_list(request):
     response = [{
         'id' : item.id,
         'course' : item.course.name,
-        'due' : datetime.strftime(item.due, '%Y-%m-%D %H:%M:%S'),
+        'due' : datetime.strftime(item.due, '%Y-%m-%d %H:%M:%S'),
         'content' : item.content, 
         'finished' : Assignment.objects.filter(course = item.id).values()[0]['finished'],
-        'last_modified' : datetime.strftime(item.last_modified, '%Y-%m-%D %H:%M:%S'),
+        'last_modified' : datetime.strftime(item.last_modified, '%Y-%m-%d %H:%M:%S'),
     } for item in assignment_values]
     return HttpResponse(simplejson.dumps(response),mimetype='application/json')
+
+#@login_required
+#@require_http_methods(['POST' ,])
+def assignment_finish(request, offset):
+    assignment_id = int(offset)
+    assignment_finish = request.POST.get('finished', None)
+    assignment_obj = Assignment.objects.filter(id = assignment_id)[0]
+    assignment_obj.finished = assignment_finish
+    assignment_obj.last_modified = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
+    response = assignment_obj.save()
+    return HttpResponse(simplejson.dumps(response),mimetype ='application/json')
+
+
+
+
+
