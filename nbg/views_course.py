@@ -48,12 +48,14 @@ def assignment_list(request):
 def assignment_finish(request, offset):
     assignment_id = int(offset)
     assignment_finish = request.POST.get('finished', None)
-    assignment_obj = Assignment.objects.filter(id = assignment_id)[0]
-    assignment_obj.finished = assignment_finish
-    assignment_obj.last_modified = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
-    response = assignment_obj.save()
-    return HttpResponse(simplejson.dumps(response),mimetype ='application/json')
-
+    if assignment_finish:
+        assignment_obj = Assignment.objects.filter(id = assignment_id)[0]
+        assignment_obj.finished = assignment_finish
+        assignment_obj.last_modified = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
+        assignment_obj.save()
+        return HttpResponse(0)
+    else:
+        return HttpResponse(simplejson.dumps('lack of POST parameter'),mimetype ='application/json')
 
 
 
