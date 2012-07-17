@@ -57,6 +57,13 @@ def assignment_finish(request, offset):
     else:
         return HttpResponse(simplejson.dumps('lack of POST parameter'),mimetype ='application/json')
 
+def assignment_delete(request, offset):
+    assignment_id = int(offset)
+    assignment_obj = Assignment.objects.filter(id = assignment_id)[0]
+    
+    assignment_obj.delete()
+
+
 
 
 
