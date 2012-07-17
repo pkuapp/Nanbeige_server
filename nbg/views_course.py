@@ -43,6 +43,7 @@ def assignment_list(request):
     } for item in assignment_values]
     return HttpResponse(simplejson.dumps(response),mimetype='application/json')
 
+#waiting for testing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #@login_required
 #@require_http_methods(['POST' ,])
 def assignment_finish(request, offset):
@@ -60,8 +61,25 @@ def assignment_finish(request, offset):
 def assignment_delete(request, offset):
     assignment_id = int(offset)
     assignment_obj = Assignment.objects.filter(id = assignment_id)[0]
-    
     assignment_obj.delete()
+    return HttpResponse(0)
+
+def assignmeny_modify(request,offset):
+    assignment_id = int(offset)
+    assignment_finish = request.POST.get('finished', None)
+    assignment_due  = request.POST.get('due', None)
+    assignment_content = request.POST.get('content', None)
+    assignment_courseid = request.POST.get('course_id', None)
+    
+    assignment_obj = Assignment.objects.filter(id = assignment_id)[0]
+    assignment_obj.finished = assignment_finish
+    assignment_obj.last_modified = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
+    assignment_obj.due = datetime.strftime(datetime.assignment_due, '%Y-%m-%d %H:%M:%S')  
+    assignment_obj.content = assignment_content
+    assignment_obj.course_id = assignment_courseid
+    assignment_obj.save()
+    return HttpResponse(0)
+    
 
 
 
