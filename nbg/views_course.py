@@ -1,4 +1,5 @@
-# -*- coding:UTF-8 -*-
+# -*- coding: utf-8 -*-
+
 from django.http import HttpResponse
 from django.utils import simplejson
 from datetime import datetime
@@ -50,7 +51,7 @@ def assignment_finish(request, offset):
     assignment_id = int(offset)
     assignment_finish = request.POST.get('finished', None)
     if assignment_finish:
-        assignment_obj = Assignment.objects.filter(id = assignment_id)[0]
+        assignment_obj = Assignment.objects.filter(id=assignment_id)[0]
         assignment_obj.finished = assignment_finish
         assignment_obj.last_modified = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
         assignment_obj.save()
@@ -60,25 +61,26 @@ def assignment_finish(request, offset):
 
 def assignment_delete(request, offset):
     assignment_id = int(offset)
-    assignment_obj = Assignment.objects.filter(id = assignment_id)[0]
+    assignment_obj = Assignment.objects.filter(id=assignment_id)[0]
     assignment_obj.delete()
     return HttpResponse(0)
 
 def assignmeny_modify(request,offset):
     assignment_id = int(offset)
     assignment_finish = request.POST.get('finished', None)
-    assignment_due  = request.POST.get('due', None)
+    assignment_due = request.POST.get('due', None)
     assignment_content = request.POST.get('content', None)
     assignment_courseid = request.POST.get('course_id', None)
     
-    assignment_obj = Assignment.objects.filter(id = assignment_id)[0]
+    assignment_obj = Assignment.objects.filter(id=assignment_id)[0]
     assignment_obj.finished = assignment_finish
     assignment_obj.last_modified = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
-    assignment_obj.due = datetime.strftime(datetime.assignment_due, '%Y-%m-%d %H:%M:%S')  
+    assignment_obj.due = datetime.strftime(assignment_due, '%Y-%m-%d %H:%M:%S')  
     assignment_obj.content = assignment_content
     assignment_obj.course_id = assignment_courseid
     assignment_obj.save()
     return HttpResponse(0)
+<<<<<<< HEAD
 
 #unfinished!!!!
 def assignment_add(request):
@@ -102,3 +104,5 @@ def comment_add(request, offset):
 
 
 
+=======
+>>>>>>> c00c5f4f4642046d5818a22aa3a39012f6f580e8
