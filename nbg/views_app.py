@@ -1,10 +1,9 @@
-# -*- coding:UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 from django.http import HttpResponse
 from django.utils import simplejson
 from django.shortcuts import *
 from django.conf import settings
-from datetime import datetime
 from nbg.models import App
 
 def version_api(request):
