@@ -60,6 +60,13 @@ class Assignment(models.Model):
     finished = models.BooleanField()
     last_modified = models.DateTimeField()
 
+class Comment(models.Model):
+    course = models.ForeignKey(Course)
+    writer = models.ForeignKey(User)
+    #wrinickname = models.ForeignKey(User)
+    time = models.DateTimeField()
+    content = models.TextField()
+
 class Building(models.Model):
     name = models.CharField(max_length=30)
     university = models.ForeignKey(University)

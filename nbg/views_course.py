@@ -81,7 +81,6 @@ def assignmeny_modify(request,offset):
     assignment_obj.save()
     return HttpResponse(0)
 
-#unfinished!!!!
 def assignment_add(request):
     assignment_courseid = request.POST.get('course_id', None)
     assignment_due = request.POST.get('due', None)
@@ -97,5 +96,17 @@ def comment_add(request, offset):
     comment_obj.save()
     return HttpResponse(0)
 
-def comment_list(request):
-    
+def comment_list(request, offset):
+    start = int(request.GET.get('start', None))
+    if course_id:
+        course_objs =Comment.objects.filter(course_id = int(offset))  
+    if not start:
+        start = 0
+    comment_obj _objs = Comment.objects[start : start+10]
+    response:[{
+        'id' : item.pk,
+        'writer' : item.writer,
+        'time' : item.time,
+        'content' : item.content,
+    }for item in comment_objs]
+    return HttpResponse(simplejson.dumps(response), mimetype = 'application/json')
