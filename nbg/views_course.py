@@ -85,18 +85,15 @@ def assignmeny_modify(request,offset):
 def assignment_add(request):
     assignment_courseid = request.POST.get('course_id', None)
     assignment_due = request.POST.get('due', None)
-    assignment_content = request.POST.get('content', None)
-    
-    assignment_obj = Assignment.objects.filter(id = assignment_courseid)[0]
-
+    assignment_content = request.POST.get('content', None)  
+    assignment_obj = Assignment.(course_id = assignment_courseid, due = datetime.strftime(assignment_due, '%Y-%m-%d %H:%M:%S', content = assignment_content))
     assignment_obj.save()
     return HttpResponse(0)
 
 def comment_add(request, offset):
     comment_id = int(offset)
     comment_content = request.POST.get('content', None)
-    comment_obj = Assignment.objects.all()[0]
-    comment_obj.comment = comment_content
+    comment_obj = Assignment.(id = course_id, content = comment_content)
     comment_obj.save()
     return HttpResponse(0)
 
