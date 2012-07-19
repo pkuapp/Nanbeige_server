@@ -80,7 +80,6 @@ def assignmeny_modify(request,offset):
     assignment_obj.course_id = assignment_courseid
     assignment_obj.save()
     return HttpResponse(0)
-<<<<<<< HEAD
 
 #unfinished!!!!
 def assignment_add(request):
@@ -101,8 +100,3 @@ def comment_add(request, offset):
     comment_obj.save()
     return HttpResponse(0)
 
-
-
-
-=======
->>>>>>> c00c5f4f4642046d5818a22aa3a39012f6f580e8
