@@ -95,7 +95,6 @@ def comment_add(request, offset):
     comment_obj.save()
     return HttpResponse(0)
 
-<<<<<<< HEAD
 def comment_list(request, offset):
     start = int(request.GET.get('start', None))
     if course_id:
@@ -110,7 +109,4 @@ def comment_list(request, offset):
         'content' : item.content,
     }for item in comment_objs]
     return HttpResponse(simplejson.dumps(response), mimetype = 'application/json')
-=======
-def comment_list(request):
-    pass
->>>>>>> a10d19a49424f006d1ff362a45194b942229bc26
+
