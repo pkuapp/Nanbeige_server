@@ -8,18 +8,17 @@ from datetime import datetime
 def wiki_node(request, offset):
     node_id = int(offset)
     wikinode_obj = WikiNode.objects.get(pk=node_id)
-    node_type = wikinode_obj.type
-    if node_type == 'L':
-        response = [{
-            'title': listitem.title,
-            'type': listitem.node_type,
-            'father': listitem.father,
+    type = wikinode_obj.type
+    if type == 'L':
+        response = {
+            'title': wikinode_obj.title,
+            'type': wikinode_obj.type,
             'list': [{
-                'title': typelist.title,
-                'node_id': typelist.pk,
-            } for typelist in typelist.list_set.all()]
-        } for listitem in wikinode_obj]
-    if node_type == 'A':
+                'title': node.title,
+                'node_id': node.pk,
+            } for node in wikinode_obj.wikinode_set.all()]
+        }
+    if type == 'A':
         response = {
             'title': wikinode_obj.title,
             'type': wikinode_obj.type,
