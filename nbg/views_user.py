@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.http import HttpResponse
+from django.utils import simplejson
 from django.contrib import auth
 from django.views.decorators.http import require_http_methods
 
@@ -12,6 +13,12 @@ def login_email(request):
     user = auth.authenticate(username=username, password=password)
     if user is not None and user.is_active:
         auth.login(request, user)
-        return HttpResponse("1")
+        response = {
+            'email': user.email,
+        }
     else:
-        return HttpResponse("0")
+        response = {
+            'error': "Email 或密码错误。",
+        }
+
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')

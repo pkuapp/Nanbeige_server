@@ -12,7 +12,7 @@
 
 ## /user/
 
-<t>✗</t> /user/login/email/
+<d>✓</d> /user/login/email/
 
 <t>✗</t> /user/login/weibo/
 
