@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest
 from django.utils import simplejson
 from django.shortcuts import *
 from nbg.models import *
@@ -16,22 +16,30 @@ def building_list(request):
 
     buildings = university.building_set.all()
     response = [{
-        'id': item.id,
-        'name': item.name,
-        'latitude': float(item.latitude),
-        'longitude': float(item.longitude),
-    } for item in buildings]
+        'id': building.id,
+        'name': building.name,
+        'latitude': float(building.latitude),
+        'longitude': float(building.longitude),
+    } for building in buildings]
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def room_list(request, offset):
     building_id = int(offset)
-    if building_id and request.GET.get('date', None):
-        pdate = datetime.strptime(request.GET.get('date', None), '%Y-%m-%d')
+    date = request.GET.get('date', None)
+    if building_id and date:
+        date = datetime.strptime(date, '%Y-%m-%d')
+
         try:
-            room_values = Classroom.objects.filter(building=building_id).values()
-            response = [ {'id' : item['id'], 'name': item['name'], 'availability': ClassroomAvailability.objects.filter(classroom=item['id'], date=pdate).values()[0]['availability']} for item in room_values]
-            return HttpResponse(simplejson.dumps(response,sort_keys=True), mimetype='application/json')
+            building = Building.objects.get(pk=building_id)
         except:
-            return HttpResponse(simplejson.dumps({'error': '尚无数据'}), mimetype='application/json')
+            return HttpResponseNotFound(simplejson.dumps({'error': '教学楼不存在。'}), mimetype='application/json')
+
+        rooms = building.classroom_set.all()
+        response = [{
+            'id': room.id,
+            'name': room.name,
+            'availability': room.classroomavailability_set.get(date=date).availability,
+        } for room in rooms]
+        return HttpResponse(simplejson.dumps(response), mimetype='application/json')
     else:
-        return HttpResponse(simplejson.dumps({'error': '缺少必要的参数'}), mimetype='application/json')
+        return HttpResponseBadRequest(simplejson.dumps({'error': '缺少必要的参数。'}), mimetype='application/json')
