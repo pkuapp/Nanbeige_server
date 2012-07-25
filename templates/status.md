@@ -56,6 +56,6 @@
 
 ## /wiki/
 
-<c>pseudo</c> /wiki/list/:university_id/
+<d>✓</d> /wiki/list/:university_id/
 
-<c>pseudo</c> /wiki/node/:id/
+<d>✓</d> /wiki/node/:id/
