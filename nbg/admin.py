@@ -1,0 +1,20 @@
+from django.contrib import admin
+from nbg.models import *
+
+admin.site.register(App)
+admin.site.register(University)
+admin.site.register(UserProfile)
+admin.site.register(ScheduleUnit)
+admin.site.register(Course)
+admin.site.register(Lesson)
+admin.site.register(Teacher)
+admin.site.register(Ta)
+admin.site.register(Assignment)
+admin.site.register(Comment)
+admin.site.register(Building)
+admin.site.register(Room)
+admin.site.register(RoomAvailability)
+admin.site.register(EventCategory)
+admin.site.register(Event)
+admin.site.register(WikiNode)
+admin.site.register(Wiki)
