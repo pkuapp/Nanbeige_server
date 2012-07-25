@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
@@ -59,6 +58,7 @@ class Ta(models.Model):
 
 class Assignment(models.Model):
     course = models.ForeignKey(Course)
+    user = models.ForeignKey(User)
     due = models.DateTimeField()
     content = models.TextField()
     finished = models.BooleanField()

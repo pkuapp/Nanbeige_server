@@ -64,7 +64,7 @@ def assignment_delete(request, offset):
     assignment_obj.delete()
     return HttpResponse(0)
 
-def assignmeny_modify(request,offset):
+def assignment_modify(request,offset):
     assignment_id = int(offset)
     assignment_finish = request.POST.get('finished', None)
     assignment_due = request.POST.get('due', None)
