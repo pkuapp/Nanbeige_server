@@ -2,12 +2,36 @@
 
 from django.http import HttpResponse
 from django.utils import simplejson
+from nbg.models import *
+from datetime import datetime
 
-def wiki_list(request, university_id):
-    return HttpResponse(simplejson.dumps([
-        {'title': 'info of school bus', 'node_id': '111'},
-        {'title': 'info of the campus', 'node_id': '222'}
-    ]), mimetype='application/json')
+def wiki_node(request, offset):
+    node_id = int(offset)
+    wikinode_obj = WikiNode.objects.get(pk=node_id)
+    node_type = wikinode_obj.type
+    if node_type == 'L':
+        response = [{
+            'title' : listitem.title,
+            'type' : listitem.node_type,
+            'father' : listitem.father,
+            'list' : [{
+            'title' : typelist.title,
+            'node_id' : typelist.pk,
+            }for typelist in typelist.list_set.all()]
+        }for listitem in wikinode_obj]
+    if node_type == 'A':
+        response = {
+            'title' : wikinode_obj.title,
+            'type' : wikinode_obj.type,
+            'content' : wikinode_obj.content,
+        }
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
-def wiki_node(request, id):
-    return HttpResponse(simplejson.dumps({'title':'info of school bus','type':'list','list':[{'title':'yu quanlu','node_id':'113'},{'title':'zi jin','node_id':'114'}]},{'title':'yu quanlu','type':'article','content':'drop at every 15 minutes'}),mimetype='application/json')
+def wiki_list(request, offset):
+    university_id = int(offset)
+    university_obj = University.objects.get(pk=university_id)
+    response = [{
+        'title' : item.node.title,
+        'node_id' : item.node.pk,
+    }for item in university_obj.wiki_set.all()]
+    return HttpResponse(simplejson.dumps(response),mimetype='application/json')
