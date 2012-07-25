@@ -101,12 +101,11 @@ def comment_list(request, offset):
         course_objs =Comment.objects.filter(course_id = int(offset))  
     if not start:
         start = 0
-    comment_obj _objs = Comment.objects[start : start+10]
-    response:[{
+    comment_objs = Comment.objects[start : start+10]
+    response = [{
         'id' : item.pk,
         'writer' : item.writer,
         'time' : item.time,
         'content' : item.content,
     }for item in comment_objs]
     return HttpResponse(simplejson.dumps(response), mimetype = 'application/json')
-
