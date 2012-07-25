@@ -76,14 +76,14 @@ class Building(models.Model):
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
 
-class Classroom(models.Model):
+class Room(models.Model):
     name = models.CharField(max_length=30)
     building = models.ForeignKey(Building)
 
-class ClassroomAvailability(models.Model):
-    classroom = models.ForeignKey(Classroom)
+class RoomAvailability(models.Model):
+    room = models.ForeignKey(Room)
     date = models.DateField()
-    availability = models.BooleanField()
+    availability = models.CommaSeparatedIntegerField(max_length=50)
 
 class EventCategory(models.Model):
     name = models.CharField(max_length=200)

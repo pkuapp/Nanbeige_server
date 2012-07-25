@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadReque
 from django.utils import simplejson
 from django.shortcuts import *
 from nbg.models import *
+from nbg.helpers import listify
 from datetime import datetime
 
 def building_list(request):
@@ -34,11 +35,11 @@ def room_list(request, offset):
         except:
             return HttpResponseNotFound(simplejson.dumps({'error': '教学楼不存在。'}), mimetype='application/json')
 
-        rooms = building.classroom_set.all()
+        rooms = building.room_set.all()
         response = [{
             'id': room.id,
             'name': room.name,
-            'availability': room.classroomavailability_set.get(date=date).availability,
+            'availability': listify(room.roomavailability_set.get(date=date).availability),
         } for room in rooms]
         return HttpResponse(simplejson.dumps(response), mimetype='application/json')
     else:
