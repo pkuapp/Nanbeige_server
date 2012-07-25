@@ -3,7 +3,6 @@
 from django.http import HttpResponse
 from django.utils import simplejson
 from datetime import datetime
-from datetime import time
 from nbg.models import *
 from nbg.helpers import listify
 from django.contrib.auth.decorators import login_required
@@ -84,18 +83,19 @@ def assignmeny_modify(request,offset):
 def assignment_add(request):
     assignment_courseid = request.POST.get('course_id', None)
     assignment_due = request.POST.get('due', None)
-    assignment_content = request.POST.get('content', None)  
-    assignment_obj = Course.(course_id = assignment_courseid, due = datetime.strftime(assignment_due, '%Y-%m-%d %H:%M:%S', content = assignment_content))
+    assignment_content = request.POST.get('content', None)
+    assignment_obj = Course(course_id=assignment_courseid, due=datetime.strftime(assignment_due, '%Y-%m-%d %H:%M:%S', content=assignment_content))
     assignment_obj.save()
     return HttpResponse(0)
 
 def comment_add(request, offset):
     comment_id = int(offset)
     comment_content = request.POST.get('content', None)
-    comment_obj = Course.(id = course_id, content = comment_content)
+    comment_obj = Course(id=course_id, content=comment_content)
     comment_obj.save()
     return HttpResponse(0)
 
+<<<<<<< HEAD
 def comment_list(request, offset):
     start = int(request.GET.get('start', None))
     if course_id:
@@ -110,3 +110,7 @@ def comment_list(request, offset):
         'content' : item.content,
     }for item in comment_objs]
     return HttpResponse(simplejson.dumps(response), mimetype = 'application/json')
+=======
+def comment_list(request):
+    pass
+>>>>>>> a10d19a49424f006d1ff362a45194b942229bc26

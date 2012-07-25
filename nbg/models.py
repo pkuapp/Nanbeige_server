@@ -26,6 +26,10 @@ class University(models.Model):
     lessons_afternoon = models.SmallIntegerField()
     lessons_evening = models.SmallIntegerField()
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    weibo_token = models.CharField(max_length=32)
+
 class ScheduleUnit(models.Model):
     number = models.SmallIntegerField()
     start = models.TimeField()
