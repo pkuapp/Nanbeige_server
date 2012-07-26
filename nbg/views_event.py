@@ -89,11 +89,21 @@ def follow(request):
 
 def following(request):
     user = request.user
-
     event_objs = user.event_set.all()
-    event_values = event_objs.values()
-    for i in range(len(event_values)):
-        event_values[i]['time'] = event_values[i]['time'].isoformat(' ')
-        event_values[i]['category_name'] = EventCategory.objects.get(pk=event_values[i]('category_id')).name
-        event_values[i]['follow_count'] = int(event_objs[i].follow_count())
-    return HttpResponse(simplejson.dumps(list(event_values)), mimetype='application/json')
+   try:
+        response = [{
+            'id' : item.pk
+            'title' : item.title,
+            'subtitle' : item.subtitle,
+            'category_id' : item.category.pk,
+            'category_name' : item.category.name,
+            'location' : item.location,
+            'organizer' : item.organizer,
+            'content' : item.content,
+            'follower_count' : item.follow_count(),
+        }for item in event_objs]
+        return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    except: 
+        return HttpResponse(simplejson.dumps('error'), mimetype='application/json')
+
+    
