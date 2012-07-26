@@ -38,7 +38,7 @@ urlpatterns = patterns('',
 
     (r'^event/$','nbg.views_event.query'),
     (r'^event/category/$','nbg.views_event.category'),
-    (r'^event/get/$','nbg.views_event.get_event'),
+    (r'^event/get/(\d+)/$','nbg.views_event.get_event'),
     (r'^event/follow/$','nbg.views_event.follow'),
     (r'^event/following/$','nbg.views_event.following'),
 
