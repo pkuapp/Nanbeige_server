@@ -223,15 +223,15 @@ a[href$=inline] 	{padding: 0; margin: 0;}
 
 <h2>/university/</h2>
 
-<p><d>✓</d> /university/list/</p>
+<p><d>✓</d> /university/</p>
 
 <p><d>✓</d> /university/:id/</p>
 
 <h2>/course/</h2>
 
-<p><c>pseudo</c> /course/list/</p>
+<p><c>pseudo</c> /course/</p>
 
-<p><t>✗</t> /course/assignment/list/</p>
+<p><t>✗</t> /course/assignment/</p>
 
 <p><t>✗</t> /course/assignment/:id/finish/</p>
 
@@ -241,9 +241,9 @@ a[href$=inline] 	{padding: 0; margin: 0;}
 
 <p><t>✗</t> /course/assignment/add/</p>
 
-<p><t>✗</t> /course/:id/comment/add/</p>
+<p><t>✗</t> /course/:id/comment/</p>
 
-<p><t>✗</t> /course/:id/comment/list/</p>
+<p><t>✗</t> /course/:id/comment/add/</p>
 
 <h2>/comment/</h2>
 
@@ -251,17 +251,25 @@ a[href$=inline] 	{padding: 0; margin: 0;}
 
 <h2>/study/</h2>
 
-<p><d>✓</d> /study/building/list/</p>
+<p><d>✓</d> /study/building/</p>
 
-<p><d>✓</d> /study/building/:id/room/list/</p>
+<p><d>✓</d> /study/building/:id/room/</p>
 
 <h2>/event/</h2>
 
-<p><t>✗</t></p>
+<p><c>pseudo</c> /event/</p>
+
+<p><d>✓</d> /event/category/</p>
+
+<p><t>✗</t> /event/:id/</p>
+
+<p><t>✗</t> /event/:id/follow/</p>
+
+<p><t>✗</t> /event/following/</p>
 
 <h2>/wiki/</h2>
 
-<p><d>✓</d> /wiki/list/:university_id/</p>
+<p><d>✓</d> /wiki/:university_id/</p>
 
 <p><d>✓</d> /wiki/node/:id/</p>
 </body>
