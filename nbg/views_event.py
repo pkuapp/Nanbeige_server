@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import *
 from django.http import HttpResponse
 from django.utils import simplejson
 from datetime import datetime
-from nbg.models import *
+from nbg.models import Event, EventCategory
 
 def query(request):
     keyword =request.GET.get('keyword', None)
-    category_id = request.GET.get('category_id',None)
+    category_id = request.GET.get('category_id', None)
     after = request.GET.get('after', None)
     before = request.GET.get('before', None)
     start = request.GET.get('start', None)
@@ -16,9 +15,9 @@ def query(request):
 
     event_objs = Event.objects.all()
     if keyword:
-        event_objs = event_objs.filter(title__contains=keyword())
+        event_objs = event_objs.filter(title__contains=keyword)
     if category_id:
-        event_objs = event_objs.filter(category=category_id())
+        event_objs = event_objs.filter(category=category_id)
     if after:
         event_objs = event_objs.filter(time__gte=datetime.fromtimestamp(float(after)))
     else:
@@ -31,20 +30,29 @@ def query(request):
         batch = 10
     event_objs = event_objs[int(start):int(batch)]
 
-    event_values = event_objs.values()
-    for i in range(len(event_values)):
-        event_values[i]['time'] = event_values[i]['time'].isoformat(' ')
-        event_values[i]['category_name'] = EventCategory.objects.get(pk=event_values[i])
-        event_values[i]['follower_count'] = int(event_objs[i].follow_count())
-    return HttpResponse(simplejson.dumps(list(event_values)), mimetype='application/json')
+    response = [{
+        'id': item.pk,
+        'title': item.title,
+        'subtitle': item.subtitle,
+        'category_id': item.category.pk,
+        'category_name': item.category.name,
+        'time': item.time.isoformat(' '),
+        'location': item.location,
+        'follow_count': int(item.follow_count()),
+    } for item in event_objs]
+
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def category(request):
     category_objs = EventCategory.objects.all()
-    category_values = list(category_objs.values())
 
-    for i in range(len(category_values)):
-        category_values[i]['count'] = category_values[i].count()
-    return HttpResponse(simplejson.dumps(list(category_values)), mimetype='application/json')
+    response = [{
+        'id': category.pk,
+        'name': category.name,
+        'count': category.count(),
+    } for category in category_objs]
+
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def get_event(request):
     event_id = request.GET.get('id',None)

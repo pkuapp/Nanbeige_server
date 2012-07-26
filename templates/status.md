@@ -18,15 +18,15 @@
 
 ## /university/
 
-<d>✓</d> /university/list/
+<d>✓</d> /university/
 
 <d>✓</d> /university/:id/
 
 ## /course/
 
-<c>pseudo</c> /course/list/
+<c>pseudo</c> /course/
 
-<t>✗</t> /course/assignment/list/
+<t>✗</t> /course/assignment/
 
 <t>✗</t> /course/assignment/:id/finish/
 
@@ -36,9 +36,9 @@
 
 <t>✗</t> /course/assignment/add/
 
-<t>✗</t> /course/:id/comment/add/
+<t>✗</t> /course/:id/comment/
 
-<t>✗</t> /course/:id/comment/list/
+<t>✗</t> /course/:id/comment/add/
 
 ## /comment/
 
@@ -46,16 +46,24 @@
 
 ## /study/
 
-<d>✓</d> /study/building/list/
+<d>✓</d> /study/building/
 
-<d>✓</d> /study/building/:id/room/list/
+<d>✓</d> /study/building/:id/room/
 
 ## /event/
 
-<t>✗</t>
+<c>pseudo</c> /event/
+
+<d>✓</d> /event/category/
+
+<t>✗</t> /event/:id/
+
+<t>✗</t> /event/:id/follow/
+
+<t>✗</t> /event/following/
 
 ## /wiki/
 
-<d>✓</d> /wiki/list/:university_id/
+<d>✓</d> /wiki/:university_id/
 
 <d>✓</d> /wiki/node/:id/
