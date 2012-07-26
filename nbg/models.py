@@ -31,6 +31,9 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     weibo_token = models.CharField(max_length=32)
 
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.name)
+
 class ScheduleUnit(models.Model):
     number = models.SmallIntegerField()
     start = models.TimeField()
@@ -82,7 +85,7 @@ class Assignment(models.Model):
     last_modified = models.DateTimeField()
 
     def __unicode__(self):
-        return u'#%s %s - %s' % (self.id,self.user,self.course.name)
+        return u'#%s %s - %s' % (self.id,self.user.username,self.course.name)
 
 class Comment(models.Model):
     course = models.ForeignKey(Course)
