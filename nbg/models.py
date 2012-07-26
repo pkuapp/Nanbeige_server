@@ -134,7 +134,7 @@ class Event(models.Model):
     location = models.CharField(max_length=200)
     organizer = models.CharField(max_length=200)
     content = models.TextField()
-    follower = models.ManyToManyField(User)
+    follower = models.ManyToManyField(User, blank=True)
 
     def follow_count(self):
         return self.follower.count()
