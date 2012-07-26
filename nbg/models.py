@@ -24,7 +24,7 @@ class University(models.Model):
     lessons_morning = models.SmallIntegerField()
     lessons_afternoon = models.SmallIntegerField()
     lessons_evening = models.SmallIntegerField()
-    lessons_separator = models.CommaSeparatedIntegerField(max_length=50, null=True)
+    lessons_separator = models.CommaSeparatedIntegerField(max_length=50)
 
     def __unicode__(self):
         return u'#%s %s' % (self.id,self.name)
