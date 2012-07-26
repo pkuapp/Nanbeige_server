@@ -15,6 +15,7 @@ class University(models.Model):
     name = models.CharField(max_length=200)
     english_name = models.CharField(max_length=200)
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
+    longitude = models.DecimalField(max_digits=10, decimal_places=6)
     support_import_course = models.BooleanField()
     support_list_course = models.BooleanField()
     week_start = models.DateField()
@@ -23,7 +24,8 @@ class University(models.Model):
     lessons_morning = models.SmallIntegerField()
     lessons_afternoon = models.SmallIntegerField()
     lessons_evening = models.SmallIntegerField()
-    
+    lessons_separator = models.CommaSeparatedIntegerField(max_length=50, null=True)
+
     def __unicode__(self):
         return u'#%s %s' % (self.id,self.name)
 
