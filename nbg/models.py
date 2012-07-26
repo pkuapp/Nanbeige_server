@@ -82,7 +82,7 @@ class Assignment(models.Model):
     last_modified = models.DateTimeField()
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.course.name)
+        return u'#%s %s - %s' % (self.id,self.user,self.course.name)
 
 class Comment(models.Model):
     course = models.ForeignKey(Course)
