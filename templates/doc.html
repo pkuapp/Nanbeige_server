@@ -700,7 +700,7 @@ td:last-child {
   },
   ...
 ]</pre></td>
-  <td align="left">返回 university_id 学校有自习室的教学楼列表。</td>
+  <td align="left">返回 <code>university_id</code> 学校有自习室的教学楼列表。</td>
 </tr>
 
 <tr>
@@ -781,70 +781,41 @@ td:last-child {
 ]
   </pre>
   </td>
+  <td align="left">查询含有关键词 <code>keyword</code>，在 <code>after</code> （默认为现在）之后、<code>before</code>（默认为宇宙的尽头）之前的活动。返回从第 <code>start</code>（默认为 0）开始的 <code>batch</code> 条（默认为 10）。</td>
 </tr>
-</tbody>
-</table>
-<pre>
-查询
-/event/query/		GET	查询活动
-  * (optional)keyword: 关键词，留空返回全部活动
-  * (optional)category: Category ID
-  * (optional)after: 限定 time 在 after 之后，默认为当前时间
-  * (optional)before: 限定 time 在 before 之前
-  * (optional)start: 从满足以上全部条件的第 start 条开始返回，默认为 0
-  * (optional)batch: 从 start 开始返回的条数，默认为 10
-  返回：JSON 格式字典
-    id, title, subtitle, category_id, category_name, time, location, follow_count
-
-/event/category/ 	GET
-  返回：JSON 格式字典
-    id, name, count(在当前时间之后的活动数)
-
-/event/get/		GET
-  * (required)id: Activity ID
-  返回：JSON 格式字典
-    id, title, subtitle, category_id, category_name, time, location, organizer, content, follow_count(关注该活动的人数)
-
-
-关注
-/event/follow/	POST*
-  * (required)id: Activity ID
-  返回：整数值
-    0: 关注成功
-    404: 活动不存在
-    -1: 其他错误
-
-/event/following/	POST*
-  返回：JSON 格式字典
-    id, title, subtitle, category_id, category_name, time, location, follow_count
-</pre>
-
-<table>
-
-<thead>
 <tr>
-<th align="left">Address</th>
-<th align="left">Method</th>
-<th align="left">Parameter</th>
-<th align="left">Return</th>
-<th align="left">Description</th>
-</tr>
-</thead>
-
-<tbody> 
-
-<tr>
-  <td align="left">address/</td>
-  <td align="left"><code>METHOD</code></td>
-  <td align="left">
-    <ul><li><code>int</code> university_id</li></ul>
+  <td align="left">category/</td>
+  <td align="left"><code>GET</code></td>
+  <td align="left">none</td>
+  <td align="left"><pre>id, name, count(在当前时间之后的活动数)</pre>
   </td>
+  <td align="left">返回活动分类列表。
+  </td>
+</tr>
+<tr>
+  <td align="left">:id/</td>
+  <td align="left"><code>GET</code></td>
+  <td align="left">none</td>
+  <td align="left"><pre>id, title, subtitle, category_id, category_name, time, location, organizer, content, follow_count(关注该活动的人数)</pre>
+  </td>
+  <td align="left">返回 id 活动。</td>
+</tr>
+<tr>
+  <td align="left">:id/follow/</td>
+  <td align="left"><code>POST*</code></td>
+  <td align="left">none</td>
   <td align="left"><pre>{
   "miao": "mew"
 }</pre></td>
-  <td align="left">Some text.</td>
+  <td align="left">关注 id 活动。</td>
 </tr>
-
+<tr>
+  <td align="left">following/</td>
+  <td align="left"><code>GET*</code></td>
+  <td align="left">none</td>
+  <td align="left"><pre>id, title, subtitle, category_id, category_name, time, location, follow_count</pre></td>
+  <td align="left">返回当前用户关注的活动列表。</td>
+</tr>
 </tbody>
 </table>
 
