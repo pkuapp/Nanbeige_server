@@ -3,7 +3,7 @@
 from django.http import HttpResponse
 from django.utils import simplejson
 from datetime import datetime
-from nbg.models import *
+from nbg.models import Course, Assignment
 from nbg.helpers import listify
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
@@ -70,7 +70,7 @@ def assignment_modify(request,offset):
     assignment_due = request.POST.get('due', None)
     assignment_content = request.POST.get('content', None)
     assignment_courseid = request.POST.get('course_id', None)
-    
+
     assignment_obj = Assignment.objects.filter(id=assignment_id)[0]
     assignment_obj.finished = assignment_finish
     assignment_obj.last_modified = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
