@@ -159,7 +159,7 @@ table ul {
 }
 
 td:last-child {
-  max-width: 190px;
+  max-width: 300px;
 }
 </style>
 <title>南北阁 API 草案</title>
@@ -197,7 +197,7 @@ td:last-child {
 
 <hr />
 
-<h2>/app/</h2>
+<h2>/app</h2>
 
 <table>
 
@@ -214,7 +214,7 @@ td:last-child {
 <tbody>
 
 <tr>
-  <td align="left">version/api/</td>
+  <td align="left">/version/api/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
   <td align="left"><pre>{
@@ -224,7 +224,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">version/android/</td>
+  <td align="left">/version/android/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
   <td align="left">
@@ -237,7 +237,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">version/ios/</td>
+  <td align="left">/version/ios/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
   <td align="left"><pre>{
@@ -248,7 +248,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">notice/</td>
+  <td align="left">/notice/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
   <td align="left"><pre>{
@@ -263,7 +263,7 @@ td:last-child {
 
 <hr />
 
-<h2>/user/</h2>
+<h2>/user</h2>
 
 <table>
 
@@ -280,7 +280,7 @@ td:last-child {
 <tbody> 
 
 <tr>
-  <td align="left">login/email/</td>
+  <td align="left">/login/email/</td>
   <td align="left"><code>POST</code></td>
   <td align="left">
     <ul>
@@ -298,7 +298,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">login/weibo/</td>
+  <td align="left">/login/weibo/</td>
   <td align="left"><code>POST</code></td>
   <td align="left">
     <ul>
@@ -320,7 +320,7 @@ td:last-child {
 
 <hr />
 
-<h2>/university/</h2>
+<h2>/university</h2>
 
 <table>
 
@@ -337,7 +337,7 @@ td:last-child {
 <tbody> 
 
 <tr>
-  <td align="left">list/</td>
+  <td align="left">/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
   <td align="left"><pre>[
@@ -364,7 +364,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">:id/</td>
+  <td align="left">/:id/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
   <td align="left"><pre>{
@@ -418,7 +418,7 @@ td:last-child {
 
 <hr />
 
-<h2>/course/</h2>
+<h2>/course</h2>
 
 <table>
 
@@ -435,7 +435,7 @@ td:last-child {
 <tbody> 
 
 <tr>
-  <td align="left">list/</td>
+  <td align="left">/</td>
   <td align="left"><code>GET*</code></td>
   <td align="left">none</td>
   <td align="left"><pre>[
@@ -479,7 +479,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">assignment/list/</td>
+  <td align="left">/assignment/</td>
   <td align="left"><code>GET*</code></td>
   <td align="left">none</td>
   <td align="left"><pre>[
@@ -504,7 +504,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">assignment/:id/finish/</td>
+  <td align="left">/assignment/:id/finish/</td>
   <td align="left"><code>POST*</code></td>
   <td align="left">
     <ul>
@@ -522,7 +522,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">assignment/:id/delete/</td>
+  <td align="left">/assignment/:id/delete/</td>
   <td align="left"><code>POST*</code></td>
   <td align="left">none</td>
   <td align="left">
@@ -536,7 +536,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">assignment/:id/modify/</td>
+  <td align="left">/assignment/:id/modify/</td>
   <td align="left"><code>POST*</code></td>
   <td align="left">
     <ul>
@@ -557,7 +557,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">assignment/add/</td>
+  <td align="left">/assignment/add/</td>
   <td align="left"><code>POST*</code></td>
   <td align="left">
     <ul>
@@ -577,24 +577,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">:id/comment/add/</td>
-  <td align="left"><code>POST*</code></td>
-  <td align="left">
-    <ul>
-      <li><code class="required">str</code> content</li>
-    </ul>
-  </td>
-  <td align="left">
-    <ul>
-      <li><code>0</code> success</li>
-      <li><code>-9</code> error</li>
-    </ul>
-  </td>
-  <td align="left">在 id 课程下添加一条小话。</td>
-</tr>
-
-<tr>
-  <td align="left">:id/comment/list/</td>
+  <td align="left">/:id/comment/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">
     <ul>
@@ -627,12 +610,29 @@ td:last-child {
   <td align="left">返回 id 课程最近 10 条小话，从第 <code>start</code> 条开始（默认为 0）。<br />若客户端在同一页面加载更多小话，须注意新的小话导致的重复。</td>
 </tr>
 
+<tr>
+  <td align="left">/:id/comment/add/</td>
+  <td align="left"><code>POST*</code></td>
+  <td align="left">
+    <ul>
+      <li><code class="required">str</code> content</li>
+    </ul>
+  </td>
+  <td align="left">
+    <ul>
+      <li><code>0</code> success</li>
+      <li><code>-9</code> error</li>
+    </ul>
+  </td>
+  <td align="left">在 id 课程下添加一条小话。</td>
+</tr>
+
 </tbody>
 </table>
 
 <hr />
 
-<h2>/comment/</h2>
+<h2>/comment</h2>
 
 <table>
 
@@ -649,7 +649,7 @@ td:last-child {
 <tbody> 
 
 <tr>
-  <td align="left">address/</td>
+  <td align="left">/miao/</td>
   <td align="left"><code>METHOD</code></td>
   <td align="left">parameter</td>
   <td align="left"><pre>{
@@ -663,7 +663,7 @@ td:last-child {
 
 <hr />
 
-<h2>/study/</h2>
+<h2>/study</h2>
 
 <table>
 
@@ -680,7 +680,7 @@ td:last-child {
 <tbody> 
 
 <tr>
-  <td align="left">building/list/</td>
+  <td align="left">/building/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">
     <ul><li><code class="required">int</code> university_id</li></ul>
@@ -704,7 +704,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">building/:id/room/list/</td>
+  <td align="left">/building/:id/room/</td>
   <td align="left"><code>GET</code></td>
   <td align="left"><code class="required">date</code> date</li></td>
   <td align="left"><pre>[
@@ -727,7 +727,7 @@ td:last-child {
 
 <hr />
 
-<h2>/event/</h2>
+<h2>/event</h2>
 
 <table>
 
@@ -744,7 +744,7 @@ td:last-child {
 <tbody>
 
 <tr>
-  <td align="left">query/</td>
+  <td align="left">/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">
     <ul>
@@ -776,15 +776,13 @@ td:last-child {
     "time": "2012-07-14 19:00:00", 
     "location": "随便",
     "follow_count": 32
-  },
-  ...
-]
-  </pre>
+  }
+]</pre>
   </td>
   <td align="left">查询含有关键词 <code>keyword</code>，在 <code>after</code> （默认为现在）之后、<code>before</code>（默认为宇宙的尽头）之前的活动。返回从第 <code>start</code>（默认为 0）开始的 <code>batch</code> 条（默认为 10）。</td>
 </tr>
 <tr>
-  <td align="left">category/</td>
+  <td align="left">/category/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
   <td align="left"><pre>id, name, count(在当前时间之后的活动数)</pre>
@@ -793,7 +791,7 @@ td:last-child {
   </td>
 </tr>
 <tr>
-  <td align="left">:id/</td>
+  <td align="left">/:id/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
   <td align="left"><pre>id, title, subtitle, category_id, category_name, time, location, organizer, content, follow_count(关注该活动的人数)</pre>
@@ -801,7 +799,7 @@ td:last-child {
   <td align="left">返回 id 活动。</td>
 </tr>
 <tr>
-  <td align="left">:id/follow/</td>
+  <td align="left">/:id/follow/</td>
   <td align="left"><code>POST*</code></td>
   <td align="left">none</td>
   <td align="left"><pre>{
@@ -810,7 +808,7 @@ td:last-child {
   <td align="left">关注 id 活动。</td>
 </tr>
 <tr>
-  <td align="left">following/</td>
+  <td align="left">/following/</td>
   <td align="left"><code>GET*</code></td>
   <td align="left">none</td>
   <td align="left"><pre>id, title, subtitle, category_id, category_name, time, location, follow_count</pre></td>
@@ -821,7 +819,7 @@ td:last-child {
 
 <hr />
 
-<h2>/wiki/</h2>
+<h2>/wiki</h2>
 
 <table>
 
@@ -838,7 +836,7 @@ td:last-child {
 <tbody> 
 
 <tr>
-  <td align="left">list/:university_id/</td>
+  <td align="left">/:id/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
   <td align="left"><pre>[
@@ -851,11 +849,11 @@ td:last-child {
     "node_id": 625
   }
 ]</pre></td>
-  <td align="left">返回 university_id 学校的自定义栏目列表。</td>
+  <td align="left">返回 id 学校的自定义栏目列表。</td>
 </tr>
 
 <tr>
-  <td align="left">node/:id/</td>
+  <td align="left">/node/:id/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
   <td align="left"><pre>{
