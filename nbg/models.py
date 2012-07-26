@@ -15,7 +15,6 @@ class University(models.Model):
     name = models.CharField(max_length=200)
     english_name = models.CharField(max_length=200)
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
-    longitude = models.DecimalField(max_digits=10, decimal_places=6)
     support_import_course = models.BooleanField()
     support_list_course = models.BooleanField()
     week_start = models.DateField()
@@ -24,6 +23,9 @@ class University(models.Model):
     lessons_morning = models.SmallIntegerField()
     lessons_afternoon = models.SmallIntegerField()
     lessons_evening = models.SmallIntegerField()
+    
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.name)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
@@ -35,11 +37,17 @@ class ScheduleUnit(models.Model):
     end = models.TimeField()
     university = models.ForeignKey(University)
 
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.university.name)
+
 class Course(models.Model):
     name = models.CharField(max_length=200)
     original_id = models.CharField(max_length=100)
     credit = models.DecimalField(max_digits=3, decimal_places=1)
     weeks = models.CommaSeparatedIntegerField(max_length=200)
+
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.name)
 
 class Lesson(models.Model):
     day = models.SmallIntegerField()
@@ -48,13 +56,22 @@ class Lesson(models.Model):
     location = models.CharField(max_length=200)
     course = models.ForeignKey(Course)
 
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.course.name)
+
 class Teacher(models.Model):
     name = models.CharField(max_length=50)
     course = models.ForeignKey(Course)
 
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.name)
+
 class Ta(models.Model):
     name = models.CharField(max_length=50)
     course = models.ForeignKey(Course)
+
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.name)
 
 class Assignment(models.Model):
     course = models.ForeignKey(Course)
@@ -64,11 +81,17 @@ class Assignment(models.Model):
     finished = models.BooleanField()
     last_modified = models.DateTimeField()
 
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.course.name)
+
 class Comment(models.Model):
     course = models.ForeignKey(Course)
     writer = models.ForeignKey(User)
     time = models.DateTimeField()
     content = models.TextField()
+
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.course.name)
 
 class Building(models.Model):
     name = models.CharField(max_length=30)
@@ -76,20 +99,32 @@ class Building(models.Model):
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
 
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.name)
+
 class Room(models.Model):
     name = models.CharField(max_length=30)
     building = models.ForeignKey(Building)
+
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.name)
 
 class RoomAvailability(models.Model):
     room = models.ForeignKey(Room)
     date = models.DateField()
     availability = models.CommaSeparatedIntegerField(max_length=50)
 
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.room.name)
+
 class EventCategory(models.Model):
     name = models.CharField(max_length=200)
 
     def count(self):
         return self.event_set.filter(time__gte=datetime.now()).count()
+
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.name)
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
@@ -103,6 +138,9 @@ class Event(models.Model):
 
     def follow_count(self):
         return self.follower.count()
+
+    def __unicode__(self):
+        return u'#%s %s' % (self.id,self.title)
 
 class WikiNode(models.Model):
     TYPE_CHOICES = (
