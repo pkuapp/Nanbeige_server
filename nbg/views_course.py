@@ -96,16 +96,20 @@ def comment_add(request, offset):
     return HttpResponse(0)
 
 def comment_list(request, offset):
-    start = int(request.GET.get('start', None))
-    if course_id:
-        course_objs =Comment.objects.filter(course_id = int(offset))  
+    course_id = int(offset)
+    start = request.GET.get('start', None)
     if not start:
         start = 0
-    comment_objs = Comment.objects[start : start+10]
+    # else:
+    #     start = int(start)
+
+    comment_objs = Course.objects.get(pk=course_id).comment_set.all()[start : start + 10]
+
     response = [{
-        'id' : item.pk,
-        'writer' : item.writer,
-        'time' : item.time,
-        'content' : item.content,
-    }for item in comment_objs]
-    return HttpResponse(simplejson.dumps(response), mimetype = 'application/json')
+        'id': item.pk,
+        'writer': item.writer.username,
+        'time': item.time,
+        'content': item.content,
+    } for item in comment_objs]
+
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
