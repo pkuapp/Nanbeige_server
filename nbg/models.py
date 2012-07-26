@@ -107,7 +107,7 @@ class Room(models.Model):
     building = models.ForeignKey(Building)
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.name)
+        return u'#%s %s - %s' % (self.id,self.building.name,self.name)
 
 class RoomAvailability(models.Model):
     room = models.ForeignKey(Room)
