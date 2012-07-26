@@ -54,22 +54,22 @@ def category(request):
 
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
-def get_event(request):
-    event_id = request.GET.get('id',None)
-
-    if event_id:
-        try:
-            event_queryset = Event.objects.filter(pk=int(event_id))
-            event_objs = event_queryset[0]
-            event = event_queryset.values()[0]
-            event['time'] = event['time'].isoformat(' ')
-            event['category_name'] = EventCategory.objects.get(pk=event['category_id'].name)
-            event['follow_count'] = int(event_objs.follow_count())
-            return HttpResponse(simplejson.dumps(list(event)), mimetype='application/json')
-        except:
-            return HttpResponse(simplejson.dumps('lack of neccessary parameter'), mimetype='application/json')
-    else:
-        return HttpResponse(simplejson.dumps(list('invalid type-in')), mimetype='application/json')
+def get_event(request,offset):
+    event_id = int(offset)
+    
+    event_obj = Event.objects.get(pk=event_id)
+    response = {
+        'id' : event_obj.pk,
+        'title' : event_obj.title,
+        'subtitle' : event_obj.subtitle,
+        'category_id' : event_obj.category.pk,
+        'category_name' : event_obj.category.name,
+        'location' : event_obj.location,
+        'organizer' : event_obj.organizer,
+        'content' : event_obj.content,
+        'follower_count' : event_obj.follow_count(),
+    }
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def follow(request):
     user = request.user
