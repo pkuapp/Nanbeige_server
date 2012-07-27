@@ -105,7 +105,7 @@ class Building(models.Model):
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.name)
+        return u'#%s %s - %s' % (self.id,self.university.name,self.name)
 
 class Room(models.Model):
     name = models.CharField(max_length=30)
