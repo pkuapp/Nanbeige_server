@@ -14,6 +14,7 @@ def login_email(request):
     if user is not None and user.is_active:
         auth.login(request, user)
         response = {
+            'id': user.pk,
             'email': user.email,
         }
     else:
