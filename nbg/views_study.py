@@ -37,7 +37,7 @@ def room_list(request, offset):
                 'name': room.name,
                 'availability': listify(room.roomavailability_set.get(date=date).availability),
             } for room in room_objs]
-        return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+            return HttpResponse(simplejson.dumps(response), mimetype='application/json')
         except:
             return HttpResponseNotFound(simplejson.dumps({'error': '教学楼不存在。'}), mimetype='application/json')    
     else:
