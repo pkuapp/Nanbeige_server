@@ -60,7 +60,7 @@ class Course(models.Model):
     semester = models.ForeignKey(Semester)
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.name)
+        return u'#%s %s - %s' % (self.id,self.semester.university.name,self.name)
 
 class Lesson(models.Model):
     day = models.SmallIntegerField()
@@ -144,6 +144,7 @@ class Event(models.Model):
     subtitle = models.CharField(max_length=200)
     category = models.ForeignKey(EventCategory)
     time = models.DateTimeField()
+    university = models.ForeignKey(University)
     location = models.CharField(max_length=200)
     organizer = models.CharField(max_length=200)
     content = models.TextField()
@@ -153,7 +154,7 @@ class Event(models.Model):
         return self.follower.count()
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.title)
+        return u'#%s %s - %s' % (self.id,self.university.name,self.title)
 
 class WikiNode(models.Model):
     TYPE_CHOICES = (
