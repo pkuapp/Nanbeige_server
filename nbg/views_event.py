@@ -92,7 +92,7 @@ def following(request):
     event_objs = user.event_set.all()
    try:
         response = [{
-            'id' : item.pk
+            'id' : item.pk,
             'title' : item.title,
             'subtitle' : item.subtitle,
             'category_id' : item.category.pk,
