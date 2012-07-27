@@ -50,7 +50,7 @@ class ScheduleUnit(models.Model):
     university = models.ForeignKey(University)
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.university.name)
+        return u'#%s %s - 第%s节' % (self.id,self.university.name)
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
