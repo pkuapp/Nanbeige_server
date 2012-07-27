@@ -379,12 +379,6 @@ td:last-child {
     "import_course": true,
     "list_course": true
   },
-  "week":
-  {
-    "start": "2012-09-03", // 第一周周一的日期
-    "end": "2013-01-06", // 最后一周周日的日期
-    "excluded": [6, 7] // 不上课的周号
-  },
   "lessons":
   {
     "count":
@@ -412,6 +406,37 @@ td:last-child {
   }
 }</pre></td>
   <td align="left">返回 <code>id</code> 大学的详细信息。</td>
+</tr>
+
+<tr>
+  <td align="left">/:id/semester/</td>
+  <td align="left"><code>GET</code></td>
+  <td align="left">none</td>
+  <td align="left"><pre>[
+  {
+    "id": 1,
+    "name": "秋冬学期",
+    "year": "2011-2012",
+    "week":
+    {
+      "start": "2012-01-01", // 第一周周一的日期
+      "end": "2012-06-06", // 最后一周周日的日期
+      "excluded": [6, 7] // 不上课的周号
+    }
+  },
+  {
+    "id": 2,
+    "name": "春夏学期",
+    "year": "2012-2013",
+    "week":
+    {
+      "start": "2012-09-03", // 第一周周一的日期
+      "end": "2013-01-06", // 最后一周周日的日期
+      "excluded": [6, 7] // 不上课的周号
+    }
+  }
+]</pre></td>
+  <td align="left">返回 <code>id</code> 大学的学期列表。</td>
 </tr>
 
 </tbody>
@@ -455,8 +480,8 @@ td:last-child {
     [
       "绿豆芽"
     ],
-    weeks:
-    [1, 3, 5, 7, 9, 11, 13, 15, 17], // 上课的周号
+    "semester_id": 2,
+    "weeks": [1, 3, 5, 7, 9, 11, 13, 15, 17], // 上课的周号
     "lessons":
     [
       {
