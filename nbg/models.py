@@ -18,9 +18,6 @@ class University(models.Model):
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
     support_import_course = models.BooleanField()
     support_list_course = models.BooleanField()
-    week_start = models.DateField()
-    week_end = models.DateField()
-    excluded = models.CommaSeparatedIntegerField(max_length=100)
     lessons_morning = models.SmallIntegerField()
     lessons_afternoon = models.SmallIntegerField()
     lessons_evening = models.SmallIntegerField()
@@ -50,9 +47,20 @@ class Course(models.Model):
     original_id = models.CharField(max_length=100)
     credit = models.DecimalField(max_digits=3, decimal_places=1)
     weeks = models.CommaSeparatedIntegerField(max_length=200)
+    semester = models.ForeignKey(Semester)
 
     def __unicode__(self):
         return u'#%s %s' % (self.id,self.name)
+
+class Semester(models.Model):
+    name = models.CharField(max_length=100)
+    university = models.ForeignKey(University)
+    week_start = models.DateField()
+    week_end = models.DateField()
+    excluded = models.CommaSeparatedIntegerField(max_length=100)
+    
+    def __unicode__(self):
+        return  u'#%s %s - %s' % (self.id,self.university.name,self.name)
 
 class Lesson(models.Model):
     day = models.SmallIntegerField()
