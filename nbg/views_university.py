@@ -22,43 +22,45 @@ def detail(request, offset):
     university_id = int(offset)
     try:
         university = University.objects.get(pk=university_id)
-        schedule_unit = university.scheduleunit_set.values()
-
-        excluded = listify(university.excluded)
-
-        lessons_total = university.lessons_morning + university.lessons_afternoon + university.lessons_evening
-        response = {
-            'name': university.name,
-            'location': {
-                'latitude': float(university.latitude),
-                'longitude': float(university.longitude),
-            },
-            'support': {
-                'import_course': university.support_import_course,
-                'list_course': university.support_list_course,
-            },
-            'week': {
-                'start': datetime.strftime(university.week_start, '%Y-%m-%d'),
-                'end': datetime.strftime(university.week_end, '%Y-%m-%d'),
-                'excluded': excluded,
-            },
-            'lessons': {
-                'count': {
-                    'total': lessons_total,
-                    'morning': university.lessons_morning,
-                    'afternoon': university.lessons_afternoon,
-                    'evening': university.lessons_evening,
-                },
-                'detail': [{
-                    'number': item['number'],
-                    'start': time.strftime(item['start'], "%H:%M"),
-                    'end': time.strftime(item['end'], "%H:%M"),
-                } for item in schedule_unit]
-            }
-        }
-        return HttpResponse(simplejson.dumps(response), mimetype='application/json')
     except:
         response = {
             'error': "学校不存在。",
         }
         return HttpResponseNotFound(simplejson.dumps(response), mimetype='application/json')
+
+    schedule_unit = university.scheduleunit_set.all()
+
+    excluded = listify(university.excluded)
+
+    lessons_total = university.lessons_morning + university.lessons_afternoon + university.lessons_evening
+    response = {
+        'name': university.name,
+        'location': {
+            'latitude': float(university.latitude),
+            'longitude': float(university.longitude),
+        },
+        'support': {
+            'import_course': university.support_import_course,
+            'list_course': university.support_list_course,
+        },
+        'week': {
+            'start': datetime.strftime(university.week_start, '%Y-%m-%d'),
+            'end': datetime.strftime(university.week_end, '%Y-%m-%d'),
+            'excluded': excluded,
+        },
+        'lessons': {
+            'count': {
+                'total': lessons_total,
+                'morning': university.lessons_morning,
+                'afternoon': university.lessons_afternoon,
+                'evening': university.lessons_evening,
+            },
+            'detail': [{
+                'number': item.number,
+                'start': time.strftime(item.start, "%H:%M"),
+                'end': time.strftime(item.end, "%H:%M"),
+            } for item in schedule_unit],
+            'separators': listify(university.lessons_separator)
+        }
+    }
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')

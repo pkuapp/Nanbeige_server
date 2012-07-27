@@ -90,7 +90,7 @@ def follow(request):
 def following(request):
     user = request.user
     event_objs = user.event_set.all()
-   try:
+    try:
         response = [{
             'id' : item.pk,
             'title' : item.title,
@@ -105,5 +105,3 @@ def following(request):
         return HttpResponse(simplejson.dumps(response), mimetype='application/json')
     except: 
         return HttpResponse(simplejson.dumps('error'), mimetype='application/json')
-
-    
