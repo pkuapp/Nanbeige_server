@@ -105,14 +105,15 @@ class Building(models.Model):
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
 
     def __unicode__(self):
-        return u'#%s %s - %s' % (self.id,self.university.name,self.name)
+        return u'#%s %s -  %s' % (self.id,self.university.name,self.name)
 
 class Room(models.Model):
     name = models.CharField(max_length=30)
     building = models.ForeignKey(Building)
+    university = models.ForeignKey(University)
 
     def __unicode__(self):
-        return u'#%s %s - %s' % (self.id,self.building.name,self.name)
+        return u'#%s %s - %s - %s' % (self.id,self.university.name,self.building.name,self.name)
 
 class RoomAvailability(models.Model):
     room = models.ForeignKey(Room)
