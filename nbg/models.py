@@ -30,6 +30,7 @@ class University(models.Model):
 
 class Semester(models.Model):
     name = models.CharField(max_length=100)
+    year = models.CharField(max_length=50)
     university = models.ForeignKey(University)
     week_start = models.DateField()
     week_end = models.DateField()
