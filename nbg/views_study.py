@@ -29,18 +29,16 @@ def room_list(request, offset):
     date = request.GET.get('date', None)
     if building_id and date:
         date = datetime.strptime(date, '%Y-%m-%d')
-
         try:
             building = Building.objects.get(pk=building_id)
-        except:
-            return HttpResponseNotFound(simplejson.dumps({'error': '教学楼不存在。'}), mimetype='application/json')
-
-        rooms = building.room_set.all()
-        response = [{
-            'id': room.id,
-            'name': room.name,
-            'availability': listify(room.roomavailability_set.get(date=date).availability),
-        } for room in rooms]
+            room_objs = building.room_set.all()
+            response = [{
+                'id': room.id,
+                'name': room.name,
+                'availability': listify(room.roomavailability_set.get(date=date).availability),
+            } for room in room_objs]
         return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+        except:
+            return HttpResponseNotFound(simplejson.dumps({'error': '教学楼不存在。'}), mimetype='application/json')    
     else:
         return HttpResponseBadRequest(simplejson.dumps({'error': '缺少必要的参数。'}), mimetype='application/json')
