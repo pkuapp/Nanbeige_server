@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
@@ -50,7 +52,7 @@ class ScheduleUnit(models.Model):
     university = models.ForeignKey(University)
 
     def __unicode__(self):
-        return u'#%s %s - 第%s节' % (self.id,self.university.name)
+        return u'#%s %s - 第%s节' % (self.id,self.university.name,self.number)
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
