@@ -61,12 +61,13 @@ def detail(request, offset):
 def semester(request, offset):
     university_id = int(offset)
     university = University.objects.get(pk=university_id)
-    
+
     semesters = university.semester_set.all()
-    
+
     response = [{
         'id': semester.pk,
         'name': semester.name,
+        'year': semester.year,
         'week': {
             'start': semester.week_start.isoformat(),
             'end': semester.week_end.isoformat(),

@@ -37,14 +37,14 @@ class Semester(models.Model):
     excluded = models.CommaSeparatedIntegerField(max_length=100)
     
     def __unicode__(self):
-        return  u'#%s %s - %s' % (self.id,self.university.name,self.name)
+        return  u'#%s %s - %s' % (self.id, self.university.name, self.name)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     weibo_token = models.CharField(max_length=32)
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.name)
+        return u'#%s %s' % (self.id, self.name)
 
 class ScheduleUnit(models.Model):
     number = models.SmallIntegerField()
@@ -53,7 +53,7 @@ class ScheduleUnit(models.Model):
     university = models.ForeignKey(University)
 
     def __unicode__(self):
-        return u'#%s %s - 第%s节' % (self.id,self.university.name,self.number)
+        return u'#%s %s - 第%s节' % (self.id, self.university.name, self.number)
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
@@ -63,7 +63,7 @@ class Course(models.Model):
     semester = models.ForeignKey(Semester)
 
     def __unicode__(self):
-        return u'#%s %s - %s' % (self.id,self.semester.university.name,self.name)
+        return u'#%s %s - %s' % (self.id, self.semester.university.name, self.name)
 
 class Lesson(models.Model):
     day = models.SmallIntegerField()
@@ -73,21 +73,21 @@ class Lesson(models.Model):
     course = models.ForeignKey(Course)
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.course.name)
+        return u'#%s %s' % (self.id, self.course.name)
 
 class Teacher(models.Model):
     name = models.CharField(max_length=50)
     course = models.ForeignKey(Course)
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.name)
+        return u'#%s %s' % (self.id, self.name)
 
 class Ta(models.Model):
     name = models.CharField(max_length=50)
     course = models.ForeignKey(Course)
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.name)
+        return u'#%s %s' % (self.id, self.name)
 
 class Assignment(models.Model):
     course = models.ForeignKey(Course)
@@ -98,7 +98,7 @@ class Assignment(models.Model):
     last_modified = models.DateTimeField()
 
     def __unicode__(self):
-        return u'#%s %s - %s' % (self.id,self.user.username,self.course.name)
+        return u'#%s %s - %s' % (self.id, self.user.username, self.course.name)
 
 class Comment(models.Model):
     course = models.ForeignKey(Course)
@@ -107,7 +107,7 @@ class Comment(models.Model):
     content = models.TextField()
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.course.name)
+        return u'#%s %s' % (self.id, self.course.name)
 
 class Building(models.Model):
     name = models.CharField(max_length=30)
@@ -116,14 +116,14 @@ class Building(models.Model):
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
 
     def __unicode__(self):
-        return u'#%s %s -  %s' % (self.id,self.university.name,self.name)
+        return u'#%s %s -  %s' % (self.id, self.university.name, self.name)
 
 class Room(models.Model):
     name = models.CharField(max_length=30)
     building = models.ForeignKey(Building)
 
     def __unicode__(self):
-        return u'#%s %s - %s - %s' % (self.id,self.building.university.name,self.building.name,self.name)
+        return u'#%s %s - %s - %s' % (self.id, self.building.university.name, self.building.name, self.name)
 
 class RoomAvailability(models.Model):
     room = models.ForeignKey(Room)
@@ -131,7 +131,7 @@ class RoomAvailability(models.Model):
     availability = models.CommaSeparatedIntegerField(max_length=50)
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.room.name)
+        return u'#%s %s' % (self.id, self.room.name)
 
 class EventCategory(models.Model):
     name = models.CharField(max_length=200)
@@ -140,7 +140,7 @@ class EventCategory(models.Model):
         return self.event_set.filter(time__gte=datetime.now()).count()
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.name)
+        return u'#%s %s' % (self.id, self.name)
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
