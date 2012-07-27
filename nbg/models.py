@@ -26,6 +26,16 @@ class University(models.Model):
     def __unicode__(self):
         return u'#%s %s' % (self.id,self.name)
 
+class Semester(models.Model):
+    name = models.CharField(max_length=100)
+    university = models.ForeignKey(University)
+    week_start = models.DateField()
+    week_end = models.DateField()
+    excluded = models.CommaSeparatedIntegerField(max_length=100)
+    
+    def __unicode__(self):
+        return  u'#%s %s - %s' % (self.id,self.university.name,self.name)
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     weibo_token = models.CharField(max_length=32)
@@ -51,16 +61,6 @@ class Course(models.Model):
 
     def __unicode__(self):
         return u'#%s %s' % (self.id,self.name)
-
-class Semester(models.Model):
-    name = models.CharField(max_length=100)
-    university = models.ForeignKey(University)
-    week_start = models.DateField()
-    week_end = models.DateField()
-    excluded = models.CommaSeparatedIntegerField(max_length=100)
-    
-    def __unicode__(self):
-        return  u'#%s %s - %s' % (self.id,self.university.name,self.name)
 
 class Lesson(models.Model):
     day = models.SmallIntegerField()
