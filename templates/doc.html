@@ -408,7 +408,7 @@ td:last-child {
         "end": "20:55"
       }
     ],
-    "separators": [2, 5, 7, 10]
+    "separators": [2, 4, 5, 6, 8, 10, 12]
   }
 }</pre></td>
   <td align="left">返回 <code>id</code> 大学的详细信息。</td>
@@ -806,7 +806,17 @@ td:last-child {
   <td align="left">/:id/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
-  <td align="left"><pre>id, title, subtitle, category_id, category_name, time, location, organizer, content, follow_count(关注该活动的人数)</pre>
+  <td align="left"><pre>{
+  "id": 2,
+  "title": "周末聚餐",
+  "subtitle": "全聚德吃北京烤鸭",
+  "category_id": 1,
+  "category_name": "聚餐",
+  "organizer": "王昊尘",
+  "location": "北京前门",
+  "content": "能去的都去阿！",
+  "follower_count": 5
+}</pre>
   </td>
   <td align="left">返回 <code>id</code> 活动。</td>
 </tr>
@@ -823,7 +833,30 @@ td:last-child {
   <td align="left">/following/</td>
   <td align="left"><code>GET*</code></td>
   <td align="left">none</td>
-  <td align="left"><pre>id, title, subtitle, category_id, category_name, time, location, follow_count</pre></td>
+  <td align="left"><pre>[
+  {
+    "id": 2,
+    "title": "周末聚餐",
+    "subtitle": "全聚德吃北京烤鸭",
+    "category_id": 1,
+    "category_name": "聚餐",
+    "organizer": "王昊尘",
+    "location": "北京前门",
+    "content": "能去的都去阿！",
+    "follower_count": 5
+  },
+  {
+    "id": 3,
+    "title": "吃遍上海",
+    "subtitle": "上海小吃游",
+    "category_id": 1,
+    "category_name": "聚餐",
+    "organizer": "张塔",
+    "location": "城隍庙",
+    "content": "吃货集会！",
+    "follower_count": 3
+  },
+]</pre></td>
   <td align="left">返回当前用户关注的活动列表。</td>
 </tr>
 </tbody>
