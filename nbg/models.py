@@ -156,7 +156,7 @@ class Event(models.Model):
         return self.follower.count()
 
     def __unicode__(self):
-        return u'#%s %s - %s' % (self.id,self.university.name,self.title)
+        return u'#%s %s - %s' % (self.id, self.university.name, self.title)
 
 class WikiNode(models.Model):
     TYPE_CHOICES = (
@@ -168,6 +168,12 @@ class WikiNode(models.Model):
     type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     content = models.TextField()
 
+    def __unicode__(self):
+        return u'#%s %s' % (self.id, self.title)
+
 class Wiki(models.Model):
     university = models.ForeignKey(University)
     node = models.ForeignKey(WikiNode)
+
+    def __unicode__(self):
+        return u'#%s %s - %s' % (self.id, self.university.name, self.node.title)
