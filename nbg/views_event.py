@@ -101,7 +101,7 @@ def following(request):
             'organizer' : item.organizer,
             'content' : item.content,
             'follower_count' : item.follow_count(),
-        }for item in event_objs]
+        } for item in event_objs]
         return HttpResponse(simplejson.dumps(response), mimetype='application/json')
     except: 
         return HttpResponse(simplejson.dumps('error'), mimetype='application/json')
