@@ -2,20 +2,20 @@
 
 from django.http import HttpResponse, HttpResponseNotFound
 from django.utils import simplejson
-from datetime import datetime, time
-from nbg.models import *
+from datetime import time
+from nbg.models import University
 from nbg.helpers import listify
 
 def university_list(request):
-    university_values = University.objects.values()
+    universities = University.objects.all()
     response = [{
-        'id': item['id'],
-        'name': item['name'],
+        'id': university.pk,
+        'name': university.name,
         'location': {
-            'latitude': float(item['latitude']),
-            'longitude': float(item['longitude'])
+            'latitude': float(university.latitude),
+            'longitude': float(university.longitude)
         }
-    } for item in university_values]
+    } for university in universities]
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def detail(request, offset):
@@ -56,4 +56,21 @@ def detail(request, offset):
             'separators': listify(university.lessons_separator)
         }
     }
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+
+def semester(request, offset):
+    university_id = int(offset)
+    university = University.objects.get(pk=university_id)
+    
+    semesters = university.semester_set.all()
+    
+    response = [{
+        'id': semester.pk,
+        'name': semester.name,
+        'week': {
+            'start': semester.week_start.isoformat(),
+            'end': semester.week_end.isoformat(),
+            'excluded': listify(semester.excluded)
+        }
+    } for semester in semesters]
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
