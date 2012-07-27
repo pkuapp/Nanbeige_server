@@ -30,8 +30,6 @@ def detail(request, offset):
 
     schedule_unit = university.scheduleunit_set.all()
 
-    excluded = listify(university.excluded)
-
     lessons_total = university.lessons_morning + university.lessons_afternoon + university.lessons_evening
     response = {
         'name': university.name,
@@ -42,11 +40,6 @@ def detail(request, offset):
         'support': {
             'import_course': university.support_import_course,
             'list_course': university.support_list_course,
-        },
-        'week': {
-            'start': datetime.strftime(university.week_start, '%Y-%m-%d'),
-            'end': datetime.strftime(university.week_end, '%Y-%m-%d'),
-            'excluded': excluded,
         },
         'lessons': {
             'count': {

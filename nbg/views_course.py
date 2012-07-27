@@ -11,27 +11,24 @@ from django.views.decorators.http import require_http_methods
 def course_list(request):
     course_values = Course.objects.all()
     response = [{
-        'id' : item.pk,
-        'orig_id' : item.original_id,
-        'name' : item.name,
-        'credit' : float(item.credit),
-        'teacher' : [ teacher.name for teacher in item.teacher_set.all() ],
-        'ta' : [ ta.name for ta in item.ta_set.all() ],
-        'week' : listify(item.weeks),
+        'id': item.pk,
+        'orig_id': item.original_id,
+        'name': item.name,
+        'credit': float(item.credit),
+        'teacher': [ teacher.name for teacher in item.teacher_set.all() ],
+        'ta': [ ta.name for ta in item.ta_set.all() ],
+        'semester_id': item.semester.pk,
+        'week': listify(item.weeks),
         'lessons': [{
             'day': lesson.day,
-            'start' : lesson.start,
-            'end' : lesson.end,
-            'location' : lesson.location,
+            'start': lesson.start,
+            'end': lesson.end,
+            'location': lesson.location,
         } for lesson in item.lesson_set.all()]
     } for item in course_values]
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def assignment_list(request):
-    #course_id = int(offset)
-  #  if course_id:
-    #    pdate = datetime.strptime(request.GET.get('date' ,None), %Y-%m-%d %H-%M-%S)
-  #      assignment_values = Assignment.objects.filter(course = course_id).values()
     assignment_values = Assignment.objects.all()
     response = [{
         'id' : item.id,
@@ -43,9 +40,6 @@ def assignment_list(request):
     } for item in assignment_values]
     return HttpResponse(simplejson.dumps(response),mimetype='application/json')
 
-#waiting for testing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#@login_required
-#@require_http_methods(['POST' ,])
 def assignment_finish(request, offset):
     assignment_id = int(offset)
     assignment_finish = request.POST.get('finished', None)

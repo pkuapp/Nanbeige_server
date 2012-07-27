@@ -22,6 +22,8 @@
 
 <d>✓</d> /university/:id/
 
+<t>✗</t> /university/:id/semester/
+
 ## /course/
 
 <c>pseudo</c> /course/
@@ -56,7 +58,7 @@
 
 <d>✓</d> /event/category/
 
-<t>✗</t> /event/:id/
+<d>✓</d> /event/:id/
 
 <t>✗</t> /event/:id/follow/
 
