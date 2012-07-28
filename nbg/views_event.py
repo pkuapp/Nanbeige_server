@@ -11,7 +11,6 @@ def query(request):
     after = request.GET.get('after', None)
     before = request.GET.get('before', None)
     start = request.GET.get('start', None)
-    batch = request.GET.get('batch', None)
 
     event_objs = Event.objects.all()
     if keyword:
@@ -26,16 +25,16 @@ def query(request):
         event_objs = event_objs.filter(time__lte=datetime.fromtimestamp(float(before)))
     if not start:
         start = 0
-    if not batch:
-        batch = 10
-    event_objs = event_objs[int(start):int(batch)]
+    event_objs = event_objs[int(start):10]
 
     response = [{
         'id': item.pk,
         'title': item.title,
         'subtitle': item.subtitle,
-        'category_id': item.category.pk,
-        'category_name': item.category.name,
+        'category': {
+            'id': item.category.pk,
+            'name': item.category.name,
+        },
         'time': item.time.isoformat(' '),
         'location': item.location,
         'follow_count': int(item.follow_count()),

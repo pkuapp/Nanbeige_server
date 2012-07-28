@@ -749,15 +749,19 @@ td:last-child {
   <td align="left"><pre>[
   {
     "id": 17,
-    "name": "东一教学楼"
-    "latitude": 116.301835, // E, N: positive; W, S: negative.
-    "longitude": 39.971217
+    "name": "东一教学楼",
+    "location": {
+      "latitude": 116.301835,
+      "longitude": 39.971217
+    }
   },
   {
     "id": 18,
-    "name": "东二教学楼"
-    "latitude": 116.301835, // E, N: positive; W, S: negative.
-    "longitude": 39.971217
+    "name": "东二教学楼",
+    "location": {
+      "latitude": 116.301835,
+      "longitude": 39.971217
+    }
   },
   ...
 ]</pre></td>
@@ -814,7 +818,6 @@ td:last-child {
       <li><code class="optional">time</code> after</li>
       <li><code class="optional">time</code> before</li>
       <li><code class="optional">int</code> start</li>
-      <li><code class="optional">int</code> batch</li>
     </ul>
   </td>
   <td align="left"><pre>[
@@ -822,8 +825,10 @@ td:last-child {
     "id": 200,
     "title": "这是一个活动饭粒。",
     "subtitle": "这个活动没有任何意义。",
-    "category_id": 2,
-    "category_name": "聚餐",
+    "category": {
+      "id": 2,
+      "name": "聚餐",
+    },
     "time": "2012-07-13 19:00:00",
     "location": "随便",
     "follow_count": 16
@@ -832,15 +837,17 @@ td:last-child {
     "id": 206,
     "title": "这是另一个活动饭粒。",
     "subtitle": "这个活动同样没有任何意义。",
-    "category_id": 2,
-    "category_name": "聚餐",
+    "category": {
+      "id": 2,
+      "name": "聚餐",
+    },
     "time": "2012-07-14 19:00:00", 
     "location": "随便",
     "follow_count": 32
   }
 ]</pre>
   </td>
-  <td align="left">查询含有关键词 <code>keyword</code>，在 <code>after</code> （默认为现在）之后、<code>before</code>（默认为宇宙的尽头）之前的活动。返回从第 <code>start</code>（默认为 0）开始的 <code>batch</code> 条（默认为 10）。</td>
+  <td align="left">查询含有关键词 <code>keyword</code>，在 <code>after</code> （默认为现在）之后、<code>before</code>（默认为宇宙的尽头）之前的活动。返回从第 <code>start</code>（默认为 0）开始的 10 条。</td>
 </tr>
 <tr>
   <td align="left">/category/</td>

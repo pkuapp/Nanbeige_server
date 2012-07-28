@@ -19,8 +19,10 @@ def building_list(request):
     response = [{
         'id': building.id,
         'name': building.name,
-        'latitude': float(building.latitude),
-        'longitude': float(building.longitude),
+        'location': {
+            'latitude': float(building.latitude),
+            'longitude': float(building.longitude),
+        },
     } for building in buildings]
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
