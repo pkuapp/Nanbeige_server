@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 
 def course_list(request):
-    course_values = Course.objects.all()
+    course_objs = Course.objects.all()
     response = [{
         'id': item.pk,
         'orig_id': item.original_id,
@@ -25,7 +25,7 @@ def course_list(request):
             'end': lesson.end,
             'location': lesson.location,
         } for lesson in item.lesson_set.all()]
-    } for item in course_values]
+    } for item in course_objs]
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def assignment_list(request):

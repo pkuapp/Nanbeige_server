@@ -771,7 +771,7 @@ td:last-child {
 <tr>
   <td align="left">/building/:id/room/</td>
   <td align="left"><code>GET</code></td>
-  <td align="left"><code class="required">date</code> date</li></td>
+  <td align="left"><code class="optional">date</code> date</li></td>
   <td align="left"><pre>[
   {
     "id": 123,
@@ -781,10 +781,10 @@ td:last-child {
   {
     "id": 124,
     "name": "东一A 404",
-    "availablity": [false, false, false, false, false, false, false, false, false, false]
+    "availablity": [] // 该教室没有可用信息
   }
 ]</pre></td>
-  <td align="left">返回 <code>id</code> 教学楼的自习室列表。</td>
+  <td align="left">返回 <code>id</code> 教学楼 <code>date</code> 日期（默认为今天）的自习室列表。</td>
 </tr>
 
 </tbody>

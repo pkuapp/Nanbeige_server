@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseNotFound
 from django.utils import simplejson
-from nbg.models import University
+from datetime import date as datetime_date
+from nbg.models import University, Building, RoomAvailability
 from nbg.helpers import listify
-from datetime import datetime
 
 def building_list(request):
     university_id = int(request.GET.get('university_id', 0))
@@ -27,19 +27,26 @@ def building_list(request):
 
 def room_list(request, offset):
     building_id = int(offset)
-    date = request.GET.get('date', None)
-    if building_id and date:
-        date = datetime.strptime(date, '%Y-%m-%d')
+    date = request.GET.get('date', datetime_date.today())
+
+    try:
+        building = Building.objects.get(pk=building_id)
+    except Building.DoesNotExist:
+        return HttpResponseNotFound(simplejson.dumps({'error': '教学楼不存在。'}), mimetype='application/json')
+
+    room_objs = building.room_set.all()
+    response = []
+    for room in room_objs:
         try:
-            building = Building.objects.get(pk=building_id)
-            room_objs = building.room_set.all()
-            response = [{
-                'id': room.id,
-                'name': room.name,
-                'availability': listify(room.roomavailability_set.get(date=date).availability),
-            } for room in room_objs]
-            return HttpResponse(simplejson.dumps(response), mimetype='application/json')
-        except:
-            return HttpResponseNotFound(simplejson.dumps({'error': '教学楼不存在。'}), mimetype='application/json')    
-    else:
-        return HttpResponseBadRequest(simplejson.dumps({'error': '缺少必要的参数。'}), mimetype='application/json')
+            availability = listify(room.roomavailability_set.get(date=date).availability)
+        except RoomAvailability.DoesNotExist:
+            availability = []
+
+        item = {
+            'id': room.id,
+            'name': room.name,
+            'availability': availability,
+        }
+        response.append(item)
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+

@@ -14,7 +14,7 @@ def comment_list(request):
             'id': item.writer.pk,
             'nickname': item.writer.email,
         },
-        'time': item.time.isoformat(),
+        'time': item.time.isoformat(' '),
         'content': item.content,
         'course': {
             'id': item.course.pk,

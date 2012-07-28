@@ -10,7 +10,7 @@ def query(request):
     category_id = request.GET.get('category_id', None)
     after = request.GET.get('after', None)
     before = request.GET.get('before', None)
-    start = request.GET.get('start', None)
+    start = int(request.GET.get('start', 0))
 
     event_objs = Event.objects.all()
     if keyword:
@@ -23,9 +23,7 @@ def query(request):
         event_objs = event_objs.filter(time__gte=datetime.now())
     if before:
         event_objs = event_objs.filter(time__lte=datetime.fromtimestamp(float(before)))
-    if not start:
-        start = 0
-    event_objs = event_objs[int(start):10]
+    event_objs = event_objs[start:10]
 
     response = [{
         'id': item.pk,
