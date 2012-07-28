@@ -8,7 +8,7 @@ from nbg.helpers import listify
 from datetime import datetime
 
 def building_list(request):
-    university_id = request.GET.get('university_id', None)
+    university_id = int(request.GET.get('university_id', 0))
 
     try:
         university = University.objects.get(pk=university_id)
