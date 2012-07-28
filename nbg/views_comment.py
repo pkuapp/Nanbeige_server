@@ -2,17 +2,23 @@
 
 from django.http import HttpResponse
 from django.utils import simplejson
-from nbg.models import *
+from nbg.models import Comment
 
-def comment_list(request, offset):
-    start = int(request.GET.get('start', None))
-    if not start:
-        start = 0
-    comment_objs = Comment.objects[start : start+10]
+def comment_list(request):
+    start = int(request.GET.get('start', 0))
+
+    comment_objs = Comment.objects.all()[start:start+10]
     response = [{
-        'id' : item.pk,
-        'writer' : item.writer,
-        'time' : item.time,
-        'content' : item.content,
-    }for item in comment_objs]
+        'id': item.pk,
+        'writer': {
+            'id': item.writer.pk,
+            'nickname': item.writer.email,
+        },
+        'time': item.time.isoformat(),
+        'content': item.content,
+        'course': {
+            'id': item.course.pk,
+            'name': item.course.name,
+        },
+    } for item in comment_objs]
     return HttpResponse(simplejson.dumps(response), mimetype = 'application/json')

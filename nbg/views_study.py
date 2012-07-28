@@ -2,8 +2,7 @@
 
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest
 from django.utils import simplejson
-from django.shortcuts import *
-from nbg.models import *
+from nbg.models import University
 from nbg.helpers import listify
 from datetime import datetime
 
