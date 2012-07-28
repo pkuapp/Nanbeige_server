@@ -191,7 +191,6 @@ td:last-child {
 
 <h2>TODO</h2>
 <ul>
-  <li>第三方登录</li>
   <li>评论小话</li>
 </ul>
 
@@ -303,17 +302,19 @@ td:last-child {
   <td align="left"><code>POST</code></td>
   <td align="left">
     <ul>
-      <li><code class="required">str</code> token</li>
+      <li><code class="required">str</code> code</li>
     </ul>
   </td>
-  <td align="left">
-    <ul>
-      <li><code>0</code> success</li>
-      <li><code>-1</code> authentication error</li>
-      <li><code>-9</code> unknown error</li>
-    </ul>
-  </td>
-  <td align="left">使用新浪微博 token 登录。</td>
+  <td align="left"><pre>{
+  "id": 0,
+  "email": "", // 该用户未绑定 Email 地址
+  "weibo_id": 1404376560,
+  "weibo_name": "ta",
+  "weibo_screen_name": "塔"
+}</pre><pre>{
+  "error": "微博 authorization code 错误。"
+}</td>
+  <td align="left">使用新浪微博 authorization code 登录。</td>
 </tr>
 
 </tbody>
