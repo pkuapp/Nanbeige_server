@@ -3,7 +3,6 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
-from django.contrib.auth.admin import UserAdmin
 
 class App(models.Model):
     version_android_beta = models.CharField(max_length=30)
@@ -35,7 +34,7 @@ class Semester(models.Model):
     week_start = models.DateField()
     week_end = models.DateField()
     excluded = models.CommaSeparatedIntegerField(max_length=100)
-    
+
     def __unicode__(self):
         return  u'#%s %s - %s' % (self.id, self.university.name, self.name)
 
@@ -60,7 +59,7 @@ class Course(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    weibo_token = models.CharField(max_length=32)
+    weibo_token = models.CharField(max_length=32, null=True)
     courses = models.ManyToManyField(Course)
 
     def __unicode__(self):
