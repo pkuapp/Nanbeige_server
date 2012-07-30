@@ -10,7 +10,7 @@ from django.views.decorators.http import require_http_methods
 
 def course_list(request):
     user = request.user
-    course_objs = user.course_set.all()
+    course_objs = user.get_profile().courses.all()
     response = [{
         'id': item.pk,
         'orig_id': item.original_id,

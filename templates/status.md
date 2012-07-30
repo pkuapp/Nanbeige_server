@@ -26,7 +26,7 @@
 
 ## /course/
 
-<c>pseudo</c> /course/
+<d>✓</d> /course/
 
 <t>✗</t> /course/assignment/
 
