@@ -44,27 +44,31 @@ def assignment_list(request):
     } for item in assignment_objs]
     return response
 
+@require_http_methods(['POST'])
 @json_response
 def assignment_finish(request, offset):
-    assignment_id = int(offset)
-    assignment_finish = request.POST.get('finished', None)
+    id = int(offset)
+    finished = int(request.POST.get('finished', 1))
 
-    response = 0
-    if assignment_finish:
-        assignment_obj = Assignment.objects.filter(id=assignment_id)[0]
-        assignment_obj.finished = assignment_finish
-        assignment_obj.last_modified = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
-        assignment_obj.save()
-    else:
-        response = 'lack of POST parameter'
-    return response
+    try:
+        assignment_obj = Assignment.objects.get(pk=id)
+    except Assignment.DoesNotExist:
+        return {'error': '作业不存在。'}
 
+    assignment_obj.finished = finished
+    assignment_obj.last_modified = datetime.now()
+    assignment_obj.save()
+
+    return 0
+
+@require_http_methods(['POST'])
 def assignment_delete(request, offset):
     assignment_id = int(offset)
     assignment_obj = Assignment.objects.filter(id=assignment_id)[0]
     assignment_obj.delete()
     return HttpResponse(0)
 
+@require_http_methods(['POST'])
 def assignment_modify(request,offset):
     assignment_id = int(offset)
     assignment_finish = request.POST.get('finished', None)
@@ -81,6 +85,7 @@ def assignment_modify(request,offset):
     assignment_obj.save()
     return HttpResponse(0)
 
+@require_http_methods(['POST'])
 def assignment_add(request):
     assignment_courseid = request.POST.get('course_id', None)
     assignment_due = request.POST.get('due', None)
@@ -89,6 +94,7 @@ def assignment_add(request):
     assignment_obj.save()
     return HttpResponse(0)
 
+@require_http_methods(['POST'])
 def comment_add(request, offset):
     comment_id = int(offset)
     comment_content = request.POST.get('content', None)
