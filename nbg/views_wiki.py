@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from django.http import HttpResponse, HttpResponseNotFound
-from django.utils import simplejson
 from nbg.models import *
 from datetime import datetime
 from nbg.helpers import json_response

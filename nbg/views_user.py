@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from django.http import HttpResponse
-from django.utils import simplejson
 from django.contrib import auth
 from django.views.decorators.http import require_http_methods
 from nbg.helpers import json_response

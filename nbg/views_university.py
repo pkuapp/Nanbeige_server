@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from django.http import HttpResponse, HttpResponseNotFound
-from django.utils import simplejson
 from datetime import time
 from nbg.models import University
 from nbg.helpers import listify

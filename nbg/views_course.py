@@ -5,8 +5,9 @@ from django.views.decorators.http import require_http_methods
 from datetime import datetime
 import dateutil.parser
 from nbg.models import Course, Assignment
-from nbg.helpers import listify, json_response
+from nbg.helpers import listify, json_response, auth_required
 
+@auth_required
 @json_response
 def course_list(request):
     user = request.user
@@ -29,6 +30,7 @@ def course_list(request):
     } for item in course_objs]
     return response
 
+@auth_required
 @json_response
 def assignment_list(request):
     user = request.user
@@ -44,6 +46,7 @@ def assignment_list(request):
     return response
 
 @require_http_methods(['POST'])
+@auth_required
 @json_response
 def assignment_finish(request, offset):
     id = int(offset)
@@ -64,6 +67,7 @@ def assignment_finish(request, offset):
     return 0
 
 @require_http_methods(['POST'])
+@auth_required
 @json_response
 def assignment_delete(request, offset):
     id = int(offset)
@@ -81,6 +85,7 @@ def assignment_delete(request, offset):
     return 0
 
 @require_http_methods(['POST'])
+@auth_required
 @json_response
 def assignment_modify(request,offset):
     id = int(offset)
@@ -124,6 +129,7 @@ def assignment_modify(request,offset):
     return 0
 
 @require_http_methods(['POST'])
+@auth_required
 def assignment_add(request):
     assignment_courseid = request.POST.get('course_id', None)
     assignment_due = request.POST.get('due', None)
@@ -133,6 +139,7 @@ def assignment_add(request):
     return HttpResponse(0)
 
 @require_http_methods(['POST'])
+@auth_required
 def comment_add(request, offset):
     comment_id = int(offset)
     comment_content = request.POST.get('content', None)

@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from django.http import HttpResponse
-from django.utils import simplejson
 from nbg.models import Comment
-from nbg.helpers import json_response
+from nbg.helpers import json_response, auth_required
 
+@auth_required
 @json_response
 def comment_list(request):
     start = int(request.GET.get('start', 0))

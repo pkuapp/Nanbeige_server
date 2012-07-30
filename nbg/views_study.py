@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from django.http import HttpResponse, HttpResponseNotFound
-from django.utils import simplejson
 from datetime import date as datetime_date
 from nbg.models import University, Building, RoomAvailability
 from nbg.helpers import listify,json_response

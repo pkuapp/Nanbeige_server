@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from django.http import HttpResponse
-from django.utils import simplejson
 from datetime import datetime
 from nbg.models import Event, EventCategory
-from nbg.helpers import json_response
+from nbg.helpers import json_response, auth_required
 
 @json_response
 def query(request):
@@ -72,6 +70,8 @@ def get_event(request,offset):
     }
     return response
 
+@auth_required
+@json_response
 def follow(request):
     user = request.user
     event_id = request.GET.get('id', None)
@@ -79,15 +79,16 @@ def follow(request):
     try:
         event = Event.objects.get(pk = event_id)
     except:
-        return HttpResponse(simplejson.dumps('lack of neccessary parameter'), mimetype='application/json')
+        return 'lack of neccessary parameter'
 
     if event.follower.filter(pk = user.id).count() > 0:
         pass
     else:
         event.follower.add(user)
         event.save()
-    return HttpResponse('0')
+    return 0
 
+@auth_required
 @json_response
 def following(request):
     user = request.user

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from string import split
 from django.utils.simplejson import dumps
 from django.http import HttpResponse
