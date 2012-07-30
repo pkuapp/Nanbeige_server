@@ -51,22 +51,35 @@ def assignment_finish(request, offset):
     finished = int(request.POST.get('finished', 1))
 
     try:
-        assignment_obj = Assignment.objects.get(pk=id)
+        assignment = Assignment.objects.get(pk=id)
     except Assignment.DoesNotExist:
         return {'error': '作业不存在。'}
 
-    assignment_obj.finished = finished
-    assignment_obj.last_modified = datetime.now()
-    assignment_obj.save()
+    if assignment.user != request.user:
+        return {'error': '作业不属于当前用户。'}
+
+    assignment.finished = finished
+    assignment.last_modified = datetime.now()
+    assignment.save()
 
     return 0
 
 @require_http_methods(['POST'])
+@json_response
 def assignment_delete(request, offset):
-    assignment_id = int(offset)
-    assignment_obj = Assignment.objects.filter(id=assignment_id)[0]
-    assignment_obj.delete()
-    return HttpResponse(0)
+    id = int(offset)
+
+    try:
+        assignment = Assignment.objects.get(pk=id)
+    except Assignment.DoesNotExist:
+        return {'error': '作业不存在。'}
+
+    if assignment.user != request.user:
+        return {'error': '作业不属于当前用户。'}
+
+    assignment.delete()
+
+    return 0
 
 @require_http_methods(['POST'])
 def assignment_modify(request,offset):
