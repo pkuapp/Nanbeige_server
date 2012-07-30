@@ -28,7 +28,7 @@
 
 <d>✓</d> /course/
 
-<t>✗</t> /course/assignment/
+<d>✓</d> /course/assignment/
 
 <t>✗</t> /course/assignment/:id/finish/
 
