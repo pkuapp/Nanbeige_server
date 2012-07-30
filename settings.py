@@ -19,7 +19,7 @@ DATABASES = {
         'NAME': 'nbg',                      # Or path to database file if using sqlite3.
         'USER': 'nbg',                      # Not used with sqlite3.
         'PASSWORD': 'd4P4eCTr4Vb4xQmL',                  # Not used with sqlite3.
-        'HOST': 'pkuapp.com',                      # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': '211.101.12.224',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -106,7 +106,10 @@ INSTALLED_APPS = (
 )
 
 REUSE_DB = 1
+
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = ['--verbosity=3']
 
 AUTH_PROFILE_MODULE = 'nbg.UserProfile'
 
