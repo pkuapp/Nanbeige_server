@@ -4,10 +4,11 @@ from django.http import HttpResponse
 from django.utils import simplejson
 from datetime import datetime
 from nbg.models import Course, Assignment
-from nbg.helpers import listify
+from nbg.helpers import listify, json_response
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 
+@json_response
 def course_list(request):
     user = request.user
     course_objs = user.course_set.all()
@@ -27,8 +28,9 @@ def course_list(request):
             'location': lesson.location,
         } for lesson in item.lesson_set.all()]
     } for item in course_objs]
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response
 
+@json_response
 def assignment_list(request):
     user = request.user
     assignment_objs = user.assignment_set.all()
@@ -40,19 +42,22 @@ def assignment_list(request):
         'finished': item.finished,
         'last_modified': item.last_modified.isoformat(' '),
     } for item in assignment_objs]
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response
 
+@json_response
 def assignment_finish(request, offset):
     assignment_id = int(offset)
     assignment_finish = request.POST.get('finished', None)
+
+    response = 0
     if assignment_finish:
         assignment_obj = Assignment.objects.filter(id=assignment_id)[0]
         assignment_obj.finished = assignment_finish
         assignment_obj.last_modified = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
         assignment_obj.save()
-        return HttpResponse(0)
     else:
-        return HttpResponse(simplejson.dumps('lack of POST parameter'),mimetype ='application/json')
+        response = 'lack of POST parameter'
+    return response
 
 def assignment_delete(request, offset):
     assignment_id = int(offset)
@@ -91,6 +96,7 @@ def comment_add(request, offset):
     comment_obj.save()
     return HttpResponse(0)
 
+@json_response
 def comment_list(request, offset):
     course_id = int(offset)
     start = request.GET.get('start', None)
@@ -108,4 +114,4 @@ def comment_list(request, offset):
         'content': item.content,
     } for item in comment_objs]
 
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response

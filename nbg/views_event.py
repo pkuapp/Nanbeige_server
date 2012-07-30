@@ -4,7 +4,9 @@ from django.http import HttpResponse
 from django.utils import simplejson
 from datetime import datetime
 from nbg.models import Event, EventCategory
+from nbg.helpers import json_response
 
+@json_response
 def query(request):
     keyword =request.GET.get('keyword', None)
     category_id = request.GET.get('category_id', None)
@@ -38,8 +40,9 @@ def query(request):
         'follow_count': int(item.follow_count()),
     } for item in event_objs]
 
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response
 
+@json_response
 def category(request):
     category_objs = EventCategory.objects.all()
 
@@ -49,8 +52,9 @@ def category(request):
         'count': category.count(),
     } for category in category_objs]
 
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response
 
+@json_response
 def get_event(request,offset):
     event_id = int(offset)
     
@@ -66,7 +70,7 @@ def get_event(request,offset):
         'content': event_obj.content,
         'follower_count': event_obj.follow_count(),
     }
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response
 
 def follow(request):
     user = request.user
@@ -84,6 +88,7 @@ def follow(request):
         event.save()
     return HttpResponse('0')
 
+@json_response
 def following(request):
     user = request.user
     event_objs = user.event_set.all()
@@ -99,6 +104,7 @@ def following(request):
             'content': item.content,
             'follower_count': item.follow_count(),
         } for item in event_objs]
-        return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+
     except: 
-        return HttpResponse(simplejson.dumps('error'), mimetype='application/json')
+        response = 'error'
+    return response
