@@ -182,16 +182,19 @@ def comment_add(request, offset):
 @json_response
 def comment_list(request, offset):
     course_id = int(offset)
-    start = request.GET.get('start', None)
-    if not start:
-        start = 0
+    start = int(request.GET.get('start', 0))
 
-    comment_objs = Course.objects.get(pk=course_id).comment_set.all()[start : start + 10]
+    try:
+        course = Course.objects.get(pk=course_id)
+    except Course.DoesNotExist:
+        return {'error': '课程不存在。'}
+
+    comment_objs = course.comment_set.all()[start:start+10]
 
     response = [{
         'id': item.pk,
         'writer': item.writer.username,
-        'time': item.time,
+        'time': item.time.isoformat(' '),
         'content': item.content,
     } for item in comment_objs]
 
