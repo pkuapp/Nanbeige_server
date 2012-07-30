@@ -101,7 +101,11 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'south',
     'nbg',
+    'django-nose',
+    'spider',
 )
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 AUTH_PROFILE_MODULE = 'nbg.UserProfile'
 
