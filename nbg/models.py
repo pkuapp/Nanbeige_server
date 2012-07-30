@@ -63,7 +63,7 @@ class UserProfile(models.Model):
     courses = models.ManyToManyField(Course)
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id, self.name)
+        return u'#%s %s' % (self.id, self.user.username)
 
 class Lesson(models.Model):
     day = models.SmallIntegerField()
