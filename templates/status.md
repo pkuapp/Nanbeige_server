@@ -30,11 +30,11 @@
 
 <d>✓</d> /course/assignment/
 
-<t>✗</t> /course/assignment/:id/finish/
+<d>✓</d> /course/assignment/:id/finish/
 
-<t>✗</t> /course/assignment/:id/delete/
+<d>✓</d> /course/assignment/:id/delete/
 
-<t>✗</t> /course/assignment/:id/modify/
+<d>✓</d> /course/assignment/:id/modify/
 
 <t>✗</t> /course/assignment/add/
 

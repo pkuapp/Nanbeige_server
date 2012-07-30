@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from django.http import HttpResponse
-from django.utils import simplejson
+from django.views.decorators.http import require_http_methods
 from datetime import datetime
+import dateutil.parser
 from nbg.models import Course, Assignment
 from nbg.helpers import listify, json_response
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
 
 @json_response
 def course_list(request):
@@ -82,21 +81,47 @@ def assignment_delete(request, offset):
     return 0
 
 @require_http_methods(['POST'])
+@json_response
 def assignment_modify(request,offset):
-    assignment_id = int(offset)
-    assignment_finish = request.POST.get('finished', None)
-    assignment_due = request.POST.get('due', None)
-    assignment_content = request.POST.get('content', None)
-    assignment_courseid = request.POST.get('course_id', None)
+    id = int(offset)
 
-    assignment_obj = Assignment.objects.filter(id=assignment_id)[0]
-    assignment_obj.finished = assignment_finish
-    assignment_obj.last_modified = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
-    assignment_obj.due = datetime.strftime(assignment_due, '%Y-%m-%d %H:%M:%S')  
-    assignment_obj.content = assignment_content
-    assignment_obj.course_id = assignment_courseid
-    assignment_obj.save()
-    return HttpResponse(0)
+    try:
+        assignment = Assignment.objects.get(pk=id)
+    except Assignment.DoesNotExist:
+        return {'error': '作业不存在。'}
+
+    if assignment.user != request.user:
+        return {'error': '作业不属于当前用户。'}
+
+    course_id = request.POST.get('course_id', None)
+    due = request.POST.get('due', None)
+    content = request.POST.get('content', None)
+    finished = request.POST.get('finished', None)
+
+    if course_id:
+        try:
+            course = Course.objects.get(pk=course_id)
+        except Course.DoesNotExist:
+            return {'error': '课程不存在。'}
+        try:
+            request.user.get_profile().courses.get(pk=course_id)
+        except Course.DoesNotExist:
+            return {'error': '课程不属于当前用户。'}
+        assignment.course = course
+    if due:
+        try:
+            assignment.due = dateutil.parser.parse(due)
+        except ValueError:
+            return {'error': '截止日期格式错误。'}
+    if content:
+        assignment.content = content
+    if finished:
+        assignment.finished = finished
+
+    assignment.last_modified = datetime.now()
+    assignment.save()
+
+    return 0
 
 @require_http_methods(['POST'])
 def assignment_add(request):

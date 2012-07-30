@@ -60,7 +60,7 @@ class Course(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     weibo_token = models.CharField(max_length=32, null=True, blank=True)
-    courses = models.ManyToManyField(Course)
+    courses = models.ManyToManyField(Course, blank=True)
 
     def __unicode__(self):
         return u'#%s (#%s %s)' % (self.id, self.user.id, self.user.username)
