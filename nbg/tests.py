@@ -18,7 +18,29 @@ class SimpleTest(TestCase):
 
 class AvalaibleTest(TestCase):
     c = Client()
+    
+
+    def test_app_meta(self):
+        urls = []
+        urls.extend(['/app/' + u for u in (
+            'version/api/',
+            'version/android/',
+            'version/ios/',
+            'notice/'
+            )])
+
+        urls.extend(['/university/' + u for u in (
+            '',
+            ':0/'
+            ':0/semester/'
+            )])
+        for url in urls:
+            response = self.c.get(url)
+            assert response.status_code, 200
+
+class AdvancedTest(TestCase):
+    c = Client()
+
     def test_univercity_list(self):
         response = self.c.get('/university/')
-        assert(response.status_code,200)
-        assert(isinstance(json.loads(response.read(),list),True))
+        assert isinstance(json.loads(response.content),list), True
