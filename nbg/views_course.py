@@ -2,7 +2,7 @@
 
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
-from nbg.models import Course, Assignment
+from nbg.models import Course, Assignment, Comment
 from nbg.helpers import listify, json_response, auth_required, parse_datetime
 
 @auth_required
@@ -154,15 +154,29 @@ def assignment_add(request):
         assignment.save()
         return 0
     else:
-        return {'error': '缺少必需的参数。'}
+        return {'error': '缺少必要的参数。'}
 
 @require_http_methods(['POST'])
 @auth_required
+@json_response
 def comment_add(request, offset):
-    comment_id = int(offset)
-    comment_content = request.POST.get('content', None)
-    comment_obj = Course(id=course_id, content=comment_content)
-    comment_obj.save()
+    course_id = int(offset)
+    content = request.POST.get('content', None)
+
+    if not content:
+        return {'error': '缺少必要的参数。'}
+    try:
+        course = Course.objects.get(pk=course_id)
+    except Course.DoesNotExist:
+        return {'error': '课程不存在。'}
+    try:
+        request.user.get_profile().courses.get(pk=course_id)
+    except Course.DoesNotExist:
+        return {'error': '课程不属于当前用户。'}
+
+    comment = Comment(course=course, writer=request.user, time=datetime.now(), content=content)
+    comment.save()
+
     return 0
 
 @json_response
