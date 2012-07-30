@@ -38,9 +38,9 @@
 
 <d>✓</d> /course/assignment/add/
 
-<t>✗</t> /course/:id/comment/
+<d>✓</d> /course/:id/comment/
 
-<t>✗</t> /course/:id/comment/add/
+<d>✓</d> /course/:id/comment/add/
 
 ## /comment/
 
