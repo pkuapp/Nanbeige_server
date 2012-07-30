@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
-import dateutil.parser
 from nbg.models import Course, Assignment
-from nbg.helpers import listify, json_response, auth_required
+from nbg.helpers import listify, json_response, auth_required, parse_datetime
 
 @auth_required
 @json_response
@@ -115,7 +113,7 @@ def assignment_modify(request,offset):
         assignment.course = course
     if due:
         try:
-            assignment.due = dateutil.parser.parse(due)
+            assignment.due = parse_datetime(due)
         except ValueError:
             return {'error': '截止日期格式错误。'}
     if content:
@@ -130,13 +128,33 @@ def assignment_modify(request,offset):
 
 @require_http_methods(['POST'])
 @auth_required
+@json_response
 def assignment_add(request):
-    assignment_courseid = request.POST.get('course_id', None)
-    assignment_due = request.POST.get('due', None)
-    assignment_content = request.POST.get('content', None)
-    assignment_obj = Course(course_id=assignment_courseid, due=datetime.strftime(assignment_due, '%Y-%m-%d %H:%M:%S', content=assignment_content))
-    assignment_obj.save()
-    return HttpResponse(0)
+    course_id = request.POST.get('course_id', None)
+    due = request.POST.get('due', None)
+    content = request.POST.get('content', None)
+
+    if course_id and due and content:
+        try:
+            course = Course.objects.get(pk=course_id)
+        except Course.DoesNotExist:
+            return {'error': '课程不存在。'}
+        try:
+            request.user.get_profile().courses.get(pk=course_id)
+        except Course.DoesNotExist:
+            return {'error': '课程不属于当前用户。'}
+
+        try:
+            due = parse_datetime(due)
+        except ValueError:
+            return {'error': '截止日期格式错误。'}
+
+        assignment = Assignment(course=course, user=request.user, due=due, content=content,
+          finished=False, last_modified=datetime.now())
+        assignment.save()
+        return 0
+    else:
+        return {'error': '缺少必需的参数。'}
 
 @require_http_methods(['POST'])
 @auth_required
@@ -145,7 +163,7 @@ def comment_add(request, offset):
     comment_content = request.POST.get('content', None)
     comment_obj = Course(id=course_id, content=comment_content)
     comment_obj.save()
-    return HttpResponse(0)
+    return 0
 
 @json_response
 def comment_list(request, offset):
@@ -153,8 +171,6 @@ def comment_list(request, offset):
     start = request.GET.get('start', None)
     if not start:
         start = 0
-    # else:
-    #     start = int(start)
 
     comment_objs = Course.objects.get(pk=course_id).comment_set.all()[start : start + 10]
 

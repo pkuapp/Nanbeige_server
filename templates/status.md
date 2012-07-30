@@ -36,7 +36,7 @@
 
 <d>✓</d> /course/assignment/:id/modify/
 
-<t>✗</t> /course/assignment/add/
+<d>✓</d> /course/assignment/add/
 
 <t>✗</t> /course/:id/comment/
 

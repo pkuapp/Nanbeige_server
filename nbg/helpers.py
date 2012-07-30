@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from string import split
+from datetime import datetime
 from django.utils.simplejson import dumps
 from django.http import HttpResponse
 
@@ -12,6 +13,9 @@ def listify(str):
         ret_list = map(int, ret_list)
 
     return ret_list
+
+def parse_datetime(str):
+    return datetime.strptime(str, "%Y-%m-%d %H:%M:%S")
 
 def json_response(func):
     def inner(request, *args, **kwargs):
