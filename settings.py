@@ -101,7 +101,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'south',
     'nbg',
-    'django-nose',
+    'django_nose',
     'spider',
 )
 
