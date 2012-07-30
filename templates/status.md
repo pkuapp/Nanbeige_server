@@ -22,7 +22,7 @@
 
 <d>✓</d> /university/:id/
 
-<t>✗</t> /university/:id/semester/
+<d>✓</d> /university/:id/semester/
 
 ## /course/
 
@@ -44,7 +44,7 @@
 
 ## /comment/
 
-<t>✗</t>
+<c>pseudo</c> /comment/
 
 ## /study/
 
@@ -62,7 +62,7 @@
 
 <t>✗</t> /event/:id/follow/
 
-<t>✗</t> /event/following/
+<c>pseudo</c> /event/following/
 
 ## /wiki/
 
