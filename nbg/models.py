@@ -39,13 +39,6 @@ class Semester(models.Model):
     def __unicode__(self):
         return  u'#%s %s - %s' % (self.id, self.university.name, self.name)
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
-    weibo_token = models.CharField(max_length=32)
-
-    def __unicode__(self):
-        return u'#%s %s' % (self.id, self.name)
-
 class ScheduleUnit(models.Model):
     number = models.SmallIntegerField()
     start = models.TimeField()
@@ -64,6 +57,14 @@ class Course(models.Model):
 
     def __unicode__(self):
         return u'#%s %s - %s' % (self.id, self.semester.university.name, self.name)
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    weibo_token = models.CharField(max_length=32)
+    courses = models.ManyToManyField(Course)
+
+    def __unicode__(self):
+        return u'#%s %s' % (self.id, self.name)
 
 class Lesson(models.Model):
     day = models.SmallIntegerField()
