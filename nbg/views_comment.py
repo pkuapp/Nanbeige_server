@@ -3,7 +3,9 @@
 from django.http import HttpResponse
 from django.utils import simplejson
 from nbg.models import Comment
+from nbg.helpers import json_response
 
+@json_response
 def comment_list(request):
     start = int(request.GET.get('start', 0))
 
@@ -21,4 +23,4 @@ def comment_list(request):
             'name': item.course.name,
         },
     } for item in comment_objs]
-    return HttpResponse(simplejson.dumps(response), mimetype = 'application/json')
+    return response

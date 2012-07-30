@@ -4,7 +4,9 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.utils import simplejson
 from nbg.models import *
 from datetime import datetime
+from nbg.helpers import json_response
 
+@json_response
 def wiki_node(request, offset):
     node_id = int(offset)
     wikinode_obj = WikiNode.objects.get(pk=node_id)
@@ -24,8 +26,9 @@ def wiki_node(request, offset):
             'type': wikinode_obj.type,
             'content': wikinode_obj.content,
         }
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response
 
+@json_response
 def wiki_list(request, offset):
     university_id = int(offset)
     
@@ -35,10 +38,10 @@ def wiki_list(request, offset):
         response = {
             'error': "学校不存在。",
         }
-        return HttpResponseNotFound(simplejson.dumps(response), mimetype='application/json')
+        return response
 
     response = [{
         'title': item.node.title,
         'node_id': item.node.pk,
     } for item in university_obj.wiki_set.all()]
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response

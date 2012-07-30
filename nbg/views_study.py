@@ -4,15 +4,16 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.utils import simplejson
 from datetime import date as datetime_date
 from nbg.models import University, Building, RoomAvailability
-from nbg.helpers import listify
+from nbg.helpers import listify,json_response
 
+@json_response
 def building_list(request):
     university_id = int(request.GET.get('university_id', 0))
 
     try:
         university = University.objects.get(pk=university_id)
     except:
-        return HttpResponseNotFound(simplejson.dumps({'error': '学校不存在。'}), mimetype='application/json')
+        return {'error': '学校不存在。'}
 
     buildings = university.building_set.all()
     response = [{
@@ -23,8 +24,9 @@ def building_list(request):
             'longitude': float(building.longitude),
         },
     } for building in buildings]
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response
 
+@json_response
 def room_list(request, offset):
     building_id = int(offset)
     date = request.GET.get('date', datetime_date.today())
@@ -32,7 +34,7 @@ def room_list(request, offset):
     try:
         building = Building.objects.get(pk=building_id)
     except Building.DoesNotExist:
-        return HttpResponseNotFound(simplejson.dumps({'error': '教学楼不存在。'}), mimetype='application/json')
+        return {'error': '教学楼不存在。'}
 
     room_objs = building.room_set.all()
     response = []
@@ -48,5 +50,5 @@ def room_list(request, offset):
             'availability': availability,
         }
         response.append(item)
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response
 

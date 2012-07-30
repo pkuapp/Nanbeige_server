@@ -5,7 +5,9 @@ from django.utils import simplejson
 from datetime import time
 from nbg.models import University
 from nbg.helpers import listify
+from nbg.helpers import json_response
 
+@json_response
 def university_list(request):
     universities = University.objects.all()
     response = [{
@@ -16,8 +18,9 @@ def university_list(request):
             'longitude': float(university.longitude)
         }
     } for university in universities]
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response
 
+@json_response
 def detail(request, offset):
     university_id = int(offset)
     try:
@@ -26,7 +29,7 @@ def detail(request, offset):
         response = {
             'error': "学校不存在。",
         }
-        return HttpResponseNotFound(simplejson.dumps(response), mimetype='application/json')
+        return response
 
     schedule_unit = university.scheduleunit_set.all()
 
@@ -56,8 +59,9 @@ def detail(request, offset):
             'separators': listify(university.lessons_separator)
         }
     }
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response
 
+@json_response
 def semester(request, offset):
     university_id = int(offset)
     university = University.objects.get(pk=university_id)
@@ -74,4 +78,4 @@ def semester(request, offset):
             'excluded': listify(semester.excluded)
         }
     } for semester in semesters]
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    return response
