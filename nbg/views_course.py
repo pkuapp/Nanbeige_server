@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 
 def course_list(request):
-    course_objs = Course.objects.all()
+    user = request.user
+    course_objs = user.course_set.all()
     response = [{
         'id': item.pk,
         'orig_id': item.original_id,
@@ -29,16 +30,17 @@ def course_list(request):
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def assignment_list(request):
-    assignment_values = Assignment.objects.all()
+    user = request.user
+    assignment_objs = user.assignment_set.all()
     response = [{
-        'id' : item.id,
-        'course' : item.course.name,
-        'due' : datetime.strftime(item.due, '%Y-%m-%d %H:%M:%S'),
-        'content' : item.content, 
-        'finished' : Assignment.objects.filter(course = item.id).values()[0]['finished'],
-        'last_modified' : datetime.strftime(item.last_modified, '%Y-%m-%d %H:%M:%S'),
-    } for item in assignment_values]
-    return HttpResponse(simplejson.dumps(response),mimetype='application/json')
+        'id': item.pk,
+        'course': item.course.name,
+        'due': item.due.isoformat(' '),
+        'content': item.content, 
+        'finished': item.finished,
+        'last_modified': item.last_modified.isoformat(' '),
+    } for item in assignment_objs]
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def assignment_finish(request, offset):
     assignment_id = int(offset)

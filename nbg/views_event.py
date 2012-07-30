@@ -56,15 +56,15 @@ def get_event(request,offset):
     
     event_obj = Event.objects.get(pk=event_id)
     response = {
-        'id' : event_obj.pk,
-        'title' : event_obj.title,
-        'subtitle' : event_obj.subtitle,
-        'category_id' : event_obj.category.pk,
-        'category_name' : event_obj.category.name,
-        'location' : event_obj.location,
-        'organizer' : event_obj.organizer,
-        'content' : event_obj.content,
-        'follower_count' : event_obj.follow_count(),
+        'id': event_obj.pk,
+        'title': event_obj.title,
+        'subtitle': event_obj.subtitle,
+        'category_id': event_obj.category.pk,
+        'category_name': event_obj.category.name,
+        'location': event_obj.location,
+        'organizer': event_obj.organizer,
+        'content': event_obj.content,
+        'follower_count': event_obj.follow_count(),
     }
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
@@ -89,15 +89,15 @@ def following(request):
     event_objs = user.event_set.all()
     try:
         response = [{
-            'id' : item.pk,
-            'title' : item.title,
-            'subtitle' : item.subtitle,
-            'category_id' : item.category.pk,
-            'category_name' : item.category.name,
-            'location' : item.location,
-            'organizer' : item.organizer,
-            'content' : item.content,
-            'follower_count' : item.follow_count(),
+            'id': item.pk,
+            'title': item.title,
+            'subtitle': item.subtitle,
+            'category_id': item.category.pk,
+            'category_name': item.category.name,
+            'location': item.location,
+            'organizer': item.organizer,
+            'content': item.content,
+            'follower_count': item.follow_count(),
         } for item in event_objs]
         return HttpResponse(simplejson.dumps(response), mimetype='application/json')
     except: 
