@@ -59,7 +59,7 @@ class Course(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    weibo_token = models.CharField(max_length=32, null=True)
+    weibo_token = models.CharField(max_length=32, null=True, blank=True)
     courses = models.ManyToManyField(Course)
 
     def __unicode__(self):
