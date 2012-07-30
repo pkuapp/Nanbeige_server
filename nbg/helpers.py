@@ -12,7 +12,7 @@ def listify(str):
     return ret_list
 
 def json_response(func):
-    def inner(request,*args,**kwargs):
-        dict_response = func(request,*args,**kwargs)
-        return HttpResponse(dumps(dict_response),mimetype="application/json")
+    def inner(request, *args, **kwargs):
+        dict_response = func(request, *args, **kwargs)
+        return HttpResponse(dumps(dict_response), mimetype="application/json")
     return inner
