@@ -3,6 +3,7 @@
 from datetime import datetime
 from django.db.models import Q
 from django.core.exceptions import ValidationError
+from django.views.decorators.http import require_http_methods
 from nbg.models import Event, EventCategory
 from nbg.helpers import json_response, auth_required
 
@@ -74,6 +75,7 @@ def get_event(request,offset):
     }
     return response
 
+@require_http_methods(['POST'])
 @auth_required
 @json_response
 def follow(request, offset):
@@ -83,7 +85,7 @@ def follow(request, offset):
     try:
         event = Event.objects.get(pk=id)
     except:
-        return {'error': '活动不存在。'}
+        return {'error': '活动不存在。'}, 404
 
     event.follower.add(user)
     event.save()

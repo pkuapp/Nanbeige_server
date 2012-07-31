@@ -60,7 +60,7 @@
 
 <d>✓</d> /event/:id/
 
-<t>✗</t> /event/:id/follow/
+<d>✓</d> /event/:id/follow/
 
 <c>pseudo</c> /event/following/
 

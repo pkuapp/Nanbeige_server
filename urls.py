@@ -40,7 +40,7 @@ urlpatterns = patterns('',
     (r'^event/$','nbg.views_event.query'),
     (r'^event/category/$','nbg.views_event.category'),
     (r'^event/(\d+)/$','nbg.views_event.get_event'),
-    (r'^event/follow/$','nbg.views_event.follow'),
+    (r'^event/(\d+)/follow/$','nbg.views_event.follow'),
     (r'^event/following/$','nbg.views_event.following'),
 
     (r'^wiki/(\d+)/$', 'nbg.views_wiki.wiki_list'),
