@@ -165,7 +165,7 @@ class Event(models.Model):
         return self.follower.count()
 
     def __unicode__(self):
-        return u'#%s %s - %s - %s' % (self.id, self.campus, self.title)
+        return u'#%s %s - %s' % (self.id, self.campus, self.title)
 
 class WikiNode(models.Model):
     TYPE_CHOICES = (
