@@ -152,7 +152,7 @@ def assignment_add(request):
         assignment = Assignment(course=course, user=request.user, due=due, content=content,
           finished=False, last_modified=datetime.now())
         assignment.save()
-        return 0
+        return {'id': assignment.pk}
     else:
         return {'error': '缺少必要的参数。'}, 400
 
