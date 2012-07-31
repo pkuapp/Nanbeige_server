@@ -99,12 +99,12 @@ class LogicTest(TestCase):
         assert not json.loads(response.content)[-1]['finished']
 
 
-        response = self.c.post(urlr+'%s/finish/' % (assignment_id),{'finished':True})
+        response = self.c.post(urlr+'%s/finish/' % (assignment_id),{'finished':1})
         assert response.status_code == 200
         response = self.c.get(urlr)
         assert json.loads(response.content)[-1]['finished']
 
-        response = self.c.post(urlr+'%s/finish/' % (assignment_id),{'finished':False})
+        response = self.c.post(urlr+'%s/finish/' % (assignment_id),{'finished':0})
         assert response.status_code == 200
         response = self.c.get(urlr)
         assert not json.loads(response.content)[-1]['finished']
