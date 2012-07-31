@@ -8,7 +8,9 @@ from nbg.helpers import json_response, auth_required
 def comment_list(request):
     start = int(request.GET.get('start', 0))
 
-    comment_objs = Comment.objects.all()[start:start+10]
+    courses = request.user.get_profile().courses.all()
+    comments = Comment.objects.filter(course__in=courses)[start:start+10]
+
     response = [{
         'id': item.pk,
         'writer': {
@@ -21,5 +23,5 @@ def comment_list(request):
             'id': item.course.pk,
             'name': item.course.name,
         },
-    } for item in comment_objs]
+    } for item in comments]
     return response
