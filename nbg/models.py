@@ -32,7 +32,7 @@ class Campus(models.Model):
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
 
     def __unicode__(self):
-        return u'#%s %s - %s' % (self.id, self.university.name, self.name)
+        return u'#%s %s%s' % (self.id, self.university.name, self.name)
 
 class Semester(models.Model):
     name = models.CharField(max_length=100)
@@ -124,7 +124,7 @@ class Building(models.Model):
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
 
     def __unicode__(self):
-        return u'#%s %s -  %s' % (self.id, self.university.name, self.name)
+        return u'#%s %s -  %s' % (self.id, self.campus, self.name)
 
 class Room(models.Model):
     name = models.CharField(max_length=30)
@@ -155,7 +155,7 @@ class Event(models.Model):
     subtitle = models.CharField(max_length=200)
     category = models.ForeignKey(EventCategory)
     time = models.DateTimeField()
-    university = models.ForeignKey(University)
+    campus = models.ForeignKey(Campus)
     location = models.CharField(max_length=200)
     organizer = models.CharField(max_length=200)
     content = models.TextField()
@@ -165,7 +165,7 @@ class Event(models.Model):
         return self.follower.count()
 
     def __unicode__(self):
-        return u'#%s %s - %s' % (self.id, self.university.name, self.title)
+        return u'#%s %s - %s - %s' % (self.id, self.campus, self.title)
 
 class WikiNode(models.Model):
     TYPE_CHOICES = (
