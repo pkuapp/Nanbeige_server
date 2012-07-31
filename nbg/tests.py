@@ -71,9 +71,6 @@ class LogicTest(TestCase):
 
     def test_univercity_list(self):
         response = self.c.get('/university/')
-<<<<<<< HEAD
-        assert isinstance(json.loads(response.content),list), True
-=======
         assert isinstance(json.loads(response.content),list)
 
     def test_courses(self):
@@ -125,11 +122,3 @@ class LogicTest(TestCase):
         assert response.status_code == 200
         response = self.c.get(urlr)
         assert json.loads(response.content)[-1]['id'] is not int(assgnment_id)
-
-
-
-        
-
-
-
->>>>>>> add tests to assignment
