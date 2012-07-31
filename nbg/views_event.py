@@ -58,38 +58,36 @@ def category(request):
 
 @json_response
 def get_event(request,offset):
-    event_id = int(offset)
-    
-    event_obj = Event.objects.get(pk=event_id)
+    id = int(offset)
+
+    event = Event.objects.get(pk=id)
     response = {
-        'id': event_obj.pk,
-        'title': event_obj.title,
-        'subtitle': event_obj.subtitle,
-        'category_id': event_obj.category.pk,
-        'category_name': event_obj.category.name,
-        'location': event_obj.location,
-        'organizer': event_obj.organizer,
-        'content': event_obj.content,
-        'follower_count': event_obj.follow_count(),
+        'id': event.pk,
+        'title': event.title,
+        'subtitle': event.subtitle,
+        'category_id': event.category.pk,
+        'category_name': event.category.name,
+        'location': event.location,
+        'organizer': event.organizer,
+        'content': event.content,
+        'follower_count': event.follow_count(),
     }
     return response
 
 @auth_required
 @json_response
-def follow(request):
+def follow(request, offset):
+    id = int(offset)
     user = request.user
-    event_id = request.GET.get('id', None)
 
     try:
-        event = Event.objects.get(pk = event_id)
+        event = Event.objects.get(pk=id)
     except:
-        return 'lack of neccessary parameter'
+        return {'error': '活动不存在。'}
 
-    if event.follower.filter(pk = user.id).count() > 0:
-        pass
-    else:
-        event.follower.add(user)
-        event.save()
+    event.follower.add(user)
+    event.save()
+
     return 0
 
 @auth_required

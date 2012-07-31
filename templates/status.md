@@ -54,7 +54,7 @@
 
 ## /event/
 
-<c>pseudo</c> /event/
+<d>✓</d> /event/
 
 <d>✓</d> /event/category/
 
