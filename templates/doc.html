@@ -189,9 +189,15 @@ td:last-child {
 
 <hr />
 
-<h2>TODO</h2>
+<h2>HTTP 状态码</h2>
+
 <ul>
-  <li>评论小话</li>
+  <li><code>200</code> 正常。</li>
+  <li><code>400</code> 请求格式错误。</li>
+  <li><code>401</code> 需要登录。</li>
+  <li><code>403</code> 没有权限。（如修改他人的作业）</li>
+  <li><code>404</code> 请求的资源不存在。</li>
+  <li><code>418</code> 我是一只咖啡壶☆</li>  
 </ul>
 
 <hr />
@@ -891,8 +897,12 @@ td:last-child {
   <td align="left">/:id/follow/</td>
   <td align="left"><code>POST*</code></td>
   <td align="left">none</td>
-  <td align="left"><pre>{
-  "miao": "mew"
+  <td align="left">
+    <ul>
+      <li><code>0</code> success</li>
+    </ul>
+    <pre>{
+  "error": "活动不存在。"
 }</pre></td>
   <td align="left">关注 <code>id</code> 活动。</td>
 </tr>
