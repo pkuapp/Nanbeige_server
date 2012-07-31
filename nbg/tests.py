@@ -114,7 +114,7 @@ class LogicTest(TestCase):
             {
                 'course_id':1, 
                 'due':"2014-01-14 00:00:00",
-                'content':'请吴昊天吃金钱豹', 
+                'content': u'请吴昊天吃金钱豹', 
             })
         assert response.status_code == 200
         response = self.c.post(urlr)
