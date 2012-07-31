@@ -66,8 +66,10 @@ def get_event(request,offset):
         'id': event.pk,
         'title': event.title,
         'subtitle': event.subtitle,
-        'category_id': event.category.pk,
-        'category_name': event.category.name,
+        'category': {
+            'id': event.category.pk,
+            'name': event.category.name,
+        },
         'location': event.location,
         'organizer': event.organizer,
         'content': event.content,
@@ -95,21 +97,20 @@ def follow(request, offset):
 @auth_required
 @json_response
 def following(request):
-    user = request.user
-    event_objs = user.event_set.all()
-    try:
-        response = [{
-            'id': item.pk,
-            'title': item.title,
-            'subtitle': item.subtitle,
-            'category_id': item.category.pk,
-            'category_name': item.category.name,
-            'location': item.location,
-            'organizer': item.organizer,
-            'content': item.content,
-            'follower_count': item.follow_count(),
-        } for item in event_objs]
+    events = request.user.event_set.all()
 
-    except: 
-        response = 'error'
+    response = [{
+        'id': item.pk,
+        'title': item.title,
+        'subtitle': item.subtitle,
+        'category': {
+            'id': item.category.id,
+            'name': item.category.name,
+        },
+        'location': item.location,
+        'organizer': item.organizer,
+        'content': item.content,
+        'follower_count': item.follow_count(),
+    } for item in events]
+
     return response

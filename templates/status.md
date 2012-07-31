@@ -62,7 +62,7 @@
 
 <d>✓</d> /event/:id/follow/
 
-<c>pseudo</c> /event/following/
+<d>✓</d> /event/following/
 
 ## /wiki/
 
