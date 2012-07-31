@@ -348,21 +348,11 @@ td:last-child {
   <td align="left"><pre>[
   {
     "id": 1,
-    "name": "北京大学",
-    "location":
-    {
-      "latitude": 116.301835, // E, N: positive; W, S: negative.
-      "longitude": 39.971217
-    }
+    "name": "北京大学"
   },
   {
     "id": 2,
-    "name": "浙江大学",
-    "location":
-    {
-      "latitude": 120.079928,
-      "longitude": 30.314252
-    }
+    "name": "浙江大学"
   }
 ]</pre></td>
   <td align="left">返回支持的大学列表。</td>
@@ -374,11 +364,23 @@ td:last-child {
   <td align="left">none</td>
   <td align="left"><pre>{
   "name": "浙江大学",
-  "location":
-  {
-    "latitude": 120.079928,
-    "longitude": 30.314252
-  },
+  "campuses":
+  [
+    {
+      "name": "紫金港校区",
+      "location": {
+        "latitude": 120.079928,
+        "longitude": 30.314252
+      }
+    },
+    {
+      "name": "玉泉校区",
+      "location": {
+        "latitude": 120.079928,
+        "longitude": 30.314252
+      }
+    }
+  ],
   "support":
   {
     "import_course": true,
@@ -410,7 +412,7 @@ td:last-child {
     "separators": [2, 4, 5, 6, 8, 10, 12]
   }
 }</pre></td>
-  <td align="left">返回 <code>id</code> 大学的详细信息。</td>
+  <td align="left">返回 <code>id</code> 大学的详细信息。若只有一个校区，campus 的 name 为空。</td>
 </tr>
 
 <tr>
