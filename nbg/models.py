@@ -30,7 +30,7 @@ class Campus(models.Model):
     university = models.ForeignKey(University)
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
-    
+
 class Semester(models.Model):
     name = models.CharField(max_length=100)
     year = models.CharField(max_length=50)

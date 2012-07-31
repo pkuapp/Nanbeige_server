@@ -3,6 +3,7 @@ from nbg.models import *
 
 admin.site.register(App)
 admin.site.register(University)
+admin.site.register(Campus)
 admin.site.register(Semester)
 admin.site.register(UserProfile)
 admin.site.register(ScheduleUnit)
