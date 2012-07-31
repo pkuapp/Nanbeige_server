@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date as datetime_date
-from nbg.models import University, Building, RoomAvailability
+from nbg.models import Campus, Building, RoomAvailability
 from nbg.helpers import listify,json_response
 
 @json_response
 def building_list(request):
-    university_id = int(request.GET.get('university_id', 0))
+    campus_id = int(request.GET.get('campus_id', 0))
 
     try:
-        university = University.objects.get(pk=university_id)
-    except University.DoesNotExist:
-        return {'error': '学校不存在。'}, 404
+        campus = Campus.objects.get(pk=campus_id)
+    except Campus.DoesNotExist:
+        return {'error': '校区不存在。'}, 404
 
-    buildings = university.building_set.all()
+    buildings = campus.building_set.all()
     response = [{
         'id': building.id,
         'name': building.name,

@@ -119,7 +119,7 @@ class Comment(models.Model):
 
 class Building(models.Model):
     name = models.CharField(max_length=30)
-    university = models.ForeignKey(University)
+    campus = models.ForeignKey(Campus)
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
 
