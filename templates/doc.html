@@ -289,8 +289,7 @@ td:last-child {
   </td>
   <td align="left"><pre>{
   "id": 0,
-  "email": "grain@pkuapp.com",
-  "weibo": null
+  "nickname": "塔"
 }</pre><pre>{
   "error": "Email 或密码错误。"
 }</pre>
@@ -303,21 +302,16 @@ td:last-child {
   <td align="left"><code>POST</code></td>
   <td align="left">
     <ul>
-      <li><code class="required">str</code> code</li>
+      <li><code class="required">str</code> token</li>
     </ul>
   </td>
   <td align="left"><pre>{
-  "id": 0,
-  "email": null, // 未绑定 Email 地址
-  "weibo": {
-    "id": 1404376560,
-    "name": "ta",
-    "screen_name": "塔"
-  }
+  "id": 31415926,
+  "nickname": null
 }</pre><pre>{
-  "error": "微博 authorization code 错误。"
+  "error": "微博 token 错误。"
 }</td>
-  <td align="left">使用新浪微博 authorization code 登录。</td>
+  <td align="left">使用新浪微博 token 登录。若用户有 email 注册的南北阁帐号，nickname 为字符串。</td>
 </tr>
 
 </tbody>

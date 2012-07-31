@@ -44,7 +44,7 @@
 
 ## /comment/
 
-<c>pseudo</c> /comment/
+<d>✓</d> /comment/
 
 ## /study/
 
