@@ -19,8 +19,16 @@ def parse_datetime(str):
 
 def json_response(func):
     def inner(request, *args, **kwargs):
-        dict_response = func(request, *args, **kwargs)
-        return HttpResponse(dumps(dict_response), mimetype="application/json")
+        status_code = 200
+        response = func(request, *args, **kwargs)
+        content = response
+        if isinstance(response,tuple):
+            content = response[0]
+            status_code = response[1]
+
+        return HttpResponse(dumps(content), \
+            mimetype="application/json",status=status_code)
+        
     return inner
 
 def auth_required(func):
