@@ -84,7 +84,7 @@ class LogicTest(TestCase):
 
         response = self.c.post(urlr+'add/',\
             {
-                'course_id':0, 
+                'course_id':1, 
                 'due':"2013-01-14 00:00:00",
                 'content':'请吴昊天吃饭',
             })
@@ -112,7 +112,7 @@ class LogicTest(TestCase):
 
         resposne = self.c.post(urlr+'%s/modify/' % (assgnment_id),\
             {
-                'course_id':0, 
+                'course_id':1, 
                 'due':"2014-01-14 00:00:00",
                 'content':'请吴昊天吃金钱豹', 
             })
