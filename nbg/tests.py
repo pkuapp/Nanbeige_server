@@ -11,7 +11,7 @@ from django_nose import FastFixtureTestCase
 import json
 
 class AvalaibleTest(TestCase):
-    fixtures = ['nbg_dump.yaml',]
+    fixtures = ['dump.yaml',]
 
     def setUp(self):
         self.c = Client()
@@ -40,7 +40,7 @@ class AvalaibleTest(TestCase):
             assert response.status_code, 200
 
 class UniversityAvalaibleTest(TestCase):
-    fixtures = ['nbg_dump.yaml',]
+    fixtures = ['dump.yaml',]
     def setUp(self):
         self.c = Client()
 
