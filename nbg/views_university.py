@@ -23,7 +23,7 @@ def detail(request, offset):
     university_id = int(offset)
     try:
         university = University.objects.get(pk=university_id)
-    except:
+    except University.DoesNotExist:
         return {'error': "学校不存在。"}, 404
 
     schedule_unit = university.scheduleunit_set.all()

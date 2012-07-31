@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from nbg.models import *
-from datetime import datetime
+from nbg.models import University, WikiNode
 from nbg.helpers import json_response
 
 @json_response
@@ -32,7 +31,7 @@ def wiki_list(request, offset):
     
     try:
         university_obj = University.objects.get(pk=university_id)
-    except:
+    except University.DoesNotExist:
         return {'error': "学校不存在。"}, 404
 
     response = [{

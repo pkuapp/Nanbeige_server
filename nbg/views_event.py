@@ -86,7 +86,7 @@ def follow(request, offset):
 
     try:
         event = Event.objects.get(pk=id)
-    except:
+    except Event.DoesNotExist:
         return {'error': '活动不存在。'}, 404
 
     event.follower.add(user)

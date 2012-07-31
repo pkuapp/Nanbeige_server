@@ -10,7 +10,7 @@ def building_list(request):
 
     try:
         university = University.objects.get(pk=university_id)
-    except:
+    except University.DoesNotExist:
         return {'error': '学校不存在。'}, 404
 
     buildings = university.building_set.all()
