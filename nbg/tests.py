@@ -11,7 +11,7 @@ from django_nose import FastFixtureTestCase
 import json
 
 class AvalaibleTest(TestCase):
-    
+
     fixtures = ['dump.yaml',]
 
     def setUp(self):

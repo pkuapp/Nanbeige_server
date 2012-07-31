@@ -33,10 +33,7 @@ def wiki_list(request, offset):
     try:
         university_obj = University.objects.get(pk=university_id)
     except:
-        response = {
-            'error': "学校不存在。",
-        }
-        return response, 404
+        return {'error': "学校不存在。"}, 404
 
     response = [{
         'title': item.node.title,
