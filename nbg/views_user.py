@@ -19,5 +19,5 @@ def login_email(request):
     else:
         response = {
             'error': "Email 或密码错误。",
-        }
+        }, 401
     return response
