@@ -71,7 +71,7 @@ def login(request):
     data['mm'] = request.POST.get('mm', None)
     return login_urp_with_data(**locals())
 
-def process_course(request):
+def get_course(request):
     doc = """
 
 
