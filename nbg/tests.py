@@ -91,7 +91,7 @@ class LogicTest(TestCase):
 
         assert response.status_code == 200
         assert type(json.loads(response.content)['id']) is int
-        assgnment_id = json.loads(response.content)['id']
+        assignment_id = json.loads(response.content)['id']
 
         response = self.c.get(urlr)
         assert response.status_code == 200
@@ -99,18 +99,18 @@ class LogicTest(TestCase):
         assert not json.loads(response.content)[-1]['finished']
 
 
-        response = self.c.post(urlr+'%s/finish/' % (assgnment_id),{'finished':True})
+        response = self.c.post(urlr+'%s/finish/' % (assignment_id),{'finished':True})
         assert response.status_code == 200
         response = self.c.get(urlr)
         assert json.loads(response.content)[-1]['finished']
 
-        response = self.c.post(urlr+'%s/finish/' % (assgnment_id),{'finished':False})
+        response = self.c.post(urlr+'%s/finish/' % (assignment_id),{'finished':False})
         assert response.status_code == 200
         response = self.c.get(urlr)
         assert not json.loads(response.content)[-1]['finished']
 
 
-        resposne = self.c.post(urlr+'%s/modify/' % (assgnment_id),\
+        resposne = self.c.post(urlr+'%s/modify/' % (assignment_id),\
             {
                 'course_id':1, 
                 'due':"2014-01-14 00:00:00",
@@ -120,7 +120,7 @@ class LogicTest(TestCase):
         response = self.c.post(urlr)
         assert json.loads(response.content)[-1]['content'] is '请吴昊天吃金钱豹'
 
-        response = self.c.post('/course/%s/delete/' % (assgnment_id))
+        response = self.c.post('/course/%s/delete/' % (assignment_id))
         assert response.status_code == 200
         response = self.c.get(urlr)
-        assert json.loads(response.content)[-1]['id'] is not int(assgnment_id)
+        assert json.loads(response.content)[-1]['id'] is not int(assignment_id)
