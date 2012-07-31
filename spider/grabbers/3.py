@@ -8,7 +8,7 @@ from types import *
 from BeautifulSoup import *
 import urllib,urllib2
 import re
-#from django.contrib.models import User
+from django.contrib.models import User
 from nbg.models import *
 
 user_agent = r'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
@@ -58,7 +58,8 @@ def login_urp_with_data(**kwarg):
             response = urllib2.urlopen(req)
             logoutdata = response.read().decode('gb18030')
             response.close()
-        #deal with course data
+            #deal with course data
+
         else:
             return HttpResponse('login error')
         #if re.search(plogin,logindata.decode('gb18030')):

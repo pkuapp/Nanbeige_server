@@ -15,8 +15,6 @@ class App(models.Model):
 class University(models.Model):
     name = models.CharField(max_length=200)
     english_name = models.CharField(max_length=200)
-    latitude = models.DecimalField(max_digits=10, decimal_places=6)
-    longitude = models.DecimalField(max_digits=10, decimal_places=6)
     support_import_course = models.BooleanField()
     support_list_course = models.BooleanField()
     lessons_morning = models.SmallIntegerField()
@@ -27,6 +25,12 @@ class University(models.Model):
     def __unicode__(self):
         return u'#%s %s' % (self.id,self.name)
 
+class Campus(models.Model):
+    name = models.CharField(max_length=100, null=True, blank=True)
+    university = models.ForeignKey(University)
+    latitude = models.DecimalField(max_digits=10, decimal_places=6)
+    longitude = models.DecimalField(max_digits=10, decimal_places=6)
+    
 class Semester(models.Model):
     name = models.CharField(max_length=100)
     year = models.CharField(max_length=50)
