@@ -1,0 +1,405 @@
+- fields: {notice_content: "\u4E00\u4EBA\u4E00\u53F0 MacBook Pro with Retina Display\u3002",
+    notice_time: !!timestamp '2012-07-25 12:58:54', version_android_beta: '0.619',
+    version_android_stable: '0.618', version_ios_beta: '1.1', version_ios_stable: '1.0'}
+  model: nbg.app
+  pk: 1
+- fields: {english_name: Peking University, latitude: '116.313132', lessons_afternoon: 4,
+    lessons_evening: 2, lessons_morning: 4, lessons_separator: '2,4,6,8,9,11', longitude: '39.989482',
+    name: "\u5317\u4EAC\u5927\u5B66", support_import_course: true, support_list_course: true}
+  model: nbg.university
+  pk: 1
+- fields: {english_name: Zhejiang University, latitude: '120.079928', lessons_afternoon: 5,
+    lessons_evening: 3, lessons_morning: 5, lessons_separator: '2,5,7,10', longitude: '30.314252',
+    name: "\u6D59\u6C5F\u5927\u5B66 ", support_import_course: true, support_list_course: true}
+  model: nbg.university
+  pk: 2
+- fields: {english_name: Beijing University of Post and Telecommunication, latitude: '116.358147',
+    lessons_afternoon: 4, lessons_evening: 2, lessons_morning: 4, lessons_separator: '2,4,6,8',
+    longitude: '39.977120', name: "\u5317\u4EAC\u90AE\u7535\u5927\u5B66", support_import_course: true,
+    support_list_course: true}
+  model: nbg.university
+  pk: 3
+- fields: {excluded: '5', name: "2011-2012\u5B66\u5E74 \u6625\u5B63\u5B66\u671F",
+    university: 3, week_end: 2012-07-06, week_start: 2012-02-13, year: '1'}
+  model: nbg.semester
+  pk: 1
+- fields: {excluded: '8,9', name: "2011-2012\u5B66\u5E74 \u6625\u5B63\u5B66\u671F",
+    university: 1, week_end: 2012-06-25, week_start: 2012-02-13, year: '1'}
+  model: nbg.semester
+  pk: 2
+- fields: {excluded: '17,18', name: "2011-2012\u5B66\u5E74 \u79CB\u5B63\u5B66\u671F",
+    university: 1, week_end: 2012-07-09, week_start: 2012-09-05, year: '1'}
+  model: nbg.semester
+  pk: 3
+- fields: {end: '08:50:00', number: 1, start: '08:00:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 1
+- fields: {end: '09:50:00', number: 2, start: '09:00:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 2
+- fields: {end: '11:00:00', number: 3, start: '10:10:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 3
+- fields: {end: '12:00:00', number: 4, start: '11:10:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 4
+- fields: {end: '14:20:00', number: 5, start: '13:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 5
+- fields: {end: '15:20:00', number: 6, start: '14:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 6
+- fields: {end: '16:20:00', number: 7, start: '15:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 7
+- fields: {end: '17:20:00', number: 8, start: '16:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 8
+- fields: {end: '19:20:00', number: 9, start: '18:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 9
+- fields: {end: '20:20:00', number: 10, start: '19:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 10
+- fields: {end: '21:20:00', number: 11, start: '20:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 11
+- fields: {end: '22:20:00', number: 12, start: '21:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 12
+- fields: {credit: '2.5', name: "\u897F\u65B9\u54F2\u5B66\u53F2", original_id: '1',
+    semester: 2, weeks: '1,2,3,4'}
+  model: nbg.course
+  pk: 1
+- fields: {credit: '2.0', name: "\u9A6C\u514B\u601D\u4E3B\u4E49\u54F2\u5B66\u539F\u7406",
+    original_id: '2', semester: 2, weeks: '1,2,3,4,5,6,7'}
+  model: nbg.course
+  pk: 2
+- fields: {credit: '6.0', name: "\u9AD8\u7B49\u6570\u5B66", original_id: '3', semester: 2,
+    weeks: '1,2,3,4,5,6'}
+  model: nbg.course
+  pk: 3
+- fields: {credit: '2.0', name: "21\u5929\u7CBE\u901A\u963F\u62C9\u4F2F\u8BED\uFF08\
+      \u53D8\u6001\u51B2\u523A\u73ED\uFF09", original_id: '4', semester: 2, weeks: '1,3,5,7'}
+  model: nbg.course
+  pk: 4
+- fields: {course: 2, day: 1, end: 4, location: "\u7406\u6559", start: 1}
+  model: nbg.lesson
+  pk: 1
+- fields: {course: 1, day: 2, end: 2, location: "\u9038\u592B\u4E8C\u697C", start: 1}
+  model: nbg.lesson
+  pk: 2
+- fields: {course: 3, day: 2, end: 3, location: "\u7406\u6559", start: 1}
+  model: nbg.lesson
+  pk: 3
+- fields: {course: 3, day: 4, end: 3, location: "\u7406\u6559", start: 1}
+  model: nbg.lesson
+  pk: 4
+- fields: {course: 4, day: 5, end: 2, location: "\u725B\u8857\u6E05\u771F\u5BFA\u5E7F\
+      \u573A", start: 1}
+  model: nbg.lesson
+  pk: 5
+- fields: {course: 1, name: "\u683C\u5965\u5C14\u683C\xB7\u5A01\u5EC9\xB7\u5F17\u91CC\
+      \u5FB7\u91CC\u5E0C\xB7\u9ED1\u683C\u5C14"}
+  model: nbg.teacher
+  pk: 1
+- fields: {course: 2, name: "\u5361\u5C14-\u9A6C\u514B\u601D"}
+  model: nbg.teacher
+  pk: 2
+- fields: {course: 3, name: "\u83B1\u6602\u54C8\u5FB7-\u4FDD\u7F57-\u6B27\u62C9"}
+  model: nbg.teacher
+  pk: 3
+- fields: {course: 4, name: "\u5F20\u5854"}
+  model: nbg.teacher
+  pk: 4
+- fields: {course: 1, name: "\u4E9A\u91CC\u58EB\u591A\u5F97"}
+  model: nbg.ta
+  pk: 1
+- fields: {course: 2, name: "\u6069\u683C\u65AF"}
+  model: nbg.ta
+  pk: 2
+- fields: {course: 3, name: "\u534E\u7F57\u5E9A"}
+  model: nbg.ta
+  pk: 3
+- fields: {course: 4, name: "\u8428\u8FBE\u59C6-\u4FAF\u8D5B\u56E0"}
+  model: nbg.ta
+  pk: 4
+- fields: {latitude: '116.313132', longitude: '39.989482', name: "\u5149\u534E\u697C",
+    university: 1}
+  model: nbg.building
+  pk: 1
+- fields: {latitude: '116.313135', longitude: '39.989484', name: "\u4E8C\u6559", university: 1}
+  model: nbg.building
+  pk: 2
+- fields: {latitude: '116.313135', longitude: '39.989484', name: "\u9038\u592B\u4E8C\
+      \u697C", university: 1}
+  model: nbg.building
+  pk: 3
+- fields: {latitude: '116.357818', longitude: '39.961894', name: "\u6559\u4E00\u697C",
+    university: 3}
+  model: nbg.building
+  pk: 4
+- fields: {latitude: '116.357880', longitude: '39.960498', name: "\u6559\u4E8C\u697C",
+    university: 3}
+  model: nbg.building
+  pk: 5
+- fields: {latitude: '116.356101', longitude: '39.960321', name: "\u6559\u4E09\u697C",
+    university: 3}
+  model: nbg.building
+  pk: 6
+- fields: {latitude: '116.356321', longitude: '39.961872', name: "\u6559\u56DB\u697C",
+    university: 3}
+  model: nbg.building
+  pk: 7
+- fields: {latitude: '116.358322', longitude: '39.961185', name: "\u4E3B\u697C", university: 3}
+  model: nbg.building
+  pk: 8
+- fields: {latitude: '116.357813', longitude: '39.962780', name: "\u56FE\u4E66\u9986",
+    university: 3}
+  model: nbg.building
+  pk: 10
+- fields: {building: 1, name: "101\u5BA4"}
+  model: nbg.room
+  pk: 1
+- fields: {building: 1, name: "102\u5BA4"}
+  model: nbg.room
+  pk: 2
+- fields: {building: 2, name: "\u9636\u68AF\u6559\u5BA4"}
+  model: nbg.room
+  pk: 3
+- fields: {building: 2, name: "\u5927\u6247\u5F62"}
+  model: nbg.room
+  pk: 4
+- fields: {building: 3, name: "100\u5BA4"}
+  model: nbg.room
+  pk: 5
+- fields: {building: 3, name: "\u529E\u516C\u5BA4"}
+  model: nbg.room
+  pk: 6
+- fields: {building: 6, name: "134\u5BA4"}
+  model: nbg.room
+  pk: 7
+- fields: {building: 6, name: "337\u5BA4"}
+  model: nbg.room
+  pk: 8
+- fields: {building: 6, name: "339\u5BA4"}
+  model: nbg.room
+  pk: 9
+- fields: {building: 6, name: "437\u5BA4"}
+  model: nbg.room
+  pk: 10
+- fields: {availability: '1,0,1,0,0,1,0,1,0,1', date: 2012-07-28, room: 1}
+  model: nbg.roomavailability
+  pk: 1
+- fields: {availability: '1,1,1,0,1,0,0,0,0,1', date: 2012-07-25, room: 2}
+  model: nbg.roomavailability
+  pk: 2
+- fields: {availability: '0,0,0,0,1,1,1,0,0,1', date: 2012-07-25, room: 3}
+  model: nbg.roomavailability
+  pk: 3
+- fields: {availability: '1,1,1,1,1,0,0,0,1,0', date: 2012-07-25, room: 4}
+  model: nbg.roomavailability
+  pk: 4
+- fields: {availability: '1,1,1,0,0,0,1,1,1,1', date: 2012-07-25, room: 5}
+  model: nbg.roomavailability
+  pk: 5
+- fields: {availability: '0,0,0,0,0,1,1,1,0,1', date: 2012-07-25, room: 6}
+  model: nbg.roomavailability
+  pk: 6
+- fields: {availability: '1,0,0,0,1,0,1,1,1,0', date: 2012-07-31, room: 7}
+  model: nbg.roomavailability
+  pk: 7
+- fields: {availability: '1,1,1,1,1,1,1,1,1,1', date: 2012-07-31, room: 8}
+  model: nbg.roomavailability
+  pk: 8
+- fields: {availability: '0,0,0,0,0,0,0,0,0,0', date: 2012-07-31, room: 9}
+  model: nbg.roomavailability
+  pk: 9
+- fields: {availability: '1,0,1,0,1,1,0,0,0,1', date: 2012-07-31, room: 10}
+  model: nbg.roomavailability
+  pk: 10
+- fields: {name: "\u805A\u9910"}
+  model: nbg.eventcategory
+  pk: 1
+- fields: {name: "\u770B\u7535\u5F71"}
+  model: nbg.eventcategory
+  pk: 2
+- fields: {name: "\u6625\u6E38"}
+  model: nbg.eventcategory
+  pk: 3
+- fields: {content: set off at 10 am, father: 2, title: info of school bus, type: A}
+  model: nbg.wikinode
+  pk: 1
+- fields: {content: "\u6211\u4EC0\u4E48\u90FD\u4E0D\u60F3 \u77E5\u9053", father: null,
+    title: "\u4F60\u60F3\u77E5\u9053\u4EC0\u4E48", type: L}
+  model: nbg.wikinode
+  pk: 2
+- fields: {content: special service, father: 2, title: what do you want, type: L}
+  model: nbg.wikinode
+  pk: 3
+- fields: {content: man, father: 1, title: who are you, type: A}
+  model: nbg.wikinode
+  pk: 4
+- fields: {node: 1, university: 1}
+  model: nbg.wiki
+  pk: 3
+- fields: {node: 2, university: 1}
+  model: nbg.wiki
+  pk: 4
+- fields:
+    date_joined: 2012-07-25 10:11:57
+    email: liu.dongyuan@gmail.com
+    first_name: Dongyuan
+    groups: []
+    is_active: true
+    is_staff: true
+    is_superuser: true
+    last_login: 2012-07-27 16:51:56
+    last_name: Liu
+    password: pbkdf2_sha256$10000$8g2BtgmjSfIf$gqSxRHJ5Y8Yv/MfWcr++0AtDHixpEW4bEO0Pu+YyFwk=
+    user_permissions: []
+    username: liu.dongyuan@gmail.com
+  model: auth.user
+  pk: 1
+- fields:
+    date_joined: 2012-07-25 10:36:10
+    email: 333@pkuapp.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-07-31 12:40:04
+    last_name: ''
+    password: pbkdf2_sha256$10000$WrWj9Loz4cCk$y4GTSrY6EDl0HjCi7VVT4+6N+Q2E/ISSanaChn72Rcg=
+    user_permissions: []
+    username: 333@pkuapp.com
+  model: auth.user
+  pk: 3
+- fields:
+    date_joined: 2012-07-25 17:28:37
+    email: coolgene@gmail.com
+    first_name: ZHANG
+    groups: []
+    is_active: true
+    is_staff: true
+    is_superuser: true
+    last_login: 2012-07-31 13:02:50
+    last_name: Ta
+    password: pbkdf2_sha256$10000$yExLIVZ5yYlw$Q9x6RGaUNVsINezrromjPhyqES7yRnsyl/r+OwOzHsQ=
+    user_permissions: []
+    username: coolgene@gmail.com
+  model: auth.user
+  pk: 4
+- fields:
+    date_joined: 2012-07-25 17:49:06
+    email: haochenallen@gmail.com
+    first_name: Haochen
+    groups: []
+    is_active: true
+    is_staff: true
+    is_superuser: true
+    last_login: 2012-07-26 15:18:01
+    last_name: Wang
+    password: pbkdf2_sha256$10000$e5GemPg6uw6K$i5g/PxLwQuQeoH2SNPb2m6ruD04adrPXgxoy/c+te3k=
+    user_permissions: []
+    username: haochenallen@gmail.com
+  model: auth.user
+  pk: 5
+- fields:
+    courses: [1, 2, 4]
+    nickname: "\u5854"
+    user: 4
+    weibo_token: ''
+  model: nbg.userprofile
+  pk: 6
+- fields:
+    courses: [1, 3]
+    nickname: null
+    user: 3
+    weibo_token: ''
+  model: nbg.userprofile
+  pk: 7
+- fields: {content: "\u7B2C\u4E00\u7AE0 \u7B2C\u4E00\u9898", course: 3, due: !!timestamp '2012-07-26
+      16:35:30', finished: true, last_modified: !!timestamp '2012-07-26 16:36:05',
+    user: 4}
+  model: nbg.assignment
+  pk: 1
+- fields: {content: "\u7EDF\u4E00\u963F\u62C9\u4F2F\u534A\u5C9B", course: 4, due: !!timestamp '2012-12-31
+      23:59:59', finished: false, last_modified: !!timestamp '2012-07-30 14:20:31',
+    user: 4}
+  model: nbg.assignment
+  pk: 2
+- fields: {content: "\u5B9E\u73B0\u5168\u4E16\u754C\u793E\u4F1A\u4E3B\u4E49\u5927\u8054\
+      \u5408\uFF01\uFF01\uFF01", course: 2, due: !!timestamp '2012-11-11 11:11:11',
+    finished: false, last_modified: !!timestamp '2012-07-30 16:21:33', user: 4}
+  model: nbg.assignment
+  pk: 3
+- fields: {content: '111', course: 1, due: !!timestamp '2012-07-30 14:42:34', finished: false,
+    last_modified: !!timestamp '2012-07-30 14:42:37', user: 1}
+  model: nbg.assignment
+  pk: 4
+- fields: {content: '123', course: 2, due: !!timestamp '1111-07-30 00:00:00', finished: false,
+    last_modified: !!timestamp '2012-07-30 17:48:18', user: 4}
+  model: nbg.assignment
+  pk: 6
+- fields: {content: '123', course: 4, due: !!timestamp '1231-12-12 12:24:45', finished: false,
+    last_modified: !!timestamp '2012-07-30 18:11:11', user: 4}
+  model: nbg.assignment
+  pk: 7
+- fields: {content: "\u8001\u5E08\u8BFE\u8BB2\u7684\u771F\u725B\u903C", course: 1,
+    time: !!timestamp '2012-07-26 13:54:17', writer: 1}
+  model: nbg.comment
+  pk: 1
+- fields: {content: "\u6C34\u8BFE\u3002", course: 4, time: !!timestamp '2012-07-30
+      18:53:58', writer: 4}
+  model: nbg.comment
+  pk: 2
+- fields:
+    category: 1
+    content: "\u80FD\u53BB\u7684\u90FD\u53BB\u963F\uFF01"
+    follower: [1]
+    location: "\u5317\u4EAC\u524D\u95E8"
+    organizer: "\u738B\u660A\u5C18"
+    subtitle: "\u5168\u805A\u5FB7\u5403\u5317\u4EAC\u70E4\u9E2D"
+    time: 2012-08-28 12:00:00
+    title: "\u5468\u672B\u805A\u9910"
+    university: 1
+  model: nbg.event
+  pk: 2
+- fields:
+    category: 1
+    content: "\u5403\u8D27\u96C6\u4F1A\uFF01"
+    follower: [1]
+    location: "\u57CE\u968D\u5E99"
+    organizer: "\u5F20\u5854"
+    subtitle: "\u4E0A\u6D77\u5C0F\u5403\u6E38"
+    time: 2012-07-29 13:00:00
+    title: "\u5403\u904D\u4E0A\u6D77"
+    university: 1
+  model: nbg.event
+  pk: 3
+- fields:
+    category: 2
+    content: "\u5F71\u8FF7\u4EEC\u6765\u554A"
+    follower: [5]
+    location: "\u4E0A\u6D77\u4E07\u8FBE\u5E7F\u573A\u7535\u5F71\u9662"
+    organizer: "\u6881\u6D77"
+    subtitle: "\u542C\u8BF4\u590D\u4EC7\u8005\u8054\u76DF\u5F88\u706B\u963F"
+    time: 2012-08-26 17:00:00
+    title: "\u4E0B\u8BFE\u7EC4\u7EC7\u770B\u7535\u5F71"
+    university: 1
+  model: nbg.event
+  pk: 4
+- fields:
+    category: 3
+    content: "\u51FA\u884C\u5566\uFF01"
+    follower: []
+    location: "\u9890\u548C\u56ED"
+    organizer: "\u67F3\u4E1C\u539F"
+    subtitle: "\u5929\u6717\u6C14\u6E05"
+    time: 2013-04-06 08:00:00
+    title: "\u6E05\u660E\u8282\u6625\u6E38"
+    university: 1
+  model: nbg.event
+  pk: 5

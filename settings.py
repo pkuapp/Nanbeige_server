@@ -105,7 +105,7 @@ INSTALLED_APPS = (
     'spider',
 )
 
-REUSE_DB = 1
+
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 

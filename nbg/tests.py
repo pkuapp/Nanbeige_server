@@ -7,18 +7,14 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 from django.test.client import Client
+from django_nose import FastFixtureTestCase
 import json
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
-
 class AvalaibleTest(TestCase):
-    c = Client()
-    
+    fixtures = ['nbg_dump.yaml',]
+
+    def setUp(self):
+        self.c = Client()
 
     def test_app_meta(self):
         urls = []
@@ -28,18 +24,31 @@ class AvalaibleTest(TestCase):
             'version/ios/',
             'notice/'
             )])
+        for url in urls:
+            response = self.c.get(url)
+            assert response.status_code, 200
 
+    def test_university(self):
+        urls = []
         urls.extend(['/university/' + u for u in (
             '',
-            ':0/'
-            ':0/semester/'
+            '1/',
+            '1/semester/'
             )])
         for url in urls:
             response = self.c.get(url)
             assert response.status_code, 200
 
+class UniversityAvalaibleTest(TestCase):
+    fixtures = ['nbg_dump.yaml',]
+    def setUp(self):
+        self.c = Client()
+
+
+
 class AdvancedTest(TestCase):
-    c = Client()
+    def setUp(self):
+        self.c = Client()
 
     def test_univercity_list(self):
         response = self.c.get('/university/')
