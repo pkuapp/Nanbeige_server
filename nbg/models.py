@@ -60,6 +60,7 @@ class Course(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     weibo_token = models.CharField(max_length=32, null=True, blank=True)
+    nickname = models.CharField(max_length=100, null=True)
     courses = models.ManyToManyField(Course, blank=True)
 
     def __unicode__(self):

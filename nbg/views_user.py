@@ -14,7 +14,7 @@ def login_email(request):
         auth.login(request, user)
         response = {
             'id': user.pk,
-            'email': user.email,
+            'nickname': user.get_profile().nickname,
         }
     else:
         response = {
