@@ -30,7 +30,7 @@ class AvalaibleTest(TestCase):
             assert response.status_code == 200
 
     def test_university(self):
-        return
+
         urls = []
         urls.extend(['/university/' + u for u in (
             '',
