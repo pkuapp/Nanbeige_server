@@ -90,8 +90,8 @@ class LogicTest(TestCase):
             })
 
         assert response.status_code == 200
-        assert type(json.loads(response.content)) is int
-        assgnment_id = response.content
+        assert type(json.loads(response.content)['id']) is int
+        assgnment_id = json.loads(response.content)['id']
 
         response = self.c.get(urlr)
         assert response.status_code == 200
