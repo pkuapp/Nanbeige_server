@@ -18,7 +18,7 @@ def query(request):
     try:
         event_objs = Event.objects.filter(time__gte=after)
     except ValidationError:
-        return {'error': 'after 日期格式错误。'}
+        return {'error': 'after 日期格式错误。'}, 400
     if keyword:
         event_objs = event_objs.filter(Q(title__contains=keyword)|Q(subtitle__contains=keyword))
     if category_id:
@@ -27,7 +27,7 @@ def query(request):
         try:
             event_objs = event_objs.filter(time__lte=before)
         except ValidationError:
-            return {'error': 'before 日期格式错误。'}
+            return {'error': 'before 日期格式错误。'}, 400
     event_objs = event_objs[start:start+10]
 
     response = [{

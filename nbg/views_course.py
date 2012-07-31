@@ -53,10 +53,10 @@ def assignment_finish(request, offset):
     try:
         assignment = Assignment.objects.get(pk=id)
     except Assignment.DoesNotExist:
-        return {'error': '作业不存在。'}
+        return {'error': '作业不存在。'}, 404
 
     if assignment.user != request.user:
-        return {'error': '作业不属于当前用户。'}
+        return {'error': '作业不属于当前用户。'}, 403
 
     assignment.finished = finished
     assignment.last_modified = datetime.now()
@@ -73,10 +73,10 @@ def assignment_delete(request, offset):
     try:
         assignment = Assignment.objects.get(pk=id)
     except Assignment.DoesNotExist:
-        return {'error': '作业不存在。'}
+        return {'error': '作业不存在。'}, 404
 
     if assignment.user != request.user:
-        return {'error': '作业不属于当前用户。'}
+        return {'error': '作业不属于当前用户。'}, 403
 
     assignment.delete()
 
@@ -91,10 +91,10 @@ def assignment_modify(request,offset):
     try:
         assignment = Assignment.objects.get(pk=id)
     except Assignment.DoesNotExist:
-        return {'error': '作业不存在。'}
+        return {'error': '作业不存在。'}, 404
 
     if assignment.user != request.user:
-        return {'error': '作业不属于当前用户。'}
+        return {'error': '作业不属于当前用户。'}, 403
 
     course_id = request.POST.get('course_id', None)
     due = request.POST.get('due', None)
@@ -105,17 +105,17 @@ def assignment_modify(request,offset):
         try:
             course = Course.objects.get(pk=course_id)
         except Course.DoesNotExist:
-            return {'error': '课程不存在。'}
+            return {'error': '课程不存在。'}, 404
         try:
             request.user.get_profile().courses.get(pk=course_id)
         except Course.DoesNotExist:
-            return {'error': '课程不属于当前用户。'}
+            return {'error': '课程不属于当前用户。'}, 403
         assignment.course = course
     if due:
         try:
             assignment.due = parse_datetime(due)
         except ValueError:
-            return {'error': '截止日期格式错误。'}
+            return {'error': '截止日期格式错误。'}, 400
     if content:
         assignment.content = content
     if finished:
@@ -138,23 +138,23 @@ def assignment_add(request):
         try:
             course = Course.objects.get(pk=course_id)
         except Course.DoesNotExist:
-            return {'error': '课程不存在。'}
+            return {'error': '课程不存在。'}, 404
         try:
             request.user.get_profile().courses.get(pk=course_id)
         except Course.DoesNotExist:
-            return {'error': '课程不属于当前用户。'}
+            return {'error': '课程不属于当前用户。'}, 403
 
         try:
             due = parse_datetime(due)
         except ValueError:
-            return {'error': '截止日期格式错误。'}
+            return {'error': '截止日期格式错误。'}, 400
 
         assignment = Assignment(course=course, user=request.user, due=due, content=content,
           finished=False, last_modified=datetime.now())
         assignment.save()
         return 0
     else:
-        return {'error': '缺少必要的参数。'}
+        return {'error': '缺少必要的参数。'}, 400
 
 @require_http_methods(['POST'])
 @auth_required
@@ -164,15 +164,15 @@ def comment_add(request, offset):
     content = request.POST.get('content', None)
 
     if not content:
-        return {'error': '缺少必要的参数。'}
+        return {'error': '缺少必要的参数。'}, 400
     try:
         course = Course.objects.get(pk=course_id)
     except Course.DoesNotExist:
-        return {'error': '课程不存在。'}
+        return {'error': '课程不存在。'}, 404
     try:
         request.user.get_profile().courses.get(pk=course_id)
     except Course.DoesNotExist:
-        return {'error': '课程不属于当前用户。'}
+        return {'error': '课程不属于当前用户。'}, 403
 
     comment = Comment(course=course, writer=request.user, time=datetime.now(), content=content)
     comment.save()
@@ -187,7 +187,7 @@ def comment_list(request, offset):
     try:
         course = Course.objects.get(pk=course_id)
     except Course.DoesNotExist:
-        return {'error': '课程不存在。'}
+        return {'error': '课程不存在。'}, 404
 
     comment_objs = course.comment_set.all()[start:start+10]
 

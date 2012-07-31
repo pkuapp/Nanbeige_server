@@ -27,7 +27,7 @@ def detail(request, offset):
         response = {
             'error': "学校不存在。",
         }
-        return response
+        return response, 404
 
     schedule_unit = university.scheduleunit_set.all()
 

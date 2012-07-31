@@ -36,5 +36,5 @@ def auth_required(func):
         if request.user.is_authenticated():
             return func(request, *args, **kwargs)
         else:
-            return HttpResponse(dumps({'error': '请先登录。'}))
+            return HttpResponse(dumps({'error': '请先登录。'}),status=401)
     return inner
