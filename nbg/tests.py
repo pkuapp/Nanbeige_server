@@ -118,10 +118,10 @@ class LogicTest(TestCase):
             })
         assert response.status_code == 200
         response = self.c.post(urlr)
-        print response.content
+
         assert json.loads(response.content)[-1]['content'] == u'请吴昊天吃金钱豹'
 
-        response = self.c.post('/course/%s/delete/' % (assignment_id))
+        response = self.c.post(urlr+'%s/delete/' % (assignment_id))
         assert response.status_code == 200
         response = self.c.get(urlr)
         assert json.loads(response.content)[-1]['id'] is not int(assignment_id)
