@@ -25,7 +25,7 @@ def login_email(request):
         }
         university = user.get_profile().university
         if university:
-            response.university = {
+            response['university'] = {
                 'id': university.pk,
                 'name': university.name,
             }
