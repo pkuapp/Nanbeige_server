@@ -68,8 +68,8 @@ class AvalaibleTest(TestCase):
     def test_event(self):
         urls = ['/event/' + u for u in (
             '',
-            'category',
-            '2',
+            'category/',
+            '2/',
             )]
         for url in urls:
             response = self.c.get(url)
