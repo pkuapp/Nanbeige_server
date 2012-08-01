@@ -18,6 +18,7 @@ urlpatterns = patterns('',
 
     (r'^user/login/email/$', 'nbg.views_user.login_email'),
     # (r'^user/login/weibo/$', 'nbg.views_user.login_weibo'),
+    (r'^user/logout/$', 'nbg.views_user.logout'),
 
     (r'^university/$', 'nbg.views_university.university_list'),
     (r'^university/(\d+)/$', 'nbg.views_university.detail'),

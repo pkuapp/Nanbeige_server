@@ -2,8 +2,9 @@
 
 from django.contrib import auth
 from django.views.decorators.http import require_http_methods
-from nbg.helpers import json_response
+from nbg.helpers import json_response, auth_required
 
+@require_http_methods(['POST'])
 @json_response
 def login_email(request):
     username = request.POST.get('email', '')
@@ -25,3 +26,10 @@ def login_email(request):
             'error': "Email 或密码错误。",
         }, 401
     return response
+
+@require_http_methods(['POST'])
+@auth_required
+@json_response
+def logout(request):
+    auth.logout(request)
+    return 0
