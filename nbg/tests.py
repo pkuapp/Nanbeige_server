@@ -45,10 +45,14 @@ class AvalaibleTest(TestCase):
 
     def test_study(self):
         urls = []
-        # urls.extend(['/study/' + u for u in (
-        #     'building/',
-        #     'building/'
-        #     )])
+        urls.extend(['/study/' + u for u in (
+            'building/',
+            'building/0/room/'
+            )])
+        for url in urls:
+            response = self.c.get(url)
+            assert response.status_code == 200
+
     
     def test_wiki(self):
         urls = ['/wiki/1/','/wiki/node/1/']
@@ -61,7 +65,15 @@ class AvalaibleTest(TestCase):
             {'email':'coolgene@gmail.com','password':'coolgene'})
         assert isinstance(json.loads(response.content)['id'],int)
 
-
+    def test_event(self):
+        urls = ['/event/' + u for u in (
+            '',
+            'category',
+            '1',
+            )]
+        for url in urls:
+            response = self.c.get(url)
+            assert response.status_code == 200
 
 class LogicTest(TestCase):
 
@@ -78,6 +90,22 @@ class LogicTest(TestCase):
     def test_courses(self):
         response = self.c.get('/course/')
         assert isinstance(json.loads(response.content),list)
+
+        response = self.c.post('/course/1/comment/add/',\
+            {
+                'content': '大家都要请吴昊天吃饭哦',
+            })
+        assert response.status_code == 200
+
+        response = self.c.get('/course/1/comment/')
+        assert isinstance(json.loads(response.content),list)
+        assert response.status_code == 200
+        assert json.loads(response.content)[-1]['content'] == u'大家都要请吴昊天吃饭哦'
+
+        response = self.c.get('/comment/')
+        assert response.status_code == 200
+        assert isinstance(json.loads(response.content),list)
+
 
     def test_assignment(self):
         urlr = ('/course/assignment/')
@@ -125,3 +153,63 @@ class LogicTest(TestCase):
         assert response.status_code == 200
         response = self.c.get(urlr)
         assert json.loads(response.content)[-1]['id'] is not int(assignment_id)
+
+    def test_event(self):
+
+        response = self.c.post('/event/1/follow/')
+        assert response.status_code == 200
+
+        response = self.c.get('/event/following/')
+        assert response.status_code == 200
+        assert isinstance(json.loads(response.content),list)
+
+class SecurityTest(TestCase):
+    def setUp(self):
+        self.c = Client()
+
+    def test_course(self):
+        response = self.c.get('/course/')
+        assert response.status_code == 401
+
+    def test_assignment(self):
+        response = self.c.get('/course/assignment/')
+        assert response.status_code == 401
+
+        response = self.c.post('/course/assignment/1/finish/',{'finished':1})
+        assert response.status_code == 401
+
+        response = self.c.post('/course/assignment/1/delete/')
+        assert response.status_code == 401
+
+        response = self.c.post('/course/assignment/1/modify/',{
+                'course_id':1,
+                'due':"2012-07-07 08:00",
+                'content':'敢不敢请吴昊天吃饭',
+                'finished':0
+            })
+        assert response.status_code == 401
+
+        response = self.c.post('/course/assignment/add/', {
+                'course_id':1,
+                'due':"2012-07-07 08:00",
+                'content':'敢不敢请吴昊天吃饭',
+                'finished':0
+            })
+        assert response.status_code == 401
+
+    def test_comment(self):
+        response = self.c.post('/course/1/comment/add/', {
+                'content':'都得请吴昊天吃饭'
+            })
+        assert response.status_code == 401
+
+        response = self.c.get('/comment/')
+        assert response.status_code == 401
+
+    def test_event(self):
+        response = self.c.post('/event/1/follow/')
+        assert response.status_code == 401
+
+        response = self.c.get('/event/following/')
+        assert response.status_code == 401
+
