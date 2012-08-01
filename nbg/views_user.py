@@ -15,6 +15,10 @@ def login_email(request):
         response = {
             'id': user.pk,
             'nickname': user.get_profile().nickname,
+            'university': {
+                'id': user.get_profile().university.pk,
+                'name': user.get_profile().university.name,
+            },
         }
     else:
         response = {
