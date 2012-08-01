@@ -2,7 +2,7 @@
 
 from datetime import time
 from nbg.models import University
-from nbg.helpers import listify
+from nbg.helpers import listify_int
 from nbg.helpers import json_response
 
 @json_response
@@ -50,7 +50,7 @@ def detail(request, offset):
                 'start': time.strftime(item.start, "%H:%M"),
                 'end': time.strftime(item.end, "%H:%M"),
             } for item in schedule_unit],
-            'separators': listify(university.lessons_separator)
+            'separators': listify_int(university.lessons_separator)
         }
     }
     return response
@@ -69,7 +69,7 @@ def semester(request, offset):
         'week': {
             'start': semester.week_start.isoformat(),
             'end': semester.week_end.isoformat(),
-            'excluded': listify(semester.excluded)
+            'excluded': listify_int(semester.excluded)
         }
     } for semester in semesters]
     return response

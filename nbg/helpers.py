@@ -4,17 +4,15 @@ from string import split
 from datetime import datetime
 from django.utils.simplejson import dumps
 from django.http import HttpResponse
-from django.core.cache import cache
-from django.core.paginator import Paginator, Page
 
-def listify(str):
+def listify_str(str):
     ret_list = split(str, ',')
     if ret_list[0] == "":
         ret_list = []
-    else:
-        ret_list = map(int, ret_list)
-
     return ret_list
+
+def listify_int(str):
+    return map(int, listify_str(str))
 
 def parse_datetime(str):
     return datetime.strptime(str, "%Y-%m-%d %H:%M:%S")

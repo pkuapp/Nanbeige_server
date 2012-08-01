@@ -2,7 +2,7 @@
 
 from datetime import date as datetime_date
 from nbg.models import Campus, Building, RoomAvailability
-from nbg.helpers import listify,json_response
+from nbg.helpers import listify_int, json_response
 
 @json_response
 def building_list(request):
@@ -38,7 +38,7 @@ def room_list(request, offset):
     response = []
     for room in room_objs:
         try:
-            availability = listify(room.roomavailability_set.get(date=date).availability)
+            availability = listify_int(room.roomavailability_set.get(date=date).availability)
         except RoomAvailability.DoesNotExist:
             availability = []
 

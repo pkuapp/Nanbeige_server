@@ -3,7 +3,7 @@
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
 from nbg.models import Course, Assignment, Comment
-from nbg.helpers import listify, json_response, auth_required, parse_datetime
+from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime
 
 @auth_required
 @json_response
@@ -15,10 +15,10 @@ def course_list(request):
         'orig_id': item.original_id,
         'name': item.name,
         'credit': float(item.credit),
-        'teacher': [ teacher.name for teacher in item.teacher_set.all() ],
-        'ta': [ ta.name for ta in item.ta_set.all() ],
+        'teacher': listify_str(item.teacher),
+        'ta': listify_str(item.ta),
         'semester_id': item.semester.pk,
-        'week': listify(item.weeks),
+        'week': listify_int(item.weeks),
         'lessons': [{
             'day': lesson.day,
             'start': lesson.start,
