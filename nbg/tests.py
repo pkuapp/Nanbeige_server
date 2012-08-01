@@ -69,7 +69,7 @@ class AvalaibleTest(TestCase):
         urls = ['/event/' + u for u in (
             '',
             'category',
-            '1',
+            '2',
             )]
         for url in urls:
             response = self.c.get(url)
@@ -156,7 +156,7 @@ class LogicTest(TestCase):
 
     def test_event(self):
 
-        response = self.c.post('/event/1/follow/')
+        response = self.c.post('/event/2/follow/')
         assert response.status_code == 200
 
         response = self.c.get('/event/following/')
