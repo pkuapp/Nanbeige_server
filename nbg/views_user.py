@@ -46,17 +46,17 @@ def reg_email(request):
         try:
             validate_email(email)
         except ValidationError:
-            return {'error': 'Email 格式不正确。'}
+            return {'error': 'Email 格式不正确。'}, 400
 
         try:
             user = User.objects.create_user(username=email, email=email, password=password)
         except IntegrityError:
-            return {'error': 'Email 已被使用。'}
+            return {'error': 'Email 已被使用。'}, 403
 
         UserProfile.objects.create(user=user, nickname=nickname)
         return {'id': user.pk}
     else:
-        return {'error': '缺少必要的参数。'}
+        return {'error': '缺少必要的参数。'}, 400
 
 @require_http_methods(['POST'])
 @auth_required
