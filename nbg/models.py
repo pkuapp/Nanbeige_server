@@ -69,7 +69,7 @@ class UserProfile(models.Model):
     weibo_name = models.CharField(max_length=120, null=True, blank=True)
     nickname = models.CharField(max_length=100, null=True)
     courses = models.ManyToManyField(Course, blank=True)
-    university = models.ForeignKey(University, blank=True)
+    university = models.ForeignKey(University, null=True)
 
     def __unicode__(self):
         return u'#%s (#%s %s)' % (self.id, self.user.id, self.user.username)
