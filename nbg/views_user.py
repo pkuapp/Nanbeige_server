@@ -21,11 +21,14 @@ def login_email(request):
         response = {
             'id': user.pk,
             'nickname': user.get_profile().nickname,
-            'university': {
-                'id': user.get_profile().university.pk,
-                'name': user.get_profile().university.name,
-            },
+            'university': None,
         }
+        university = user.get_profile().university
+        if university:
+            response.university = {
+                'id': university.pk,
+                'name': university.name,
+            }
     else:
         response = {
             'error': "Email 或密码错误。",
