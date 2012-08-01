@@ -24,6 +24,12 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-CN'
 

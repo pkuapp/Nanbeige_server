@@ -4,6 +4,8 @@ from string import split
 from datetime import datetime
 from django.utils.simplejson import dumps
 from django.http import HttpResponse
+from django.core.cache import cache
+from django.core.paginator import Paginator, Page
 
 def listify(str):
     ret_list = split(str, ',')
