@@ -158,33 +158,33 @@
   model: nbg.scheduleunit
   pk: 12
 - fields: {credit: '2.5', name: "\u897F\u65B9\u54F2\u5B66\u53F2", original_id: '1',
-    semester: 2, weeks: '1,2,3,4'}
+    semester: 2, weeks: '1,2,3,4', teacher: "\u5434\u660A\u5929,\u5434\u660A\u5929", ta: "\u5434\u660A\u5929"}
   model: nbg.course
   pk: 1
 - fields: {credit: '2.0', name: "\u9A6C\u514B\u601D\u4E3B\u4E49\u54F2\u5B66\u539F\u7406",
-    original_id: '2', semester: 2, weeks: '1,2,3,4,5,6,7'}
+    original_id: '2', semester: 2, weeks: '1,2,3,4,5,6,7', teacher: "\u5434\u660A\u5929,\u5434\u660A\u5929", ta: "\u5434\u660A\u5929,\u5434\u660A\u5929"}
   model: nbg.course
   pk: 2
 - fields: {credit: '6.0', name: "\u9AD8\u7B49\u6570\u5B66", original_id: '3', semester: 2,
-    weeks: '1,2,3,4,5,6'}
+    weeks: '1,2,3,4,5,6', teacher: "\u5434\u660A\u5929,\u5434\u660A\u5929", ta: "\u5434\u660A\u5929,\u5434\u660A\u5929"}
   model: nbg.course
   pk: 3
 - fields: {credit: '2.0', name: "21\u5929\u7CBE\u901A\u963F\u62C9\u4F2F\u8BED\uFF08\
-      \u53D8\u6001\u51B2\u523A\u73ED\uFF09", original_id: '4', semester: 2, weeks: '1,3,5,7'}
+      \u53D8\u6001\u51B2\u523A\u73ED\uFF09", original_id: '4', semester: 2, weeks: '1,3,5,7', teacher: "", ta: ""}
   model: nbg.course
   pk: 4
 - fields:
     courses: [1, 2, 4]
     nickname: "\u5854"
     user: 4
-    weibo_token: ''
+    weibo_name: ''
   model: nbg.userprofile
   pk: 6
 - fields:
     courses: [1, 3]
     nickname: null
     user: 3
-    weibo_token: ''
+    weibo_name: ''
   model: nbg.userprofile
   pk: 7
 - fields: {course: 2, day: 1, end: 4, location: "\u7406\u6559", start: 1}
@@ -203,31 +203,6 @@
       \u573A", start: 1}
   model: nbg.lesson
   pk: 5
-- fields: {course: 1, name: "\u683C\u5965\u5C14\u683C\xB7\u5A01\u5EC9\xB7\u5F17\u91CC\
-      \u5FB7\u91CC\u5E0C\xB7\u9ED1\u683C\u5C14"}
-  model: nbg.teacher
-  pk: 1
-- fields: {course: 2, name: "\u5361\u5C14-\u9A6C\u514B\u601D"}
-  model: nbg.teacher
-  pk: 2
-- fields: {course: 3, name: "\u83B1\u6602\u54C8\u5FB7-\u4FDD\u7F57-\u6B27\u62C9"}
-  model: nbg.teacher
-  pk: 3
-- fields: {course: 4, name: "\u5F20\u5854"}
-  model: nbg.teacher
-  pk: 4
-- fields: {course: 1, name: "\u4E9A\u91CC\u58EB\u591A\u5F97"}
-  model: nbg.ta
-  pk: 1
-- fields: {course: 2, name: "\u6069\u683C\u65AF"}
-  model: nbg.ta
-  pk: 2
-- fields: {course: 3, name: "\u534E\u7F57\u5E9A"}
-  model: nbg.ta
-  pk: 3
-- fields: {course: 4, name: "\u8428\u8FBE\u59C6-\u4FAF\u8D5B\u56E0"}
-  model: nbg.ta
-  pk: 4
 - fields: {content: "\u7B2C\u4E00\u7AE0 \u7B2C\u4E00\u9898", course: 3, due: !!timestamp '2012-07-26
       16:35:30', finished: true, last_modified: !!timestamp '2012-07-26 16:36:05',
     user: 4}
