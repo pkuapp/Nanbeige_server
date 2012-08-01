@@ -294,7 +294,7 @@ td:last-child {
     </ul>
   </td>
   <td align="left"><pre>{
-  "id": 0,
+  "id": 18446744073709551615,
   "nickname": "塔"
 }</pre><pre>{
   "error": "Email 或密码错误。"
@@ -318,6 +318,55 @@ td:last-child {
   "error": "微博 token 错误。"
 }</td>
   <td align="left">使用新浪微博 token 登录。若用户有 email 注册的南北阁帐号，nickname 为字符串。</td>
+</tr>
+
+<tr>
+  <td align="left">/reg/email/</td>
+  <td align="left"><code>POST</code></td>
+  <td align="left">
+    <ul>
+      <li><code class="required">str</code> email</li>
+      <li><code class="required">str</code> nickname</li>
+      <li><code class="required">str</code> password</li>
+    </ul>
+  </td>
+  <td align="left"><pre>{
+  "id": 2147483647
+}</pre><pre>{
+  "error": "Email 已被使用。"
+}</td>
+  <td align="left">使用邮箱注册。</td>
+</tr>
+
+<tr>
+  <td align="left">/logout/</td>
+  <td align="left"><code>POST</code></td>
+  <td align="left">none</td>
+  <td align="left">
+    <ul>
+      <li><code>0</code> success</li>
+    </ul>
+  </td>
+  <td align="left">登出当前用户。</td>
+</tr>
+
+<tr>
+  <td align="left">/edit/</td>
+  <td align="left"><code>POST*</code></td>
+  <td align="left">
+    <ul>
+      <li><code class="optional">str</code> password</li>
+      <li><code class="optional">str</code> nickname</li>
+      <li><code class="optional">str</code> weibo_token</li>
+      <li><code class="optional">str</code> university_id</li>
+    </ul>
+  </td>
+  <td align="left">
+    <ul>
+      <li><code>0</code> success</li>
+    </ul>
+  </td>
+  <td align="left">修改用户信息。若有参数 weibo_token，添加或修改微博绑定。</td>
 </tr>
 
 </tbody>
@@ -473,7 +522,7 @@ td:last-child {
   <td align="left">none</td>
   <td align="left"><pre>[
   {
-    "id": 650,
+    "id": 65537,
     "orig_id": "2011-325763QR",
     "name": "21天精通阿拉伯语（变态冲刺班）",
     "credit": 2.5,
@@ -516,7 +565,7 @@ td:last-child {
   <td align="left">none</td>
   <td align="left"><pre>[
   {
-    "id": 11,
+    "id": 618,
     "course_id": 65535,
     "due": "2012-07-07 08:00",
     "content": "配置服务器",
@@ -524,7 +573,7 @@ td:last-child {
     "last_modified": "2012-07-07 23:59:59"
   },
   {
-    "id": 14,
+    "id": 2718,
     "course_id": 65535,
     "due": "2012-07-10",
     "content": "完成 API 草案",
