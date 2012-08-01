@@ -60,6 +60,8 @@ class Course(models.Model):
     credit = models.DecimalField(max_digits=3, decimal_places=1)
     weeks = models.CommaSeparatedIntegerField(max_length=200)
     semester = models.ForeignKey(Semester)
+    teacher = models.CharField(max_length=200, null=True, blank=True)
+    ta = models.CharField(max_length=200, null=True, blank=True)
 
     def __unicode__(self):
         return u'#%s %s - %s' % (self.id, self.semester.university.name, self.name)
@@ -83,20 +85,6 @@ class Lesson(models.Model):
 
     def __unicode__(self):
         return u'#%s %s' % (self.id, self.course.name)
-
-class Teacher(models.Model):
-    name = models.CharField(max_length=50)
-    course = models.ForeignKey(Course)
-
-    def __unicode__(self):
-        return u'#%s %s' % (self.id, self.name)
-
-class Ta(models.Model):
-    name = models.CharField(max_length=50)
-    course = models.ForeignKey(Course)
-
-    def __unicode__(self):
-        return u'#%s %s' % (self.id, self.name)
 
 class Assignment(models.Model):
     course = models.ForeignKey(Course)
