@@ -59,7 +59,7 @@ def login_urp_with_data(**kwarg):
             response.close()
             #deal with course data
             #return HttpResponse(coursedata)
-            return HttpResponse(get_course(coursedata))
+            return HttpResponse(get_course(coursedata,request))
         else:
             return HttpResponse('login error')
 
@@ -72,7 +72,7 @@ def login(request):
     data['mm'] = request.POST.get('mm', None)
     return login_urp_with_data(**locals())
 
-def get_course(coursedata):
+def get_course(coursedata,request):
     table_soup = BeautifulSoup(coursedata)
     soup_course = table_soup.findAll('table', {'class':'displayTag', 'id':'user'})
     tablebody = str(soup_course[1])
@@ -82,52 +82,79 @@ def get_course(coursedata):
     for row in rows:
         td_soup = BeautifulSoup(str(row))
         tdbody = td_soup.findAll('td')
-        courserow = {
-            'fangan': tdbody[0].getText().strip('&nbsp'),
-            'original_id': tdbody[1].getText().strip('&nbsp'),
-            'name': tdbody[2].getText().strip('&nbsp'),
-            'xuhao': tdbody[3].getText().strip('&nbsp'),
-            'credit': tdbody[4].getText().strip('&nbsp'),
-            'xuanxiuma': tdbody[5].getText().strip('&nbsp'),
-            'kaochama': tdbody[6].getText().strip('&nbsp'),
-            'teacher': tdbody[7].getText().strip('&nbsp'),
-            'di ji zhou shang': tdbody[11].getText().strip('&nbsp'),
-            'xingqi' : tdbody[12].getText().strip('&nbsp'),
-            'jieci' : tdbody[13].getText().strip('&nbsp'),
-            'jieshu': tdbody[14].getText().strip('&nbsp'),
-            'xiaoqu': tdbody[15].getText().strip('&nbsp'),
-            'building' : tdbody[16].getText().strip('&nbsp'),
-            'jiaoshi' : tdbody[17].getText().strip('&nbsp'),
-        }
-        courselist.append(courserow)
-        get_original_id = tdbody[1].getText().strip('&nbsp')
-        get_course_name = tdbody[2].getText().strip('&nbsp')
-        get_teacher_name = tdbody[7].getText().strip('&nbsp')
-        get_credit = tdbody[4].getText().strip('&nbsp')
-        get_weeks = tdbody[12].getText().strip('&nbsp')
-        get_campus = tdbody[15].getText().strip('&nbsp')
+    #     courserow = {
+    #         'fangan': tdbody[0].getText().strip('&nbsp'),
+    #         'original_id': tdbody[1].getText().strip('&nbsp'),
+    #         'name': tdbody[2].getText().strip('&nbsp'),
+    #         'xuhao': tdbody[3].getText().strip('&nbsp'),
+    #         'credit': tdbody[4].getText().strip('&nbsp'),
+    #         'xuanxiuma': tdbody[5].getText().strip('&nbsp'),
+    #         'kaochama': tdbody[6].getText().strip('&nbsp'),
+    #         'teacher': tdbody[7].getText().strip('&nbsp'),
+    #         'di ji zhou shang': tdbody[11].getText().strip('&nbsp'),
+    #         'xingqi' : tdbody[12].getText().strip('&nbsp'),
+    #         'jieci' : tdbody[13].getText().strip('&nbsp'),
+    #         'jieshu': tdbody[14].getText().strip('&nbsp'),
+    #         'xiaoqu': tdbody[15].getText().strip('&nbsp'),
+    #         'building' : tdbody[16].getText().strip('&nbsp'),
+    #         'jiaoshi' : tdbody[17].getText().strip('&nbsp'),
+    #     }
+    #     courselist.append(courserow)
+        get_semester = Semester.objects.get(pk=1)
+        get_original_id = tdbody[1].getText().strip('&nbsp;')
+        get_course_name = tdbody[2].getText().strip('&nbsp;')
+        get_teacher_name = tdbody[7].getText().strip('&nbsp;')
+        get_credit = tdbody[4].getText().strip('&nbsp;')
+        get_weeks = tdbody[12].getText().strip('&nbsp;')
+        get_campus = tdbody[15].getText().strip('&nbsp;')
+        get_location = tdbody[16].getText().strip('&nbsp') + ' ' + tdbody[17].getText().strip('&nbsp;')
+        get_day = int(tdbody[12].getText().strip('&nbsp;'))
+        get_course_start = int(tdbody[13].getText().strip('&nbsp;'))
+        get_course_end = get_course_start + int(tdbody[14].getText().strip('&nbsp;')) - 1
+        test_day = tdbody[12].getText().strip('&nbsp;')
+        test_start = tdbody[13].getText().strip('&nbsp;')
+        test_end = tdbody[14].getText().strip('&nbsp;')
         try:
             course_obj = Course.objects.get(original_id=get_original_id,name=get_course_name,teacher=get_teacher_name)
-            get_location = tdbody[16].getText().strip('&nbsp') + ' ' + tdbody[17].getText().strip('&nbsp')
-            if tdbody[12].getText().strip('&nbsp') != '' and tdbody[13].getText().strip('&nbsp') != '' and tdbody[14].getText().strip('&nbsp') != '':
-                get_day = int(tdbody[12].getText().strip('&nbsp'))
-                get_course_start = int(tdbody[13].getText().strip('&nbsp'))
-                get_course_end = get_course_start + int(tdbody[14].getText().strip('&nbsp')) - 1
+            if test_day != '' and test_start != '' and test_end != '':
                 course_lesson = Lesson.objects.filter(course=course_obj,day=get_day, start=get_course_start,end=get_course_end)
                 current_user = request.user              
                 if course_lesson.count() == 0:
-                    course_new = add_course(get_course_name, get_original_id, get_credit, get_teacher_name, get_course_start, get_course_end, get_location, get_weeks)[0]
-                    current_user.courses.add(course_new)
+                    course_new = add_course(get_semester, get_course_name, get_original_id, get_credit, get_teacher_name,get_day, get_course_start, get_course_end, get_location, get_weeks)[0]
+                    lesson_new = add_course(get_semester, get_course_name, get_original_id, get_credit, get_teacher_name,get_day, get_course_start, get_course_end, get_location, get_weeks)[1]
+                    current_user.get_profile().courses.add(course_new)
+                    consequence = show_result(get_semester, get_course_name, get_original_id, get_credit, get_teacher_name,get_day, get_course_start, get_course_end, get_location, get_weeks)                
                 else:
-                    current_user.courses.add(course_obj)
+                    current_user.get_profile().courses.add(course_obj)
         except:
-                course_new = add_course(get_course_name, get_original_id, get_credit, get_teacher_name, get_course_start, get_course_end, get_location, get_weeks)[0]
-                current_user.courses.add(course_new)
-    return HttpResponse(simplejson.dumps(courselist))
+            current_user = request.user
+            course_new = add_course(get_semester, get_course_name, get_original_id, get_credit, get_teacher_name, get_day, get_course_start, get_course_end, get_location, get_weeks)[0]
+            lesson_new = add_course(get_semester, get_course_name, get_original_id, get_credit, get_teacher_name,get_day, get_course_start, get_course_end, get_location, get_weeks)[1]
+            current_user.get_profile().courses.add(course_new)
+            consequence = show_result(get_semester, get_course_name, get_original_id, get_credit, get_teacher_name,get_day, get_course_start, get_course_end, get_location, get_weeks)
+    return consequence
 
-def add_course(g_name, g_original_id, g_credit, g_teacher, g_day, g_start, g_end, g_location, g_weeks):
-    course = Course(name=g_name, original_id=g_original_id, credit=g_credit, teacher=g_teacher)
-    lesson = Lesson(day=g_day,start=g_start, end=g_end, location=g_location, course=course)
+def add_course(g_semester, g_name, g_original_id, g_credit, g_teacher, g_day, g_start, g_end, g_location, g_weeks):
+    course = Course(semester=g_semester , name=g_name, original_id=g_original_id, credit=g_credit, teacher=g_teacher)
     course.save()
+    lesson = Lesson(day=g_day,start=g_start, end=g_end, location=g_location, course=course)
     lesson.save()
     return course, lesson
+
+def show_result(g_semester, g_name, g_original_id, g_credit, g_teacher, g_day, g_start, g_end, g_location, g_weeks):
+    course_objs = Course.objects.filter(semester=g_semester , name=g_name, original_id=g_original_id, credit=g_credit, teacher=g_teacher)
+    response = [{
+        'semester'  : course_item.semester,
+        'course_name' : course_item.name,
+        'credit' : course_item.credit,
+        'original_id' : course_item.original_id,
+        'teacher' : course_item.teacher,
+        'lesson' : [
+        {
+            'day' : lesson_item.day,
+            'start' : lesson_item.start,
+            'end' : lesson_item.end,
+            'location' : lesson_item.location,
+        }for lesson_item in course_item.lesson_set.all()]
+     }for course_item in course_objs]
+    return response
