@@ -52,8 +52,11 @@ def reg_email(request):
             user = User.objects.create_user(username=email, email=email, password=password)
         except IntegrityError:
             return {'error': 'Email 已被使用。'}, 403
-
         UserProfile.objects.create(user=user, nickname=nickname)
+
+        user = auth.authenticate(username=email, password=password)
+        auth.login(request, user)
+
         return {'id': user.pk}
     else:
         return {'error': '缺少必要的参数。'}, 400
