@@ -347,18 +347,6 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">/logout/</td>
-  <td align="left"><code>POST</code></td>
-  <td align="left">none</td>
-  <td align="left">
-    <ul>
-      <li><code>0</code> success</li>
-    </ul>
-  </td>
-  <td align="left">登出当前用户。</td>
-</tr>
-
-<tr>
   <td align="left">/edit/</td>
   <td align="left"><code>POST*</code></td>
   <td align="left">
@@ -375,6 +363,30 @@ td:last-child {
     </ul>
   </td>
   <td align="left">修改用户信息。若有参数 weibo_token，添加或修改微博绑定。</td>
+</tr>
+
+<tr>
+  <td align="left">/logout/</td>
+  <td align="left"><code>POST*</code></td>
+  <td align="left">none</td>
+  <td align="left">
+    <ul>
+      <li><code>0</code> success</li>
+    </ul>
+  </td>
+  <td align="left">登出当前用户。</td>
+</tr>
+
+<tr>
+  <td align="left">/deactive/</td>
+  <td align="left"><code>POST*</code></td>
+  <td align="left">none</td>
+  <td align="left">
+    <ul>
+      <li><code>0</code> success</li>
+    </ul>
+  </td>
+  <td align="left">吊销当前用户并登出。（仍保留用户信息）</td>
 </tr>
 
 </tbody>

@@ -16,23 +16,30 @@ def login_email(request):
     password = request.POST.get('password', '')
 
     user = auth.authenticate(username=username, password=password)
-    if user is not None and user.is_active:
-        auth.login(request, user)
-        response = {
-            'id': user.pk,
-            'nickname': user.get_profile().nickname,
-            'university': None,
-        }
-        university = user.get_profile().university
-        if university:
-            response['university'] = {
-                'id': university.pk,
-                'name': university.name,
+
+    if user is not None:
+        if user.is_active:
+            auth.login(request, user)
+            response = {
+                'id': user.pk,
+                'nickname': user.get_profile().nickname,
+                'university': None,
             }
+            university = user.get_profile().university
+            if university:
+                response['university'] = {
+                    'id': university.pk,
+                    'name': university.name,
+                }
+        else:
+            response = {
+                'error': "用户已被吊销。",
+            }, 401
     else:
         response = {
             'error': "Email 或密码错误。",
         }, 401
+
     return response
 
 @require_http_methods(['POST'])
@@ -65,5 +72,14 @@ def reg_email(request):
 @auth_required
 @json_response
 def logout(request):
+    auth.logout(request)
+    return 0
+
+@require_http_methods(['POST'])
+@auth_required
+@json_response
+def deactive(request):
+    request.user.is_active = False
+    request.user.save()
     auth.logout(request)
     return 0
