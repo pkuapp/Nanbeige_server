@@ -87,7 +87,7 @@ def parse_urp_doc_course(doc,request):
                     'name': rowraw[2],
                     'original_id': rowraw[1],
                     'credit': rowraw[4],
-                    'semester': Semester.objects.get(pk=1),
+                    #'semester': Semester.objects.get(pk=1),
                     'teacher': rowraw[7],
                     'ta': '',
                     'lessons-numbers': rowspan,
@@ -118,7 +118,7 @@ def parse_urp_doc_course(doc,request):
                             oncourse['lessons'].append(onlesson)
                         lessonrow=lessonrow.nextSibling
                 returnl.append(oncourse)
-    return returnl
+    return simplejson.dumps(returnl)
 
 
 #以下几个函数暂时不用
