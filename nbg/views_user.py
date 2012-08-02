@@ -9,6 +9,11 @@ from django.db import IntegrityError
 from nbg.models import UserProfile, University
 from nbg.helpers import json_response, auth_required
 
+@auth_required
+@json_response
+def get_user(request):
+    return {'id': request.user.pk}
+
 @require_http_methods(['POST'])
 @json_response
 def login_email(request):

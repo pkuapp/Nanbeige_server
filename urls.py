@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     (r'^app/version/ios/$', 'nbg.views_app.version_ios'),
     (r'^app/notice/$', 'nbg.views_app.notice'),
 
+    (r'^user/$', 'nbg.views_user.get_user'),
     (r'^user/login/email/$', 'nbg.views_user.login_email'),
     (r'^user/login/weibo/$', 'nbg.views_user.login_weibo'),
     (r'^user/reg/email/$', 'nbg.views_user.reg_email'),
