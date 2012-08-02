@@ -29,6 +29,15 @@ plogin = re.compile(u'学分制综合教务')
 #                 return HttpResponse('-1')
 #     return HttpResponse('-9')
 
+def login_urp(request):
+    data = {}
+    JSESSIONID = request.POST.get('sid', None)
+    #add parameters that the login webpage needs here!
+    data['type'] = 'sso'
+    data['zjh'] = request.POST.get('zjh', None)
+    data['mm'] = request.POST.get('mm', None)
+    return read_urp_course_data(**locals())
+
 def read_urp_course_data(**kwarg):
     data = kwarg['data']
     JSESSIONID = kwarg['JSESSIONID']
@@ -110,17 +119,6 @@ def parse_urp_doc_course(doc,request):
                         lessonrow=lessonrow.nextSibling
                 returnl.append(oncourse)
     return returnl
-
-
-
-def login_urp(request):
-    data = {}
-    JSESSIONID = request.POST.get('sid', None)
-    #add parameters that the login webpage needs here!
-    data['type'] = 'sso'
-    data['zjh'] = request.POST.get('zjh', None)
-    data['mm'] = request.POST.get('mm', None)
-    return read_urp_course_data(**locals())
 
 
 #以下几个函数暂时不用
