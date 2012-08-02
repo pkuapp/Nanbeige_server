@@ -2,7 +2,7 @@
 
 from django.db import models
 from datetime import datetime
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User  
 
 class App(models.Model):
     version_android_beta = models.CharField(max_length=30)
@@ -35,6 +35,9 @@ class Campus(models.Model):
         return u'#%s %s%s' % (self.id, self.university.name, self.name)
 
 class Semester(models.Model):
+    """
+        excluded: 不同学校的公共假期或考试周等无课时间
+    """
     name = models.CharField(max_length=100)
     year = models.CharField(max_length=50)
     university = models.ForeignKey(University)
@@ -75,6 +78,14 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return u'#%s (#%s %s)' % (self.id, self.user.id, self.user.username)
+
+class UserAction(models.Model):
+    ACTION_CHOICES = ((0,'courses_imported'),)
+
+    user = models.ForeignKey(User)
+    semester = models.ForeignKey(Semester)
+    time = models.DateTimeField(auto_now_add=True)
+    action_type = models.IntegerField(choices=ACTION_CHOICES)
 
 class Lesson(models.Model):
     day = models.SmallIntegerField()
