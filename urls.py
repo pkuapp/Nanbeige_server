@@ -17,9 +17,10 @@ urlpatterns = patterns('',
     (r'^app/notice/$', 'nbg.views_app.notice'),
 
     (r'^user/login/email/$', 'nbg.views_user.login_email'),
-    # (r'^user/login/weibo/$', 'nbg.views_user.login_weibo'),
-    (r'^user/logout/$', 'nbg.views_user.logout'),
+    (r'^user/login/weibo/$', 'nbg.views_user.login_weibo'),
     (r'^user/reg/email/$', 'nbg.views_user.reg_email'),
+    (r'^user/edit/$', 'nbg.views_user.edit'),
+    (r'^user/logout/$', 'nbg.views_user.logout'),
     (r'^user/deactive/$', 'nbg.views_user.deactive'),
 
     (r'^university/$', 'nbg.views_university.university_list'),
