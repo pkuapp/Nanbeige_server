@@ -12,7 +12,6 @@ from nbg.models import *
 
 user_agent = r'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
 urlroot = r'http://byjw.bupt.edu.cn:8080'
-urlend = r''         
 urlin = r"http://byjw.bupt.edu.cn:8080/jwLoginAction.do"
 urlcourse = r"http://byjw.bupt.edu.cn:8080/xkAction.do?actionType=6"
 urlout = r"http://byjw.bupt.edu.cn:8080/logout.do"
@@ -20,58 +19,111 @@ urlout = r"http://byjw.bupt.edu.cn:8080/logout.do"
 #info showed when logged in successfully
 plogin = re.compile(u'学分制综合教务')
 
-def _loginFromData(request,data):
-	
-    user = authenticate(username=data['username'],password=data['password'])
-    if user is not None:
-        if user.is_active:
-                auth_login(request,user)
-                return HttpResponse('0')
-        else:
-                return HttpResponse('-1')
-    return HttpResponse('-9')
+# def _loginFromData(request,data):
+#     user = authenticate(username=data['username'],password=data['password'])
+#     if user is not None:
+#         if user.is_active:
+#                 auth_login(request,user)
+#                 return HttpResponse('0')
+#         else:
+#                 return HttpResponse('-1')
+#     return HttpResponse('-9')
 
-def login_urp_with_data(**kwarg):
+def read_urp_course_data(**kwarg):
     data = kwarg['data']
     JSESSIONID = kwarg['JSESSIONID']
     request = kwarg['request']
     headers = {'User-Agent': user_agent, 'Cookie': 'JSESSIONID='+JSESSIONID}
 
-    if data['zjh'] == u'':
-        return HttpResponse('-1')
+    if data['zjh'] == u'' or data['mm'] == u'':
+        return HttpResponse('student no. and password required')
     else:
         url_values = urllib.urlencode(data)
-        #login
-        req = urllib2.Request(urlin, url_values, headers)
-        response = urllib2.urlopen(req)
-        logindata = response.read().decode('gb18030')
-        response.close()
-        if re.search(plogin, logindata):
-            #read course
-            req = urllib2.Request(urlcourse, None, headers)
+        try:
+            #login
+            req = urllib2.Request(urlin, url_values, headers)
             response = urllib2.urlopen(req)
-            coursedata = response.read().decode('gb18030')
+            logindata = response.read().decode('gb18030')
             response.close()
-            #logout
-            req = urllib2.Request(urlout, None, headers)
-            response = urllib2.urlopen(req)
-            logoutdata = response.read().decode('gb18030')
-            response.close()
-            #deal with course data
-            #return HttpResponse(coursedata)
-            return HttpResponse(get_course(coursedata,request))
-        else:
-            return HttpResponse('login error')
+            if re.search(plogin, logindata):
+                #read course
+                req = urllib2.Request(urlcourse, None, headers)
+                response = urllib2.urlopen(req)
+                doc_courses = response.read().decode('gb18030')
+                response.close()
+                #logout
+                req = urllib2.Request(urlout, None, headers)
+                response = urllib2.urlopen(req)
+                response.close()
+                #deal with course data
+                return HttpResponse(parse_urp_doc_course(doc_courses,request))
+            else:
+                return HttpResponse('login error, password might be wrong')
+        except Exception, e:
+            return HttpResponse('network error')
 
-def login(request):
+def parse_urp_doc_course(doc,request):
+    returnl=list()
+    strainer= SoupStrainer('tr',{'class':'odd'})
+    soup = BeautifulSoup(doc, parseOnlyThese=strainer)
+    for row in soup:
+        if type(row)==Tag:
+            if row.td.has_key('rowspan'):
+                rowspan = int(row.td['rowspan'])
+                rowraw = list()
+                for td in row:
+                    if type(td) == Tag:
+                        rowraw.append(td.getText().strip('&nbsp;'))
+                oncourse = {
+                    'name': rowraw[2],
+                    'original_id': rowraw[1],
+                    'credit': rowraw[4],
+                    'semester': Semester.objects.get(pk=1),
+                    'teacher': rowraw[7],
+                    'ta': '',
+                    'lessons-numbers': rowspan,
+                    'lessons':[{
+                        'day': int(rowraw[12]),
+                        'start': int(rowraw[13]),
+                        'end': int(rowraw[13]) + int(rowraw[14]) -1,
+                        'location': rowraw[16]+' '+rowraw[17],
+                        'weeks': rowraw[11]
+                    }]
+                }
+                #下面把这节课的多个上课时间取出（如果上课时间超过一个的话）
+                if rowspan>1:
+                    lessonrow=row.nextSibling
+                    for i in xrange(rowspan-1):
+                        if type(lessonrow)==Tag:
+                            rowraw = list()
+                            for td in lessonrow:
+                                if type(td) == Tag:
+                                    rowraw.append(td.getText().strip('&nbsp;')) 
+                            onlesson = {
+                                'day': int(rowraw[1]),
+                                'start': int(rowraw[2]),
+                                'end': int(rowraw[2]) + int(rowraw[3]) -1,
+                                'location': rowraw[5]+' '+rowraw[6],
+                                'weeks': rowraw[0]
+                            }
+                            oncourse['lessons'].append(onlesson)
+                        lessonrow=lessonrow.nextSibling
+                returnl.append(oncourse)
+    return returnl
+
+
+
+def login_urp(request):
     data = {}
     JSESSIONID = request.POST.get('sid', None)
     #add parameters that the login webpage needs here!
     data['type'] = 'sso'
     data['zjh'] = request.POST.get('zjh', None)
     data['mm'] = request.POST.get('mm', None)
-    return login_urp_with_data(**locals())
+    return read_urp_course_data(**locals())
 
+
+#以下几个函数暂时不用
 def get_course(coursedata,request):
     table_soup = BeautifulSoup(coursedata)
     soup_course = table_soup.findAll('table', {'class':'displayTag', 'id':'user'})
