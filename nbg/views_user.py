@@ -59,6 +59,8 @@ def reg_email(request):
             validate_email(email)
         except ValidationError:
             return {'error': 'Email 格式不正确。'}, 400
+        if len(email) > 30:
+            return {'error': 'Email 地址过长。'}, 400
 
         try:
             user = User.objects.create_user(username=email, email=email, password=password)
