@@ -102,7 +102,8 @@ class Assignment(models.Model):
     user = models.ForeignKey(User)
     due = models.DateTimeField()
     content = models.TextField()
-    finished = models.BooleanField()
+    finished = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
     last_modified = models.DateTimeField()
 
     def __unicode__(self):
