@@ -2,8 +2,10 @@
 
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
-from nbg.models import Course, Assignment, Comment
+from nbg.models import Course, Assignment, Comment, University
 from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime
+from django.core.cache import cache
+from spider import grabbers
 
 @auth_required
 @json_response
@@ -199,3 +201,43 @@ def comment_list(request, offset):
     } for item in comment_objs]
 
     return response
+
+
+@require_http_methods(['POST'])
+@auth_required
+@json_response
+def course_grab(request):
+    user = request.user
+    university = user.get_profile().campus.university
+    exec('import grabbers.3 as GrabberModel')
+    grabber = GrabberModel.Grabber()
+
+    response = {
+        'available': True,
+    }
+
+    if grabber.require_captcha:
+        response['require_captcha'] = True
+        captcha = grabber.fetch_captcha()
+        response['captcha'] = 
+
+    cache.set(request.session+'_grabber',grabber)
+    return response
+
+@require_http_methods(['POST'])
+@auth_required
+@json_response
+def course_grab_start(request):
+    grabber = cache.get(request.session+'_grabber')
+    if grabber:
+        grabber.setUp(**request.POST)
+        if grabber.run():
+            courses_set = grabber.courses
+            "save"
+        else:
+            "error"
+    else:
+        return {'error': '未指定的错误'}, 403
+
+
+
