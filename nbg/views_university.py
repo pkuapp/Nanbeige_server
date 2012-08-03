@@ -11,6 +11,10 @@ def university_list(request):
     response = [{
         'id': university.pk,
         'name': university.name,
+        'campuses': [{
+            'id': campus.pk,
+            'name': campus.name,
+        } for campus in university.campus_set.all()],
     } for university in universities]
     return response
 
@@ -27,13 +31,6 @@ def detail(request, offset):
     lessons_total = university.lessons_morning + university.lessons_afternoon + university.lessons_evening
     response = {
         'name': university.name,
-        'campuses': [{
-            'name': campus.name,
-            'location': {
-                'latitude': float(campus.latitude),
-                'longitude': float(campus.longitude),
-            }
-        } for campus in university.campus_set.all()],
         'support': {
             'import_course': university.support_import_course,
             'list_course': university.support_list_course,
