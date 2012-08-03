@@ -26,7 +26,7 @@ class University(models.Model):
         return u'#%s %s' % (self.id, self.name)
 
 class Campus(models.Model):
-    name = models.CharField(max_length=100, null=True, blank=True)
+    name = models.CharField(max_length=100, blank=True)
     university = models.ForeignKey(University)
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
@@ -43,7 +43,7 @@ class Semester(models.Model):
     university = models.ForeignKey(University)
     week_start = models.DateField()
     week_end = models.DateField()
-    excluded = models.CommaSeparatedIntegerField(max_length=100)
+    excluded = models.CommaSeparatedIntegerField(max_length=100, blank=True)
 
     def __unicode__(self):
         return  u'#%s %s - %s' % (self.id, self.university.name, self.name)
@@ -62,9 +62,9 @@ class Course(models.Model):
     original_id = models.CharField(max_length=100)
     credit = models.DecimalField(max_digits=3, decimal_places=1)
     semester = models.ForeignKey(Semester)
-    teacher = models.CharField(max_length=200, null=True, blank=True)
-    ta = models.CharField(max_length=200, null=True, blank=True)
-    custom = models.CharField(max_length=300, null=True, blank=True)
+    teacher = models.CharField(max_length=200, blank=True)
+    ta = models.CharField(max_length=200, blank=True)
+    custom = models.CharField(max_length=300, blank=True)
     hash = models.CharField(max_length=32)
 
     def __unicode__(self):
@@ -72,8 +72,8 @@ class Course(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    weibo_name = models.CharField(max_length=120, null=True, blank=True)
-    nickname = models.CharField(max_length=100, null=True)
+    weibo_name = models.CharField(max_length=120, blank=True)
+    nickname = models.CharField(max_length=100, blank=True)
     courses = models.ManyToManyField(Course, blank=True)
     university = models.ForeignKey(University, null=True)
 
@@ -81,8 +81,8 @@ class UserProfile(models.Model):
         return u'#%s (#%s %s)' % (self.id, self.user.id, self.user.username)
 
 class UserAction(models.Model):
-    
-    ACTION_CHOICES = ((0,'courses_imported'),)
+
+    ACTION_CHOICES = ((0, 'courses_imported'),)
 
     user = models.ForeignKey(User)
     semester = models.ForeignKey(Semester)
