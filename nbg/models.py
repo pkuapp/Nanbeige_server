@@ -23,7 +23,7 @@ class University(models.Model):
     lessons_separator = models.CommaSeparatedIntegerField(max_length=50)
 
     def __unicode__(self):
-        return u'#%s %s' % (self.id,self.name)
+        return u'#%s %s' % (self.id, self.name)
 
 class Campus(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
@@ -61,10 +61,11 @@ class Course(models.Model):
     name = models.CharField(max_length=200)
     original_id = models.CharField(max_length=100)
     credit = models.DecimalField(max_digits=3, decimal_places=1)
-    weeks = models.CommaSeparatedIntegerField(max_length=200)
     semester = models.ForeignKey(Semester)
     teacher = models.CharField(max_length=200, null=True, blank=True)
     ta = models.CharField(max_length=200, null=True, blank=True)
+    custom = models.CharField(max_length=300, null=True, blank=True)
+    hash = models.CharField(max_length=32)
 
     def __unicode__(self):
         return u'#%s %s - %s' % (self.id, self.semester.university.name, self.name)
@@ -80,7 +81,7 @@ class UserProfile(models.Model):
         return u'#%s (#%s %s)' % (self.id, self.user.id, self.user.username)
 
 class UserAction(models.Model):
-    ACTION_CHOICES = ((0,'courses_imported'),)
+    ACTION_CHOICES = ((0, 'courses_imported'),)
 
     user = models.ForeignKey(User)
     semester = models.ForeignKey(Semester)
@@ -91,6 +92,7 @@ class Lesson(models.Model):
     day = models.SmallIntegerField()
     start = models.SmallIntegerField()
     end = models.SmallIntegerField()
+    weeks = models.CommaSeparatedIntegerField(max_length=200)
     location = models.CharField(max_length=200)
     course = models.ForeignKey(Course)
 
