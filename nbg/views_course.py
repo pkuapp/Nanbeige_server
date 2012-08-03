@@ -18,12 +18,12 @@ def course_list(request):
         'teacher': listify_str(item.teacher),
         'ta': listify_str(item.ta),
         'semester_id': item.semester.pk,
-        'week': listify_int(item.weeks),
         'lessons': [{
             'day': lesson.day,
             'start': lesson.start,
             'end': lesson.end,
             'location': lesson.location,
+            'week': listify_int(lesson.weeks),
         } for lesson in item.lesson_set.all()]
     } for item in course_objs]
     return response
