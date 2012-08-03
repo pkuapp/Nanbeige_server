@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from nbg.models import UserProfile, University
+from nbg.models import UserProfile, Campus
 from nbg.helpers import json_response, auth_required
 
 @auth_required
@@ -30,7 +30,7 @@ def login_email(request):
                 'nickname': user.get_profile().nickname,
                 'university': None,
             }
-            university = user.get_profile().university
+            university = user.get_profile().campus.university
             if university:
                 response['university'] = {
                     'id': university.pk,
@@ -87,8 +87,8 @@ def edit(request):
     password = request.POST.get('password', None)
     nickname = request.POST.get('nickname', None)
     # weibo_token = request.POST.get('weibo_token', None)
-    university_id = request.POST.get('university_id', None)
-    university_none = request.POST.get('university_none', None)
+    campus_id = request.POST.get('campus_id', None)
+    campus_none = request.POST.get('campus_none', None)
 
     user = request.user
     user_profile = user.get_profile()
@@ -102,19 +102,19 @@ def edit(request):
     # if weibo_token:
     #     user_profile.weibo_token = weibo_token
 
-    if university_id:
+    if campus_id:
         try:
-            university_id = int(university_id)
-            university = University.objects.get(pk=university_id)
+            campus_id = int(campus_id)
+            campus = Campus.objects.get(pk=campus_id)
         except ValueError:
-            return {'error': 'university_id 参数格式不正确。'}, 400
-        except University.DoesNotExist:
-            return {'error': '学校不存在。'}, 404
+            return {'error': 'campus_id 参数格式不正确。'}, 400
+        except Campus.DoesNotExist:
+            return {'error': '校区不存在。'}, 404
 
-        user_profile.university = university
+        user_profile.campus = campus
 
-    if university_none == '1':
-        user_profile.university = None
+    if campus_none == '1':
+        user_profile.campus = None
 
     user.save()
     user_profile.save()

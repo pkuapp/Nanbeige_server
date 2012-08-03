@@ -76,7 +76,7 @@ class UserProfile(models.Model):
     nickname = models.CharField(max_length=100, blank=True)
     realname = models.CharField(max_length=100, blank=True)
     courses = models.ManyToManyField(Course, blank=True)
-    university = models.ForeignKey(University, null=True)
+    campus = models.ForeignKey(Campus, null=True)
 
     def __unicode__(self):
         return u'#%s (#%s %s)' % (self.id, self.user.id, self.user.username)
