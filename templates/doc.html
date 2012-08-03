@@ -116,7 +116,7 @@ pre {
   display: block;
   padding: 14px;
   font-size: 12px;
-  margin: 0 0 18px;
+  margin: 0 0 10px 0;
   line-height: 15px;
   border: 1px solid #d9d9d9;
   white-space: pre-wrap;
@@ -299,7 +299,8 @@ td:last-child {
   "university": {
     "id": 2718,
     "name": "北京大学"
-  }
+  },
+  "course_imported": true
 }</pre><pre>{
   "error": "Email 或密码错误。"
 }</pre>
@@ -319,6 +320,7 @@ td:last-child {
   "id": 31415926,
   "nickname": null,
   "university": null,
+  "course_imported": false,
   "first_login": false
 }</pre><pre>{
   "error": "微博 token 错误。"
@@ -577,6 +579,42 @@ td:last-child {
   ...
 ]</pre></td>
   <td align="left">返回当前用户的全部课程。<code>course_id</code> 为教务网课程编号。<code>lessons</code> 中，<code>day</code> 为在星期几上课（1-7），<code>start</code> 和 <code>end</code> 为起止节次。</td>
+</tr>
+
+<tr>
+  <td align="left">/grabber/</td>
+  <td align="left"><code>POST*</code></td>
+  <td align="left">none</td>
+  <td align="left"><pre>{
+  "username_field_name": "校园一卡通帐号",
+  "captcha": "TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieSB0aGlz
+IHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIGx1c3Qgb2Yg
+dGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbiB0aGUgY29udGlu
+dWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZGdlLCBleGNlZWRzIHRo
+ZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS4="
+}</pre></td>
+  <td align="left">返回课程抓取器。captcha 为 base64 处理后的图片验证码（对于不需要的学校为 null）。</td>
+</tr>
+
+<tr>
+  <td align="left">/grabber/start/</td>
+  <td align="left"><code>POST*</code></td>
+  <td align="left">
+    <ul>
+      <li><code class="required">str</code> username</li>
+      <li><code class="required">str</code> password</li>
+      <li><code class="optional">str</code> captcha</li>
+    </ul>
+  </td>
+  <td align="left">
+    <ul>
+      <li><code>0</code> success</li>
+    </ul>
+    <pre>{"error": "验证码错误。"}</pre>
+    <pre>{"error": "校园一卡通帐号或密码错误。"}</pre>
+    <pre>{"error": "服务器出错。"}</pre>
+  </td>
+  <td align="left">启动课程抓取器。<code>captcha</code> 根据 /grabber/ 返回的验证码图片填写，若无验证码不需要此参数。</td>
 </tr>
 
 <tr>
