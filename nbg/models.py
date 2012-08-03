@@ -81,7 +81,8 @@ class UserProfile(models.Model):
         return u'#%s (#%s %s)' % (self.id, self.user.id, self.user.username)
 
 class UserAction(models.Model):
-    ACTION_CHOICES = ((0, 'courses_imported'),)
+    
+    ACTION_CHOICES = ((0,'courses_imported'),)
 
     user = models.ForeignKey(User)
     semester = models.ForeignKey(Semester)
