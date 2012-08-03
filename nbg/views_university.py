@@ -30,8 +30,8 @@ def detail(request, offset):
         'campuses': [{
             'name': campus.name,
             'location': {
-                'latitude': 0.0,
-                'longitude': 0.0,
+                'latitude': float(campus.latitude),
+                'longitude': float(campus.longitude),
             }
         } for campus in university.campus_set.all()],
         'support': {
