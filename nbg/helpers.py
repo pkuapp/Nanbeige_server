@@ -18,15 +18,14 @@ def parse_datetime(str):
     return datetime.strptime(str, "%Y-%m-%d %H:%M:%S")
 
 def json_response(func):
-    def inner(request, *args, **kwargs):
+    def inner(request=None, *args, **kwargs):
         status_code = 200
         response = func(request, *args, **kwargs)
         content = response
         if isinstance(response, tuple):
             content = response[0]
             status_code = response[1]
-
-        return HttpResponse(dumps(content),
+        return HttpResponse(dumps(content),\
           mimetype="application/json", status=status_code)
 
     return inner

@@ -6,6 +6,8 @@ from nbg.models import Course, Assignment, Comment, University
 from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime
 from django.core.cache import cache
 from spider import grabbers
+from django.http import HttpResponse
+
 
 
 @auth_required
@@ -210,19 +212,10 @@ def comment_list(request, offset):
 def course_grab(request):
     user = request.user
     university = user.get_profile().campus.university
-    exec('import grabbers.3 as GrabberModel')
-    grabber = GrabberModel.Grabber()
+    exec('import grabbers.0 as GrabberModel')
+    grabber = GrabberModel.TeapotParser()
 
-    response = {
-        'available': True,
-        'info': '',
-    }
-
-    if grabber.require_captcha:
-        response['require_captcha'] = True
-        captcha_img_code = grabber.fetch_captcha_img_code()
-        
-        response['captcha'] = captcha_img_code
+    response = grabber.work_flow_type()
         
     cache.set(request.session+'_grabber',grabber)
     return response
@@ -234,14 +227,22 @@ def course_grab_start(request):
     grabber = cache.get(request.session+'_grabber')
     if grabber:
         grabber.setUp(**request.POST)
-        if grabber.run():
+        try:
+            grabber.run()
             courses_set = grabber.courses
             
-
-        else:
-            "error"
+        except:
+            return {'error': '无法运行导入脚本'}, 501
     else:
-        return {'error': '未指定的错误'}, 403
+        return {'error': '找不到可运行的导入对象'}, 403
 
 
+@require_http_methods(['GET'])
+@auth_required
+def captcha_img(request):
+    grabber = cache.get(request.session+'_grabber')
+    if grabber and grabber.captcha_img:
+        return HttpResponse(grabber.captcha_img, mimetype=”image/png”)
+    else:
+        return json_response(lambda x:('captcha image not found', 404))()
 
