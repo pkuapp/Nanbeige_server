@@ -65,14 +65,13 @@ class Course(models.Model):
     teacher = models.CharField(max_length=200, blank=True)
     ta = models.CharField(max_length=200, blank=True)
     custom = models.CharField(max_length=300, blank=True)
-    hash = models.CharField(max_length=32)
 
     def __unicode__(self):
         return u'#%s %s - %s' % (self.id, self.semester.university.name, self.name)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    weibo_name = models.CharField(max_length=120, blank=True)
+    weibo_id = models.IntegerField(null=True, blank=True)
     nickname = models.CharField(max_length=100, blank=True)
     realname = models.CharField(max_length=100, blank=True)
     courses = models.ManyToManyField(Course, blank=True)
