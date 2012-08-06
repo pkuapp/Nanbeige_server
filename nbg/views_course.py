@@ -7,6 +7,7 @@ from nbg.helpers import listify_int, listify_str, json_response, auth_required, 
 from django.core.cache import cache
 from spider import grabbers
 
+
 @auth_required
 @json_response
 def course_list(request):
@@ -214,13 +215,15 @@ def course_grab(request):
 
     response = {
         'available': True,
+        'info': '',
     }
 
     if grabber.require_captcha:
         response['require_captcha'] = True
-        captcha = grabber.fetch_captcha()
-        response['captcha'] = 
-
+        captcha_img_code = grabber.fetch_captcha_img_code()
+        
+        response['captcha'] = captcha_img_code
+        
     cache.set(request.session+'_grabber',grabber)
     return response
 
@@ -233,7 +236,8 @@ def course_grab_start(request):
         grabber.setUp(**request.POST)
         if grabber.run():
             courses_set = grabber.courses
-            "save"
+            
+
         else:
             "error"
     else:

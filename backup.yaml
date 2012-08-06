@@ -1,0 +1,977 @@
+- fields: {notice_content: "\u4E00\u4EBA\u4E00\u53F0 MacBook Pro with Retina Display\u3002",
+    notice_time: !!timestamp '2012-07-25 12:58:54', version_android_beta: '0.619',
+    version_android_stable: '0.618', version_ios_beta: '1.1', version_ios_stable: '1.0'}
+  model: nbg.app
+  pk: 1
+- fields: {english_name: Peking University, lessons_afternoon: 4, lessons_evening: 2,
+    lessons_morning: 4, lessons_separator: '2,4,6,8,9,11', name: "\u5317\u4EAC\u5927\
+      \u5B66", support_import_course: true, support_list_course: true}
+  model: nbg.university
+  pk: 1
+- fields: {english_name: Zhejiang University, lessons_afternoon: 5, lessons_evening: 3,
+    lessons_morning: 5, lessons_separator: '2,5,7,10', name: "\u6D59\u6C5F\u5927\u5B66",
+    support_import_course: true, support_list_course: true}
+  model: nbg.university
+  pk: 2
+- fields: {english_name: Beijing University of Post and Telecommunication, lessons_afternoon: 4,
+    lessons_evening: 2, lessons_morning: 4, lessons_separator: '2,4,6,8', name: "\u5317\u4EAC\
+      \u90AE\u7535\u5927\u5B66", support_import_course: true, support_list_course: true}
+  model: nbg.university
+  pk: 3
+- fields: {english_name: Peking University Health Science Center, lessons_afternoon: 4,
+    lessons_evening: 4, lessons_morning: 4, lessons_separator: '2,4,6,8,10', name: "\u5317\u4EAC\
+      \u5927\u5B66\u533B\u5B66\u90E8", support_import_course: true, support_list_course: true}
+  model: nbg.university
+  pk: 4
+- fields: {latitude: '116.350708', longitude: '39.989747', name: "\u6821\u672C\u90E8",
+    university: 3}
+  model: nbg.campus
+  pk: 1
+- fields: {latitude: '116.373603', longitude: '40.106257', name: "\u5B8F\u798F\u6821\
+      \u533A", university: 3}
+  model: nbg.campus
+  pk: 2
+- fields: {latitude: '120.125155', longitude: '30.261810', name: "\u7389\u6CC9\u6821\
+      \u533A", university: 2}
+  model: nbg.campus
+  pk: 3
+- fields: {latitude: '120.087433', longitude: '30.318062', name: "\u7D2B\u91D1\u6E2F\
+      \u6821\u533A", university: 2}
+  model: nbg.campus
+  pk: 4
+- fields: {latitude: '120.142536', longitude: '30.278637', name: "\u897F\u6EAA\u6821\
+      \u533A", university: 2}
+  model: nbg.campus
+  pk: 5
+- fields: {latitude: '120.195751', longitude: '30.274635', name: "\u534E\u5BB6\u6C60\
+      \u6821\u533A", university: 2}
+  model: nbg.campus
+  pk: 6
+- fields: {latitude: '120.124512', longitude: '30.217542', name: "\u4E4B\u6C5F\u6821\
+      \u533A", university: 2}
+  model: nbg.campus
+  pk: 7
+- fields: {latitude: '116.309896', longitude: '39.992641', name: '', university: 1}
+  model: nbg.campus
+  pk: 8
+- fields: {latitude: '116.358618', longitude: '39.984644', name: '', university: 4}
+  model: nbg.campus
+  pk: 9
+- fields: {excluded: '5', name: "2011-2012\u5B66\u5E74 \u6625\u5B63\u5B66\u671F",
+    university: 3, week_end: 2012-07-06, week_start: 2012-02-13, year: '1'}
+  model: nbg.semester
+  pk: 1
+- fields: {excluded: '8,9', name: "2011-2012\u5B66\u5E74 \u6625\u5B63\u5B66\u671F",
+    university: 1, week_end: 2012-06-25, week_start: 2012-02-13, year: '1'}
+  model: nbg.semester
+  pk: 2
+- fields: {excluded: '17,18', name: "2011-2012\u5B66\u5E74 \u79CB\u5B63\u5B66\u671F",
+    university: 1, week_end: 2012-07-09, week_start: 2012-09-05, year: '1'}
+  model: nbg.semester
+  pk: 3
+- fields: {excluded: '1', name: "2012-2013\u5B66\u5E74 \u7B2C\u4E00\u5B66\u671F",
+    university: 4, week_end: 2013-01-27, week_start: 2012-08-20, year: '1'}
+  model: nbg.semester
+  pk: 4
+- fields: {excluded: '', name: "\u79CB\u51AC\u5B66\u671F", university: 2, week_end: 2013-01-27,
+    week_start: 2012-09-10, year: "2012-2013\u5B66\u5E74"}
+  model: nbg.semester
+  pk: 5
+- fields: {end: '08:50:00', number: 1, start: '08:00:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 1
+- fields: {end: '09:50:00', number: 2, start: '09:00:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 2
+- fields: {end: '11:00:00', number: 3, start: '10:10:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 3
+- fields: {end: '12:00:00', number: 4, start: '11:10:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 4
+- fields: {end: '13:50:00', number: 5, start: '13:00:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 5
+- fields: {end: '14:50:00', number: 6, start: '14:00:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 6
+- fields: {end: '16:20:00', number: 7, start: '15:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 7
+- fields: {end: '17:20:00', number: 8, start: '16:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 8
+- fields: {end: '19:20:00', number: 9, start: '18:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 9
+- fields: {end: '20:20:00', number: 10, start: '19:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 10
+- fields: {end: '21:20:00', number: 11, start: '20:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 11
+- fields: {end: '22:20:00', number: 12, start: '21:30:00', university: 1}
+  model: nbg.scheduleunit
+  pk: 12
+- fields: {end: '08:50:00', number: 1, start: '08:00:00', university: 3}
+  model: nbg.scheduleunit
+  pk: 13
+- fields: {end: '09:50:00', number: 2, start: '09:00:00', university: 3}
+  model: nbg.scheduleunit
+  pk: 14
+- fields: {end: '11:00:00', number: 3, start: '10:10:00', university: 3}
+  model: nbg.scheduleunit
+  pk: 15
+- fields: {end: '12:00:00', number: 4, start: '11:10:00', university: 3}
+  model: nbg.scheduleunit
+  pk: 16
+- fields: {end: '14:20:00', number: 5, start: '13:30:00', university: 3}
+  model: nbg.scheduleunit
+  pk: 17
+- fields: {end: '15:20:00', number: 6, start: '14:30:00', university: 3}
+  model: nbg.scheduleunit
+  pk: 18
+- fields: {end: '16:20:00', number: 7, start: '15:30:00', university: 3}
+  model: nbg.scheduleunit
+  pk: 19
+- fields: {end: '17:20:00', number: 8, start: '16:30:00', university: 3}
+  model: nbg.scheduleunit
+  pk: 20
+- fields: {end: '19:20:00', number: 9, start: '18:30:00', university: 3}
+  model: nbg.scheduleunit
+  pk: 21
+- fields: {end: '20:20:00', number: 10, start: '19:30:00', university: 3}
+  model: nbg.scheduleunit
+  pk: 22
+- fields: {end: '08:50:00', number: 1, start: '08:00:00', university: 4}
+  model: nbg.scheduleunit
+  pk: 23
+- fields: {end: '09:50:00', number: 2, start: '09:00:00', university: 4}
+  model: nbg.scheduleunit
+  pk: 24
+- fields: {end: '11:00:00', number: 3, start: '10:10:00', university: 4}
+  model: nbg.scheduleunit
+  pk: 25
+- fields: {end: '12:00:00', number: 4, start: '11:10:00', university: 4}
+  model: nbg.scheduleunit
+  pk: 26
+- fields: {end: '13:50:00', number: 5, start: '13:00:00', university: 4}
+  model: nbg.scheduleunit
+  pk: 27
+- fields: {end: '14:50:00', number: 6, start: '14:00:00', university: 4}
+  model: nbg.scheduleunit
+  pk: 28
+- fields: {end: '15:50:00', number: 7, start: '15:00:00', university: 4}
+  model: nbg.scheduleunit
+  pk: 29
+- fields: {end: '17:00:00', number: 8, start: '16:10:00', university: 4}
+  model: nbg.scheduleunit
+  pk: 30
+- fields: {end: '18:00:00', number: 9, start: '17:10:00', university: 4}
+  model: nbg.scheduleunit
+  pk: 31
+- fields: {end: '19:30:00', number: 10, start: '18:40:00', university: 4}
+  model: nbg.scheduleunit
+  pk: 32
+- fields: {end: '20:30:00', number: 11, start: '19:40:00', university: 4}
+  model: nbg.scheduleunit
+  pk: 33
+- fields: {end: '21:30:00', number: 12, start: '20:40:00', university: 4}
+  model: nbg.scheduleunit
+  pk: 34
+- fields: {end: '08:45:00', number: 1, start: '08:00:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 36
+- fields: {end: '09:35:00', number: 2, start: '08:50:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 37
+- fields: {end: '10:35:00', number: 3, start: '09:50:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 38
+- fields: {end: '11:25:00', number: 4, start: '10:40:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 39
+- fields: {end: '12:15:00', number: 5, start: '11:30:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 40
+- fields: {end: '14:00:00', number: 6, start: '13:15:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 41
+- fields: {end: '14:50:00', number: 7, start: '14:05:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 42
+- fields: {end: '15:40:00', number: 8, start: '14:55:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 43
+- fields: {end: '16:40:00', number: 9, start: '15:55:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 44
+- fields: {end: '17:30:00', number: 10, start: '16:45:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 45
+- fields: {end: '19:15:00', number: 11, start: '18:30:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 46
+- fields: {end: '20:05:00', number: 12, start: '19:20:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 47
+- fields: {end: '20:55:00', number: 13, start: '20:10:00', university: 2}
+  model: nbg.scheduleunit
+  pk: 48
+- fields: {credit: '2.5', custom: '', hash: '0', name: "\u897F\u65B9\u54F2\u5B66\u53F2",
+    original_id: '1', semester: 2, ta: "\u5434\u660A\u5929", teacher: "\u5434\u660A\
+      \u5929,\u5434\u660A\u5929"}
+  model: nbg.course
+  pk: 1
+- fields: {credit: '2.0', custom: '', hash: '0', name: "\u9A6C\u514B\u601D\u4E3B\u4E49\
+      \u54F2\u5B66\u539F\u7406", original_id: '2', semester: 2, ta: "\u5434\u660A\u5929\
+      ,\u5434\u660A\u5929", teacher: "\u5434\u660A\u5929,\u5434\u660A\u5929"}
+  model: nbg.course
+  pk: 2
+- fields: {credit: '6.0', custom: '', hash: '0', name: "\u9AD8\u7B49\u6570\u5B66",
+    original_id: '3', semester: 2, ta: "\u5434\u660A\u5929,\u5434\u660A\u5929", teacher: "\u5434\u660A\
+      \u5929,\u5434\u660A\u5929"}
+  model: nbg.course
+  pk: 3
+- fields: {credit: '2.0', custom: '', hash: '0', name: "21\u5929\u7CBE\u901A\u963F\
+      \u62C9\u4F2F\u8BED\uFF08\u53D8\u6001\u51B2\u523A\u73ED\uFF09", original_id: '4',
+    semester: 2, ta: '', teacher: ''}
+  model: nbg.course
+  pk: 4
+- fields: {course: 2, day: 1, end: 4, location: "\u7406\u6559 108", start: 1, weeks: '1'}
+  model: nbg.lesson
+  pk: 1
+- fields: {course: 1, day: 2, end: 6, location: "\u9038\u592B\u4E8C\u82D1 201", start: 5,
+    weeks: '1'}
+  model: nbg.lesson
+  pk: 2
+- fields: {course: 3, day: 2, end: 3, location: "\u7406\u6559", start: 1, weeks: '1'}
+  model: nbg.lesson
+  pk: 3
+- fields: {course: 3, day: 4, end: 3, location: "\u4E8C\u6559 201", start: 1, weeks: '1'}
+  model: nbg.lesson
+  pk: 4
+- fields: {course: 4, day: 5, end: 2, location: "\u725B\u8857\u6E05\u771F\u5BFA\u5E7F\
+      \u573A", start: 1, weeks: '1'}
+  model: nbg.lesson
+  pk: 5
+- fields: {campus: 8, latitude: '116.313132', longitude: '39.989482', name: "\u5149\u534E\
+      \u697C"}
+  model: nbg.building
+  pk: 1
+- fields: {campus: 8, latitude: '116.313135', longitude: '39.989484', name: "\u4E8C\u6559"}
+  model: nbg.building
+  pk: 2
+- fields: {campus: 8, latitude: '116.313135', longitude: '39.989484', name: "\u9038\u592B\
+      \u4E8C\u697C"}
+  model: nbg.building
+  pk: 3
+- fields: {campus: 1, latitude: '116.357818', longitude: '39.961894', name: "\u6559\u4E00\
+      \u697C"}
+  model: nbg.building
+  pk: 4
+- fields: {campus: 1, latitude: '116.357880', longitude: '39.960498', name: "\u6559\u4E8C\
+      \u697C"}
+  model: nbg.building
+  pk: 5
+- fields: {campus: 1, latitude: '116.356101', longitude: '39.960321', name: "\u6559\u4E09\
+      \u697C"}
+  model: nbg.building
+  pk: 6
+- fields: {campus: 1, latitude: '116.356321', longitude: '39.961872', name: "\u6559\u56DB\
+      \u697C"}
+  model: nbg.building
+  pk: 7
+- fields: {campus: 1, latitude: '116.358322', longitude: '39.961185', name: "\u4E3B\u697C"}
+  model: nbg.building
+  pk: 8
+- fields: {campus: 1, latitude: '116.357813', longitude: '39.962780', name: "\u56FE\u4E66\
+      \u9986"}
+  model: nbg.building
+  pk: 10
+- fields: {building: 1, name: "101\u5BA4"}
+  model: nbg.room
+  pk: 1
+- fields: {building: 1, name: "102\u5BA4"}
+  model: nbg.room
+  pk: 2
+- fields: {building: 2, name: "\u9636\u68AF\u6559\u5BA4"}
+  model: nbg.room
+  pk: 3
+- fields: {building: 2, name: "\u5927\u6247\u5F62"}
+  model: nbg.room
+  pk: 4
+- fields: {building: 3, name: "100\u5BA4"}
+  model: nbg.room
+  pk: 5
+- fields: {building: 3, name: "\u529E\u516C\u5BA4"}
+  model: nbg.room
+  pk: 6
+- fields: {building: 6, name: "134\u5BA4"}
+  model: nbg.room
+  pk: 7
+- fields: {building: 6, name: "337\u5BA4"}
+  model: nbg.room
+  pk: 8
+- fields: {building: 6, name: "339\u5BA4"}
+  model: nbg.room
+  pk: 9
+- fields: {building: 6, name: "437\u5BA4"}
+  model: nbg.room
+  pk: 10
+- fields: {availability: '1,0,1,0,0,1,0,1,0,1', date: 2012-07-28, room: 1}
+  model: nbg.roomavailability
+  pk: 1
+- fields: {availability: '1,1,1,0,1,0,0,0,0,1', date: 2012-07-25, room: 2}
+  model: nbg.roomavailability
+  pk: 2
+- fields: {availability: '0,0,0,0,1,1,1,0,0,1', date: 2012-07-25, room: 3}
+  model: nbg.roomavailability
+  pk: 3
+- fields: {availability: '1,1,1,1,1,0,0,0,1,0', date: 2012-07-25, room: 4}
+  model: nbg.roomavailability
+  pk: 4
+- fields: {availability: '1,1,1,0,0,0,1,1,1,1', date: 2012-07-25, room: 5}
+  model: nbg.roomavailability
+  pk: 5
+- fields: {availability: '0,0,0,0,0,1,1,1,0,1', date: 2012-07-25, room: 6}
+  model: nbg.roomavailability
+  pk: 6
+- fields: {availability: '1,0,0,0,1,0,1,1,1,0', date: 2012-07-31, room: 7}
+  model: nbg.roomavailability
+  pk: 7
+- fields: {availability: '1,1,1,1,1,1,1,1,1,1', date: 2012-07-31, room: 8}
+  model: nbg.roomavailability
+  pk: 8
+- fields: {availability: '0,0,0,0,0,0,0,0,0,0', date: 2012-07-31, room: 9}
+  model: nbg.roomavailability
+  pk: 9
+- fields: {availability: '1,0,1,0,1,1,0,0,0,1', date: 2012-07-31, room: 10}
+  model: nbg.roomavailability
+  pk: 10
+- fields: {name: "\u805A\u9910"}
+  model: nbg.eventcategory
+  pk: 1
+- fields: {name: "\u770B\u7535\u5F71"}
+  model: nbg.eventcategory
+  pk: 2
+- fields: {name: "\u6625\u6E38"}
+  model: nbg.eventcategory
+  pk: 3
+- fields: {content: set off at 10 am, father: 2, title: info of school bus, type: A}
+  model: nbg.wikinode
+  pk: 1
+- fields: {content: "\u6211\u4EC0\u4E48\u90FD\u4E0D\u60F3 \u77E5\u9053", father: null,
+    title: "\u4F60\u60F3\u77E5\u9053\u4EC0\u4E48", type: L}
+  model: nbg.wikinode
+  pk: 2
+- fields: {content: special service, father: 2, title: what do you want, type: L}
+  model: nbg.wikinode
+  pk: 3
+- fields: {content: man, father: 1, title: who are you, type: A}
+  model: nbg.wikinode
+  pk: 4
+- fields: {node: 1, university: 1}
+  model: nbg.wiki
+  pk: 3
+- fields: {node: 2, university: 1}
+  model: nbg.wiki
+  pk: 4
+- fields:
+    date_joined: 2012-07-25 10:11:57
+    email: liu.dongyuan@gmail.com
+    first_name: Dongyuan
+    groups: []
+    is_active: true
+    is_staff: true
+    is_superuser: true
+    last_login: 2012-07-27 16:51:56
+    last_name: Liu
+    password: pbkdf2_sha256$10000$8g2BtgmjSfIf$gqSxRHJ5Y8Yv/MfWcr++0AtDHixpEW4bEO0Pu+YyFwk=
+    user_permissions: []
+    username: liu.dongyuan@gmail.com
+  model: auth.user
+  pk: 1
+- fields:
+    date_joined: 2012-07-25 10:36:10
+    email: 333@pkuapp.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-03 14:30:37
+    last_name: ''
+    password: pbkdf2_sha256$10000$WrWj9Loz4cCk$y4GTSrY6EDl0HjCi7VVT4+6N+Q2E/ISSanaChn72Rcg=
+    user_permissions: []
+    username: 333@pkuapp.com
+  model: auth.user
+  pk: 3
+- fields:
+    date_joined: 2012-07-25 17:28:37
+    email: coolgene@gmail.com
+    first_name: ZHANG
+    groups: []
+    is_active: true
+    is_staff: true
+    is_superuser: true
+    last_login: 2012-08-02 11:36:07
+    last_name: Ta
+    password: pbkdf2_sha256$10000$yExLIVZ5yYlw$Q9x6RGaUNVsINezrromjPhyqES7yRnsyl/r+OwOzHsQ=
+    user_permissions: []
+    username: coolgene@gmail.com
+  model: auth.user
+  pk: 4
+- fields:
+    date_joined: 2012-07-25 17:49:06
+    email: haochenallen@gmail.com
+    first_name: Haochen
+    groups: []
+    is_active: true
+    is_staff: true
+    is_superuser: true
+    last_login: 2012-07-31 16:08:54
+    last_name: Wang
+    password: pbkdf2_sha256$10000$e5GemPg6uw6K$i5g/PxLwQuQeoH2SNPb2m6ruD04adrPXgxoy/c+te3k=
+    user_permissions: []
+    username: haochenallen@gmail.com
+  model: auth.user
+  pk: 5
+- fields:
+    date_joined: 2012-08-01 17:08:03
+    email: coolgene#gmail.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-01 17:08:03
+    last_name: ''
+    password: pbkdf2_sha256$10000$ZZRjYiGZrpdD$M4BZE72oqn3te7Ne/ZRCAK+dAVvHg3Gx2F7L9WVaXrg=
+    user_permissions: []
+    username: coolgene#gmail.com
+  model: auth.user
+  pk: 11
+- fields:
+    date_joined: 2012-08-01 17:25:17
+    email: coolgene!!!gmail.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-01 17:25:17
+    last_name: ''
+    password: pbkdf2_sha256$10000$mh0ohgu5T4cR$j5qsvokREJfVa9QzeuBz6wnvm5RY0phd+WT1GeHv17g=
+    user_permissions: []
+    username: coolgene!!!gmail.com
+  model: auth.user
+  pk: 13
+- fields:
+    date_joined: 2012-08-01 17:34:16
+    email: coolgene1@gmail.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-01 17:34:16
+    last_name: ''
+    password: pbkdf2_sha256$10000$RVV59AovRWIf$vIczNuDWLO8PpI/8qsiXXqrFr36WrDVQpl1G1lKWNfo=
+    user_permissions: []
+    username: coolgene1@gmail.com
+  model: auth.user
+  pk: 15
+- fields:
+    date_joined: 2012-08-01 18:01:57
+    email: ele@me.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-03 15:06:41
+    last_name: ''
+    password: pbkdf2_sha256$10000$b5WuYbyJmaSI$DFgQPLm0h1e2AHStqvy4peBHKzrLQUSznmwwWpY7o5o=
+    user_permissions: []
+    username: ele@me.com
+  model: auth.user
+  pk: 16
+- fields:
+    date_joined: 2012-08-01 19:07:39
+    email: q@q.cn
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-02 12:31:15
+    last_name: ''
+    password: pbkdf2_sha256$10000$S85KyRINn14e$GTfr9mWaUyeUPD94bULTL1njORFWHxCR69AjSOti0mk=
+    user_permissions: []
+    username: q@q.cn
+  model: auth.user
+  pk: 17
+- fields:
+    date_joined: 2012-08-02 09:18:15
+    email: ele@icloud.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-02 09:18:15
+    last_name: ''
+    password: pbkdf2_sha256$10000$a1SsK9gxQBEP$UhkcTX7yq1RLc9jK5K/41qOqBtHvu9U13Jb7y2wXw3E=
+    user_permissions: []
+    username: ele@icloud.com
+  model: auth.user
+  pk: 19
+- fields:
+    date_joined: 2012-08-02 09:21:23
+    email: ele@outlook.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-02 09:21:23
+    last_name: ''
+    password: pbkdf2_sha256$10000$9oKDOO7Z3jX6$c+DIxDsiWIvyyQSXheFXJ19MUvZ/pMO2GYbvNfX687w=
+    user_permissions: []
+    username: ele@outlook.com
+  model: auth.user
+  pk: 20
+- fields:
+    date_joined: 2012-08-02 09:26:43
+    email: ele@live.com
+    first_name: ''
+    groups: []
+    is_active: false
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-02 10:09:21
+    last_name: ''
+    password: pbkdf2_sha256$10000$ewJQtCCOqKAb$0RKkLkNe1KZMxnB76KWjJxu8RK6bF9dTgnFt/lpfLpY=
+    user_permissions: []
+    username: ele@live.com
+  model: auth.user
+  pk: 22
+- fields:
+    date_joined: 2012-08-02 11:13:37
+    email: me@example.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-02 14:25:51
+    last_name: ''
+    password: pbkdf2_sha256$10000$rwhMKDQ29PPS$QTAoXWPOzWBUrWCRNYtxUXyNwcTUAmyxhBTKhW2Eu6E=
+    user_permissions: []
+    username: me@example.com
+  model: auth.user
+  pk: 27
+- fields:
+    date_joined: 2012-08-02 11:16:11
+    email: tr@example.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-02 11:16:11
+    last_name: ''
+    password: pbkdf2_sha256$10000$jSOrvMLTo33c$/TcQhBCzfzaN0WOXgx1amp/UZAd6MkW2loNScLIXYHQ=
+    user_permissions: []
+    username: tr@example.com
+  model: auth.user
+  pk: 30
+- fields:
+    date_joined: 2012-08-02 12:19:03
+    email: tt@example.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-02 12:19:04
+    last_name: ''
+    password: pbkdf2_sha256$10000$dwDj9R9CjgYc$KF/LskSyRvfii67Jty/6FUfcJ/7Av9RvY6wsOS5KPUk=
+    user_permissions: []
+    username: tt@example.com
+  model: auth.user
+  pk: 34
+- fields:
+    date_joined: 2012-08-02 12:23:39
+    email: t@t.tt
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-02 12:23:46
+    last_name: ''
+    password: pbkdf2_sha256$10000$GGDFwZjSKo7P$n7iM8AqJKYoVj8S09n+VVgdRlbY65NvTulO8DJsq3vc=
+    user_permissions: []
+    username: t@t.tt
+  model: auth.user
+  pk: 35
+- fields:
+    date_joined: 2012-08-02 14:16:23
+    email: helongestmailaccount@gmail.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-02 14:16:39
+    last_name: ''
+    password: pbkdf2_sha256$10000$dVB0k1dxijoP$9W0u9LsAifQjW4dkecfT5BVd6Q8OJ+kGYguSg8WKl80=
+    user_permissions: []
+    username: helongestmailaccount@gmail.com
+  model: auth.user
+  pk: 36
+- fields:
+    date_joined: 2012-08-02 15:11:03
+    email: xiejiaye523@gmail.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-02 15:11:05
+    last_name: ''
+    password: pbkdf2_sha256$10000$QW42bH8SW4ay$8BETAj0ZExRQHkLmLg+EqvjZTB7W6yg8R1E56hh8a5g=
+    user_permissions: []
+    username: xiejiaye523@gmail.com
+  model: auth.user
+  pk: 37
+- fields:
+    date_joined: 2012-08-03 03:06:28
+    email: zz@ele.me
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-03 11:14:56
+    last_name: ''
+    password: pbkdf2_sha256$10000$uH6l0GiFd8CI$XP7fwHFn4ryuSz4cuR1b3IcvyO/Z4RmTSyiORQObaXw=
+    user_permissions: []
+    username: zz@ele.me
+  model: auth.user
+  pk: 38
+- fields:
+    date_joined: 2012-08-03 11:45:57
+    email: zongzi@zz.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-03 14:13:00
+    last_name: ''
+    password: pbkdf2_sha256$10000$h7uPZPCnr4n0$J63gmZJ7iPD5KmWn7yb1t5xQICn7XoctZ3fvKYZ2W78=
+    user_permissions: []
+    username: zongzi@zz.com
+  model: auth.user
+  pk: 39
+- fields:
+    date_joined: 2012-08-03 14:07:55
+    email: aaa@pkuapp.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-03 14:07:56
+    last_name: ''
+    password: pbkdf2_sha256$10000$p89aOIz37wzA$k9fo/vMbw8HT4sM20GeuB6ybP3YhgwzoC6eXr8hTO6g=
+    user_permissions: []
+    username: aaa@pkuapp.com
+  model: auth.user
+  pk: 41
+- fields:
+    date_joined: 2012-08-03 15:27:13
+    email: bbb@pkuapp.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-08-03 15:30:25
+    last_name: ''
+    password: pbkdf2_sha256$10000$GH7C37QuNYVm$FX6rfZ4OGE4+Vugyqc/CCVJDnOxEHqAZe8WQNRhbBlw=
+    user_permissions: []
+    username: bbb@pkuapp.com
+  model: auth.user
+  pk: 42
+- fields:
+    campus: 8
+    category: 1
+    content: "\u80FD\u53BB\u7684\u90FD\u53BB\u963F\uFF01"
+    follower: [1]
+    location: "\u5317\u4EAC\u524D\u95E8"
+    organizer: "\u738B\u660A\u5C18"
+    subtitle: "\u5168\u805A\u5FB7\u5403\u5317\u4EAC\u70E4\u9E2D"
+    time: 2012-08-28 12:00:00
+    title: "\u5468\u672B\u805A\u9910"
+  model: nbg.event
+  pk: 2
+- fields:
+    campus: 8
+    category: 1
+    content: "\u5403\u8D27\u96C6\u4F1A\uFF01"
+    follower: [1, 4]
+    location: "\u57CE\u968D\u5E99"
+    organizer: "\u5F20\u5854"
+    subtitle: "\u4E0A\u6D77\u5C0F\u5403\u6E38"
+    time: 2012-07-29 13:00:00
+    title: "\u5403\u904D\u4E0A\u6D77"
+  model: nbg.event
+  pk: 3
+- fields:
+    campus: 8
+    category: 2
+    content: "\u5F71\u8FF7\u4EEC\u6765\u554A"
+    follower: [5]
+    location: "\u4E0A\u6D77\u4E07\u8FBE\u5E7F\u573A\u7535\u5F71\u9662"
+    organizer: "\u6881\u6D77"
+    subtitle: "\u542C\u8BF4\u590D\u4EC7\u8005\u8054\u76DF\u5F88\u706B\u963F"
+    time: 2012-08-26 17:00:00
+    title: "\u4E0B\u8BFE\u7EC4\u7EC7\u770B\u7535\u5F71"
+  model: nbg.event
+  pk: 4
+- fields:
+    campus: 8
+    category: 3
+    content: "\u51FA\u884C\u5566\uFF01"
+    follower: []
+    location: "\u9890\u548C\u56ED"
+    organizer: "\u67F3\u4E1C\u539F"
+    subtitle: "\u5929\u6717\u6C14\u6E05"
+    time: 2013-04-06 08:00:00
+    title: "\u6E05\u660E\u8282\u6625\u6E38"
+  model: nbg.event
+  pk: 5
+- fields: {content: "\u8001\u5E08\u8BFE\u8BB2\u7684\u771F\u725B\u903C", course: 1,
+    time: !!timestamp '2012-07-26 13:54:17', writer: 1}
+  model: nbg.comment
+  pk: 1
+- fields: {content: "\u6C34\u8BFE\u3002", course: 4, time: !!timestamp '2012-07-30
+      18:53:58', writer: 4}
+  model: nbg.comment
+  pk: 2
+- fields: {content: "\u7B2C\u4E00\u7AE0 \u7B2C\u4E00\u9898", course: 3, deleted: false,
+    due: !!timestamp '2012-07-26 16:35:30', finished: true, last_modified: !!timestamp '2012-07-26
+      16:36:05', user: 4}
+  model: nbg.assignment
+  pk: 1
+- fields: {content: "\u7EDF\u4E00\u963F\u62C9\u4F2F\u534A\u5C9B", course: 4, deleted: false,
+    due: !!timestamp '2012-12-31 23:59:59', finished: false, last_modified: !!timestamp '2012-07-30
+      14:20:31', user: 4}
+  model: nbg.assignment
+  pk: 2
+- fields: {content: "\u5B9E\u73B0\u5168\u4E16\u754C\u793E\u4F1A\u4E3B\u4E49\u5927\u8054\
+      \u5408\uFF01\uFF01\uFF01", course: 2, deleted: false, due: !!timestamp '2012-11-11
+      11:11:11', finished: false, last_modified: !!timestamp '2012-07-30 16:21:33',
+    user: 4}
+  model: nbg.assignment
+  pk: 3
+- fields: {content: '111', course: 1, deleted: false, due: !!timestamp '2012-07-30
+      14:42:34', finished: false, last_modified: !!timestamp '2012-07-30 14:42:37',
+    user: 1}
+  model: nbg.assignment
+  pk: 4
+- fields: {content: '123', course: 2, deleted: false, due: !!timestamp '1111-07-30
+      00:00:00', finished: false, last_modified: !!timestamp '2012-07-30 17:48:18',
+    user: 4}
+  model: nbg.assignment
+  pk: 6
+- fields: {content: '123', course: 4, deleted: false, due: !!timestamp '1231-12-12
+      12:24:45', finished: false, last_modified: !!timestamp '2012-07-30 18:11:11',
+    user: 4}
+  model: nbg.assignment
+  pk: 7
+- fields: {content: "\u6D17\u8863\u670D\uFF01", course: 4, deleted: false, due: !!timestamp '2010-12-12
+      12:24:45', finished: false, last_modified: !!timestamp '2012-07-31 16:25:13',
+    user: 4}
+  model: nbg.assignment
+  pk: 8
+- fields: {content: "\u8BF7\u5434\u660A\u5929\u5403\u996D", course: 1, deleted: false,
+    due: !!timestamp '2013-01-14 00:00:00', finished: false, last_modified: !!timestamp '2012-07-31
+      17:18:43', user: 4}
+  model: nbg.assignment
+  pk: 9
+- fields:
+    campus: null
+    courses: [1, 2, 4]
+    nickname: "\u5854"
+    realname: ''
+    user: 4
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 6
+- fields:
+    campus: null
+    courses: [1, 3]
+    nickname: '333'
+    realname: ''
+    user: 3
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 7
+- fields:
+    campus: null
+    courses: []
+    nickname: gene
+    realname: ''
+    user: 13
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 8
+- fields:
+    campus: null
+    courses: []
+    nickname: gene
+    realname: ''
+    user: 15
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 9
+- fields:
+    campus: null
+    courses: []
+    nickname: EleMe
+    realname: ''
+    user: 16
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 10
+- fields:
+    campus: null
+    courses: []
+    nickname: q
+    realname: ''
+    user: 17
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 11
+- fields:
+    campus: null
+    courses: []
+    nickname: Ele
+    realname: ''
+    user: 19
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 12
+- fields:
+    campus: null
+    courses: []
+    nickname: Ele
+    realname: ''
+    user: 20
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 13
+- fields:
+    campus: null
+    courses: []
+    nickname: Ele
+    realname: ''
+    user: 22
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 14
+- fields:
+    campus: null
+    courses: []
+    nickname: me
+    realname: ''
+    user: 27
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 15
+- fields:
+    campus: null
+    courses: []
+    nickname: tr
+    realname: ''
+    user: 30
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 16
+- fields:
+    campus: null
+    courses: []
+    nickname: tt
+    realname: ''
+    user: 34
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 17
+- fields:
+    campus: null
+    courses: []
+    nickname: t
+    realname: ''
+    user: 35
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 18
+- fields:
+    campus: null
+    courses: []
+    nickname: wuhaotian
+    realname: ''
+    user: 36
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 19
+- fields:
+    campus: null
+    courses: []
+    nickname: "\u8C22\u5BB6\u6654"
+    realname: ''
+    user: 37
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 20
+- fields:
+    campus: null
+    courses: []
+    nickname: ZongZiWang
+    realname: ''
+    user: 38
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 21
+- fields:
+    campus: null
+    courses: []
+    nickname: ZongZi
+    realname: ''
+    user: 39
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 22
+- fields:
+    campus: null
+    courses: []
+    nickname: AAA
+    realname: ''
+    user: 41
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 23
+- fields:
+    campus: null
+    courses: []
+    nickname: BBB
+    realname: ''
+    user: 42
+    weibo_name: ''
+  model: nbg.userprofile
+  pk: 24
