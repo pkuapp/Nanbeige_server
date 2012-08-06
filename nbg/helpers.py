@@ -2,7 +2,7 @@
 
 from string import split
 from datetime import datetime
-from django.utils.simplejson import dumps
+from json import dumps
 from django.http import HttpResponse
 
 def listify_str(str):
