@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from nbg.models import UserProfile, Campus
 from nbg.helpers import json_response, auth_required
+from sns.verifiers import VerifyError, get_weibo_uid
 
 @auth_required
 @json_response
