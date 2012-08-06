@@ -30,11 +30,11 @@ def login_email(request):
                 'nickname': user.get_profile().nickname,
                 'university': None,
             }
-            university = user.get_profile().campus.university
-            if university:
+            campus = user.get_profile().campus
+            if campus:
                 response['university'] = {
-                    'id': university.pk,
-                    'name': university.name,
+                    'id': campus.university.pk,
+                    'name': campus.university.name,
                 }
         else:
             response = {
