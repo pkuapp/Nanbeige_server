@@ -47,10 +47,24 @@ def login_email(request):
 
     return response
 
+class WeiboBackend(object):
+    supports_inactive_user = False
+
+    def authenticate(self, weibo_token=None):
+        user = User.objects.get(username="coolgene@gmail.com")
+        return user
+
 @require_http_methods(['POST'])
 @json_response
 def login_weibo(request):
-    pass
+    weibo_token = request.POST.get('weibo_token', None)
+    if not weibo_token:
+        return {'error': '缺少必要的参数。'}, 400
+
+    user = WeiboBackend.authenticate(weibo_token)
+    auth.login(request, user)
+
+    return 0
 
 @require_http_methods(['POST'])
 @json_response
