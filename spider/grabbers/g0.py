@@ -31,7 +31,7 @@ class BaseParser(object):
         self.captcha_img = None
         self.courses = None
 
-    def setUp(self,**kwargs):
+    def setUp(self, **kwargs):
         self.username = kwargs['username']
         self.password = kwargs['password']
         if self.require_captcha:
@@ -39,7 +39,10 @@ class BaseParser(object):
                 self.captcha = kwargs.get('captcha')
             except:
                 raise LookupError('captcha required')
-
+    @static
+    def unique_in_db(self, course):
+        
+        
     def run(self):
         """
             implement your request and parse code here
