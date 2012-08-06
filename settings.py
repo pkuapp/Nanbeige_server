@@ -6,6 +6,7 @@ API_VERSION = 2
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+INTERNAL_IPS = ('127.0.0.1',)
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -88,6 +89,21 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+)
+
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.template.TemplateDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+    'cache_panel.CachePanel',
+
 )
 
 ROOT_URLCONF = 'urls'
@@ -110,6 +126,7 @@ INSTALLED_APPS = (
     'nbg',
     'django_nose',
     'spider',
+    'debug_toolbar',
 )
 
 

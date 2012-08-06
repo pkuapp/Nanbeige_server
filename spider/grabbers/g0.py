@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
+
 # import base64
 # import StringIO
+import os.path
 
 class BaseParser(object):
     """
@@ -94,7 +97,7 @@ class BaseParser(object):
         if self.require_captcha:
             self._fetch_img()
             return{
-                'available': self.available
+                'available': self.available,
                 'require_captcha': True,
                 'info': self.error
             }
@@ -110,38 +113,38 @@ class TeapotParser(BaseParser):
     
     def _fetch_img(self):
         img = open(os.path.join(os.path.dirname(__file__), 'captcha_teapot.png'))
-        self.img = img.read()
+        self.captcha_img = img.read()
 
     def run(self):
         return [{
-              "orig_id": "2011-325763QR",
-              "name": "21天精通阿拉伯语（变态冲刺班）",
-              "credit": 2.5,
-              "teacher":
-              [
-                "张塔",
-                "ZHANG Ta"
-              ],
-              "ta":
-              [
-                "塔"
-              ],
-              "semester_id": 2,
-              "lessons":
-              [
-                {
-                  "day": 5,
-                  "start": 1,
-                  "end": 2,
-                  "location": "牛街清真寺广场",
-                  "weeks": [1, 3, 5, 7, 9, 11, 13, 15, 17]
-                },
-                {
-                  "day": 1,
-                  "start": 1,
-                  "end": 5,
-                  "location": "张塔家中",
-                  "weeks": [1, 2, 3, 4, 5, 6, 7, 8]
-                }
-            },
-        ]
+            "orig_id": "2011-325763QR",
+            "name": "21天精通阿拉伯语（变态冲刺班）",
+            "credit": 2.5,
+            "teacher":
+            [
+                "张塔",
+                "ZHANG Ta"
+            ],
+            "ta":
+            [
+                "塔"
+            ],
+            "semester_id": 2,
+            "lessons":
+            [
+                {
+                    "day": 5,
+                    "start": 1,
+                    "end": 2,
+                    "location": "牛街清真寺广场",
+                    "weeks": [1, 3, 5, 7, 9, 11, 13, 15, 17]
+                },
+                {
+                    "day": 1,
+                    "start": 1,
+                    "end": 5,
+                    "location": "张塔家中",
+                    "weeks": [1, 2, 3, 4, 5, 6, 7, 8]
+                }
+            ]
+        },]

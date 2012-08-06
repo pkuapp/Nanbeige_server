@@ -212,19 +212,20 @@ def comment_list(request, offset):
 def course_grab(request):
     user = request.user
     university = user.get_profile().campus.university
-    exec('import grabbers.0 as GrabberModel')
+    exec('import spider.grabbers.g0 as GrabberModel')
     grabber = GrabberModel.TeapotParser()
 
     response = grabber.work_flow_type()
         
-    cache.set(request.session+'_grabber',grabber)
+    cache.set(request.session.session_key+'_grabber', grabber)
+
     return response
 
 @require_http_methods(['POST'])
 @auth_required
 @json_response
 def course_grab_start(request):
-    grabber = cache.get(request.session+'_grabber')
+    grabber = cache.get(request.session.session_key+'_grabber')
     if grabber:
         grabber.setUp(**request.POST)
         try:
@@ -240,9 +241,9 @@ def course_grab_start(request):
 @require_http_methods(['GET'])
 @auth_required
 def captcha_img(request):
-    grabber = cache.get(request.session+'_grabber')
+    grabber = cache.get(request.session.session_key+'_grabber')
     if grabber and grabber.captcha_img:
-        return HttpResponse(grabber.captcha_img, mimetype=”image/png”)
+        return HttpResponse(grabber.captcha_img, mimetype="image/png")
     else:
-        return json_response(lambda x:('captcha image not found', 404))()
+        return json_response(lambda x:({'error': 'captcha image not found'}, 404))()
 
