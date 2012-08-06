@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# import base64
-# import StringIO
 import os.path
 
 class BaseParser(object):
@@ -22,6 +20,8 @@ class BaseParser(object):
     Or, if there's anything wrong with the script for the corresponding university, set self.available to False
     and provide error info.
     2. say the captcha is required, you MUST override *_fetch_img()* and set self.captcha_img in it.
+    3. You MUST provide an unique_in_db method to determine whether a course should be regard as
+    a new course in database.
     """
     def __init__(self):
         super(BaseParser, self).__init__()
@@ -41,8 +41,11 @@ class BaseParser(object):
                 raise LookupError('captcha required')
     @static
     def unique_in_db(self, course):
-        
-        
+        """
+            Override this to provide a valid method to determine whether a course should be regard as a
+            new course in database.
+        """
+
     def run(self):
         """
             implement your request and parse code here
