@@ -2,13 +2,11 @@
 
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
-from nbg.models import Course, Assignment, Comment, University
+from nbg.models import Course, Assignment, Comment
 from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime
 from django.core.cache import cache
 from spider import grabbers
 from django.http import HttpResponse
-
-
 
 @auth_required
 @json_response
@@ -205,18 +203,17 @@ def comment_list(request, offset):
 
     return response
 
-
 @require_http_methods(['POST'])
 @auth_required
 @json_response
 def course_grab(request):
     user = request.user
     university = user.get_profile().campus.university
-    exec('import spider.grabbers.g0 as GrabberModel')
+    GrabberModel = __import__("spider.grabbers.grabber_" + str(university.pk))
     grabber = GrabberModel.TeapotParser()
 
     response = grabber.work_flow_type()
-        
+
     cache.set(request.session.session_key+'_grabber', grabber)
 
     return response
@@ -237,7 +234,6 @@ def course_grab_start(request):
     else:
         return {'error': '找不到可运行的导入对象'}, 403
 
-
 @require_http_methods(['GET'])
 @auth_required
 def captcha_img(request):
@@ -245,5 +241,6 @@ def captcha_img(request):
     if grabber and grabber.captcha_img:
         return HttpResponse(grabber.captcha_img, mimetype="image/png")
     else:
-        return json_response(lambda x:({'error': 'captcha image not found'}, 404))()
-
+        return json_response(lambda x:({
+            'error': 'Captcha image not found'
+        }, 404))()
