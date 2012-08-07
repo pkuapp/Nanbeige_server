@@ -41,11 +41,11 @@ def login_email(request):
         else:
             response = {
                 'error': "用户已被吊销。",
-            }, 401
+            }, 403
     else:
         response = {
             'error': "Email 或密码错误。",
-        }, 401
+        }, 403
 
     return response
 
@@ -87,11 +87,11 @@ def login_weibo(request):
         else:
             response = {
                 'error': "用户已被吊销。",
-            }, 401
+            }, 403
     else:
         response = {
             'error_code': "UserNotFound",
-        }, 401
+        }, 403
 
     return response
 
