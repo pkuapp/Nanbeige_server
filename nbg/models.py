@@ -2,7 +2,7 @@
 
 from django.db import models
 from datetime import datetime
-from django.contrib.auth.models import User  
+from django.contrib.auth.models import User
 
 class App(models.Model):
     version_android_beta = models.CharField(max_length=30)

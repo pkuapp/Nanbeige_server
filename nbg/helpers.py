@@ -25,7 +25,7 @@ def json_response(func):
         if isinstance(response, tuple):
             content = response[0]
             status_code = response[1]
-        return HttpResponse(dumps(content, ensure_ascii=False, separators=(',',':')),\
+        return HttpResponse(dumps(content, ensure_ascii=False, separators=(',',':')),
           mimetype="application/json", status=status_code)
 
     return inner

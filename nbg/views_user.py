@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
+from urllib2 import HTTPError
 from nbg.models import UserProfile, Campus
 from nbg.helpers import json_response, auth_required
 from sns.verifiers import VerifyError, get_weibo_uid
@@ -48,22 +49,32 @@ def login_email(request):
 
     return response
 
-class WeiboBackend(object):
-    supports_inactive_user = False
-
-    def authenticate(self, weibo_token=None):
-        user = User.objects.get(username="coolgene@gmail.com")
-        return user
-
 @require_http_methods(['POST'])
 @json_response
 def login_weibo(request):
-    weibo_token = request.POST.get('weibo_token', None)
-    if not weibo_token:
+    token = request.POST.get('token', None)
+    if not token:
         return {'error': '缺少必要的参数。'}, 400
 
-    user = WeiboBackend.authenticate(weibo_token)
-    auth.login(request, user)
+    try:
+        user = auth.authenticate(weibo_token=token)
+    except HTTPError:
+        return {
+            'error_string': "ErrorConnectingWeiboServer",
+            'error': "连接微博服务器时发生错误。",
+        }, 500
+    except VerifyError:
+        return {
+            'error_string': "InvalidToken",
+            'error': "微博 token 错误。"
+        }, 403
+
+    if user:
+        auth.login(request, user)
+    else:
+        return {
+            'error_string': "UserNotFound",
+        }, 401
 
     return 0
 
