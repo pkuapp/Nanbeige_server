@@ -60,7 +60,7 @@ def login_weibo(request):
         user = auth.authenticate(weibo_token=token)
     except HTTPError:
         return {
-            'error_string': "ErrorConnectingWeiboServer",
+            'error_code': "ErrorConnectingWeiboServer",
             'error': "连接微博服务器时发生错误。",
         }, 500
     except VerifyError:
