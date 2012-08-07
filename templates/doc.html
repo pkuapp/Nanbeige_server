@@ -348,6 +348,23 @@ td:last-child {
 </tr>
 
 <tr>
+  <td align="left">/reg/weibo/</td>
+  <td align="left"><code>POST</code></td>
+  <td align="left">
+    <ul>
+      <li><code class="required">str</code> token</li>
+      <li><code class="required">str</code> nickname</li>
+    </ul>
+  </td>
+  <td align="left"><pre>{
+  "id": 930111
+}</pre><pre>{
+  "error": "微博帐号已被使用。"
+}</td>
+  <td align="left">使用新浪微博 token 注册。</td>
+</tr>
+
+<tr>
   <td align="left">/edit/</td>
   <td align="left"><code>POST*</code></td>
   <td align="left">

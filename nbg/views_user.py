@@ -65,18 +65,35 @@ def login_weibo(request):
         }, 500
     except VerifyError:
         return {
-            'error_string': "InvalidToken",
+            'error_code': "InvalidToken",
             'error': "微博 token 错误。"
         }, 403
 
-    if user:
-        auth.login(request, user)
+    if user is not None:
+        if user.is_active:
+            auth.login(request, user)
+            response = {
+                'id': user.pk,
+                'email': user.email,
+                'nickname': user.get_profile().nickname,
+                'university': None,
+            }
+            campus = user.get_profile().campus
+            if campus:
+                response['university'] = {
+                    'id': campus.university.pk,
+                    'name': campus.university.name,
+                }
+        else:
+            response = {
+                'error': "用户已被吊销。",
+            }, 401
     else:
-        return {
+        response = {
             'error_code': "UserNotFound",
         }, 401
 
-    return 0
+    return response
 
 @require_http_methods(['POST'])
 @json_response
@@ -104,7 +121,41 @@ def reg_email(request):
 
         return {'id': user.pk}
     else:
-        return {'error': '缺少必要的参数。'}, 400
+        return {'error_code': "BadSyntax"}, 400
+
+@require_http_methods(['POST'])
+@json_response
+def reg_weibo(request):
+    token = request.POST.get('token', None)
+    nickname = request.POST.get('nickname', None)
+
+    if token and nickname:
+        try:
+            weibo_id = get_weibo_uid(token)
+        except HTTPError:
+            return {
+                'error_code': "ErrorConnectingWeiboServer",
+                'error': "连接微博服务器时发生错误。",
+            }, 500
+        except VerifyError:
+            return {
+                'error_code': "InvalidToken",
+                'error': "微博 token 错误。"
+            }, 403
+
+        try:
+            # this password is not used for auth
+            user = User.objects.create_user(username=weibo_id, password="WeiboUser")
+        except IntegrityError:
+            return {'error': '微博帐号已被使用。'}, 403
+        UserProfile.objects.create(user=user, weibo_id=weibo_id, nickname=nickname)
+
+        user = auth.authenticate(weibo_token=token)
+        auth.login(request, user)
+
+        return {'id': user.pk}
+    else:
+        return {'error_code': "BadSyntax"}, 400
 
 @require_http_methods(['POST'])
 @auth_required

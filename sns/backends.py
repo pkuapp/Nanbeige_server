@@ -15,7 +15,15 @@ class EmailBackend(object):
             return None
         return user
 
+    def get_user(self, user_id):
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None
+
 class WeiboBackend(object):
+    supports_object_permissions = False
+    supports_anonymous_user = False
     supports_inactive_user = False
 
     def authenticate(self, weibo_token=None):
@@ -31,3 +39,9 @@ class WeiboBackend(object):
                 return None
             return user_profile.user
         return None
+
+    def get_user(self, user_id):
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None

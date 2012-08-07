@@ -71,7 +71,7 @@ class Course(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    weibo_id = models.IntegerField(null=True, blank=True)
+    weibo_id = models.BigIntegerField(null=True, blank=True)
     nickname = models.CharField(max_length=100, blank=True)
     realname = models.CharField(max_length=100, blank=True)
     courses = models.ManyToManyField(Course, blank=True)
