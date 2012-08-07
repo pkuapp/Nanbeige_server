@@ -73,7 +73,7 @@ def login_weibo(request):
         auth.login(request, user)
     else:
         return {
-            'error_string': "UserNotFound",
+            'error_code': "UserNotFound",
         }, 401
 
     return 0
