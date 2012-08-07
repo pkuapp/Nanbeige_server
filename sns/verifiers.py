@@ -37,9 +37,4 @@ def get_renren_uid():
 
 if __name__ == "__main__":
     print "Hi!"
-    try:
-        print get_weibo_uid("2.00jcKICD7oJLUBf46c9b60a5hQAQwD")
-    except VerifyError:
-        print "invalid token."
-    except HTTPError:
-        print "connection error."
+    print get_weibo_uid("token")

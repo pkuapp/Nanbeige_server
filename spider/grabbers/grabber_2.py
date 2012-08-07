@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import os.path
@@ -16,4 +17,10 @@ class TeapotParser(BaseParser):
         self.captcha_img = img.read()
 
     def run(self):
+        url_prefix = "http://jwbinfosys.zju.edu.cn/"
+        url = url_prefix + "default2.aspx"
         return []
+
+if __name__ == "__main__":
+    grabber = TeapotParser()
+    print grabber.run()

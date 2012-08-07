@@ -41,7 +41,6 @@ class BaseParser(object):
             except:
                 raise LookupError('Captcha required.')
 
-    @static
     def unique_in_db(self, course):
         """
         If needed, override this general method to provide a valid method to determine whether a course should be regard as a
