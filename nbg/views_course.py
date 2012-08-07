@@ -230,17 +230,17 @@ def course_grab_start(request):
             courses_set = grabber.courses
             pass
         except:
-            return {'error': '无法运行导入脚本'}, 501
+            return {'error': '导入课程出错。'}, 501
     else:
-        return {'error': '找不到可运行的导入对象'}, 403
+        return {'error': '导入课程无法启动。'}, 403
 
 @require_http_methods(['GET'])
 @auth_required
 def captcha_img(request):
     grabber = cache.get(request.session.session_key+'_grabber')
     if grabber and grabber.captcha_img:
-        return HttpResponse(grabber.captcha_img, mimetype="image/png")
+        return HttpResponse(grabber.captcha_img, mimetype="image")
     else:
         return json_response(lambda x:({
-            'error': 'Captcha image not found'
+            'error': '验证码不存在或已过期。'
         }, 404))()

@@ -621,8 +621,15 @@ td:last-child {
   <td align="left">/grabber/captcha/</td>
   <td align="left"><code>GET*</code></td>
   <td align="left">none</td>
-  <td align="left"><code>binary</code></td>
-  <td align="left">返回验证码。</td>
+  <td align="left">
+    <ul>
+      <li><code>binary</code> captcha image</li>
+    </ul>
+    <pre>{
+  "error": "验证码不存在或已过期。"
+}</pre>
+  </td>
+  <td align="left">返回验证码。（若 grabber 返回的 require_captcha 为 true，须立即访问此 API 获得验证码）</td>
 </tr>
 
 <tr>
@@ -643,7 +650,7 @@ td:last-child {
     <pre>{"error": "校园一卡通帐号或密码错误。"}</pre>
     <pre>{"error": "服务器出错。"}</pre>
   </td>
-  <td align="left">启动课程抓取器。<code>captcha</code> 根据 /grabber/ 返回的验证码图片填写，若无验证码不需要此参数。</td>
+  <td align="left">启动课程抓取器。</td>
 </tr>
 
 <tr>
