@@ -31,17 +31,19 @@ class BaseParser(object):
         self.error = None
         self.captcha_img = None
         self.courses = None
+        self.ua = r'Mozilla/5.0 (Ubuntu; Linux x86_64) TeapotParser'
 
     def setUp(self, **kwargs):
         self.username = kwargs['username']
         self.password = kwargs['password']
         if self.require_captcha:
             try:
-                self.captcha = kwargs.get('captcha')
+                self.captcha = kwargs['captcha']
             except:
                 raise LookupError('Captcha required.')
 
-    def unique_in_db(self, course):
+    @staticmethod
+    def unique_in_db(course):
         """
         If needed, override this general method to provide a valid method to determine whether a course should be regard as a
         new course in database.

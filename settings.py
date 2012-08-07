@@ -102,8 +102,7 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.sql.SQLDebugPanel',
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
-    'cache_panel.CachePanel',
-
+    # 'cache_panel.CachePanel',
 )
 
 ROOT_URLCONF = 'urls'

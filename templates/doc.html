@@ -605,14 +605,24 @@ td:last-child {
   <td align="left"><code>POST*</code></td>
   <td align="left">none</td>
   <td align="left"><pre>{
-  "username_field_name": "校园一卡通帐号",
-  "captcha": "TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieSB0aGlz
-IHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIGx1c3Qgb2Yg
-dGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbiB0aGUgY29udGlu
-dWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZGdlLCBleGNlZWRzIHRo
-ZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS4="
-}</pre></td>
-  <td align="left">返回课程抓取器。captcha 为 base64 处理后的图片验证码（对于不需要的学校为 null）。</td>
+  "available": true,
+  "require_captcha": true
+}</pre>
+<pre>{
+  "available": false,
+  "require_captcha": false,
+  "error": "无法连接教务网服务器。" 
+}</pre>
+</td>
+  <td align="left">返回课程抓取器。</td>
+</tr>
+
+<tr>
+  <td align="left">/grabber/captcha/</td>
+  <td align="left"><code>GET*</code></td>
+  <td align="left">none</td>
+  <td align="left"><code>binary</code></td>
+  <td align="left">返回验证码。</td>
 </tr>
 
 <tr>

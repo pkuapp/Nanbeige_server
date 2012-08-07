@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os.path
+import requests
 from grabber_base import BaseParser
 
 class TeapotParser(BaseParser):
@@ -11,16 +11,17 @@ class TeapotParser(BaseParser):
         super(TeapotParser, self).__init__()
         self.require_captcha = True
         self.available = True
+        self.url_prefix = "http://jwbinfosys.zju.edu.cn/"
 
     def _fetch_img(self):
-        img = open(os.path.join(os.path.dirname(__file__), 'captcha_teapot.png'))
-        self.captcha_img = img.read()
+        headers = {'User-Agent': self.ua}
+        url_captcha = self.url_prefix + "CheckCode.aspx"
+        resp = requests.get(url_captcha, headers=headers)
+        self.captcha_img = resp.content
 
     def run(self):
-        url_prefix = "http://jwbinfosys.zju.edu.cn/"
-        url = url_prefix + "default2.aspx"
-        return []
+        self._fetch_img()
 
 if __name__ == "__main__":
     grabber = TeapotParser()
-    print grabber.run()
+    grabber.run()

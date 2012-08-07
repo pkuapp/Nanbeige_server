@@ -209,7 +209,7 @@ def comment_list(request, offset):
 def course_grab(request):
     user = request.user
     university = user.get_profile().campus.university
-    GrabberModel = __import__("spider.grabbers.grabber_" + str(university.pk))
+    exec("from spider.grabbers import grabber_" + str(int(university.pk)) + " as GrabberModel")
     grabber = GrabberModel.TeapotParser()
 
     response = grabber.work_flow_type()
@@ -228,7 +228,7 @@ def course_grab_start(request):
         try:
             grabber.run()
             courses_set = grabber.courses
-            
+            pass
         except:
             return {'error': '无法运行导入脚本'}, 501
     else:
