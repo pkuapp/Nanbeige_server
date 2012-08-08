@@ -239,7 +239,7 @@ def course_grab_start(request):
         except:
             return {'error_code': 'UnknownError'}, 501
     else:
-        return {'error': '导入课程无法启动。'}, 403
+        return {'error': '导入课程无法启动。'}, 503
 
 @require_http_methods(['GET'])
 @auth_required

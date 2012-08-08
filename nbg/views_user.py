@@ -62,7 +62,7 @@ def login_weibo(request):
         return {
             'error_code': "ErrorConnectingWeiboServer",
             'error': "连接微博服务器时发生错误。",
-        }, 500
+        }, 503
     except VerifyError:
         return {
             'error_code': "InvalidToken",
@@ -136,7 +136,7 @@ def reg_weibo(request):
             return {
                 'error_code': "ErrorConnectingWeiboServer",
                 'error': "连接微博服务器时发生错误。",
-            }, 500
+            }, 503
         except VerifyError:
             return {
                 'error_code': "InvalidToken",

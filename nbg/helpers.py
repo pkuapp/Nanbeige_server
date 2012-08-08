@@ -18,16 +18,15 @@ def parse_datetime(str):
     return datetime.strptime(str, "%Y-%m-%d %H:%M:%S")
 
 def json_response(func):
-    # use status 200 for all responses
     def inner(request=None, *args, **kwargs):
-        # status_code = 200
+        status_code = 200
         response = func(request, *args, **kwargs)
         content = response
         if isinstance(response, tuple):
             content = response[0]
-            # status_code = response[1]
+            status_code = response[1]
         return HttpResponse(dumps(content, ensure_ascii=False, separators=(',',':')),
-          mimetype="application/json")
+          mimetype="application/json", status=status_code)
 
     return inner
 
@@ -36,6 +35,5 @@ def auth_required(func):
         if request.user.is_authenticated():
             return func(request, *args, **kwargs)
         else:
-            # use status 200 for all responses
-            return HttpResponse(dumps({'error': '请先登录。'}), mimetype="application/json")
+            return HttpResponse(dumps({'error': '请先登录。'}), mimetype="application/json", status=403)
     return inner
