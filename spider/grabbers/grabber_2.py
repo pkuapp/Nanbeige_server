@@ -104,20 +104,47 @@ class TeapotParser(BaseParser):
             time_texts = [text for text in cols[4].stripped_strings]
             locations = [text for text in cols[5].stripped_strings]
 
-            '''parse week'''
-            if semester_text:
-                pass
-            # TODO
-
             '''parse lesson'''
             ''' - parse time'''
             lessons = []
             for time_text in time_texts:
+                '''parse week'''
+                '''data for 2012-2013, should be updated every year
+                first week: 2012-09-10
+                '''
+                week_data = {
+                    u"秋": {
+                        "odd":  [1, 3, 5, 7],
+                        "even": [2, 6, 8, 9],
+                        "all":  [1, 2, 3, 5, 6, 7, 8, 9],
+                    },
+                    u"冬": {
+                        "odd":  [11, 13, 15, 17],
+                        "even": [12, 14, 16, 18],
+                        "all":  [11, 12, 13, 14, 15, 16, 17, 18],
+                    },
+                    u"秋冬": {
+                        "odd":  [1, 3, 5, 7, 11, 13, 15, 17],
+                        "even": [2, 6, 8, 9, 12, 14, 16, 18],
+                        "all":  [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18],
+                    },
+                }
+
+                if u"单" in time_text:
+                    odd_or_even = "odd"
+                elif u"双" in time_text:
+                    odd_or_even = "even"
+                else:
+                    odd_or_even = "all"
+
+                weeks = week_data[semester_text][odd_or_even]
+
                 number = re.findall("\d{1,2}", time_text[3:])
                 lessons.append({
                     'day': chinese_week_numbers[time_text[1]],
                     'start': int(number[0]),
-                    'end': int(number[-1])
+                    'end': int(number[-1]),
+                    'weeks': weeks,
                 })
 
             ''' - parse location'''
