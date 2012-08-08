@@ -4,8 +4,8 @@ from django.views.decorators.http import require_http_methods
 from datetime import datetime
 from nbg.models import Course, Assignment, Comment
 from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime
+from spider.grabbers.grabber_base import LoginError
 from django.core.cache import cache
-from spider import grabbers
 from django.http import HttpResponse
 
 @auth_required
@@ -229,8 +229,15 @@ def course_grab_start(request):
             grabber.run()
             courses_set = grabber.courses
             pass
+        except LoginError as e:
+            if e.error == "auth":
+                return {'error_code': 'AuthError'}
+            elif e.error == "captcha":
+                return {'error_code': 'CaptchaError'}
+            else:
+                return {'error_code': 'UnknownError'}
         except:
-            return {'error': '导入课程出错。'}, 501
+            return {'error_code': 'UnknownError'}, 501
     else:
         return {'error': '导入课程无法启动。'}, 403
 

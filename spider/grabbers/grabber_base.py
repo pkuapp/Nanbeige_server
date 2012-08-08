@@ -2,6 +2,15 @@
 
 import os.path
 
+class LoginError(Exception):
+    '''raise VerifyError if token is invalid.
+    '''
+    def __init__(self, error):
+        self.error = error
+
+    def __str__(self):
+        return 'LoginError: {}'.format(self.error)
+
 class BaseParser(object):
     """All your grabber are belong to us.
 

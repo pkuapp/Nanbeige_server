@@ -6,8 +6,7 @@ from weibo import APIClient
 END_OF_THE_WORLD = 4294967295
 
 class VerifyError(Exception):
-    '''
-    raise VerifyError if token is invalid.
+    '''raise VerifyError if token is invalid.
     '''
     def __init__(self, error):
         self.error = error
