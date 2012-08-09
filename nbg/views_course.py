@@ -228,7 +228,7 @@ def course_grab_start(request):
     grabber = cache.get(request.session.session_key+'_grabber')
     if grabber:
         try:
-            grabber.setUp(**request.POST)
+            grabber.setUp(**request.POST.dict())
         except LookupError:
             return {'error_code': 'MissingArgument'}, 400
 
@@ -244,10 +244,9 @@ def course_grab_start(request):
             else:
                 return {'error_code': 'UnknownError'}
         except:
-            raise
             return {'error_code': 'UnknownError'}, 501
     else:
-        return {'error': '导入课程无法启动。'}, 503
+        return {'error': '导入课程无法启动或抓取器已过期。'}, 503
 
 @require_http_methods(['GET'])
 @auth_required
