@@ -227,11 +227,15 @@ def course_grab(request):
 def course_grab_start(request):
     grabber = cache.get(request.session.session_key+'_grabber')
     if grabber:
-        grabber.setUp(**request.POST)
+        try:
+            grabber.setUp(**request.POST)
+        except LookupError:
+            return {'error_code': 'MissingArgument'}, 400
+
         try:
             grabber.run()
             courses_set = grabber.courses
-            pass
+            return 0
         except LoginError as e:
             if e.error == "auth":
                 return {'error_code': 'AuthError'}
@@ -240,6 +244,7 @@ def course_grab_start(request):
             else:
                 return {'error_code': 'UnknownError'}
         except:
+            raise
             return {'error_code': 'UnknownError'}, 501
     else:
         return {'error': '导入课程无法启动。'}, 503

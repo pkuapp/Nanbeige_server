@@ -31,12 +31,17 @@ def login_email(request):
                 'id': user.pk,
                 'nickname': user.get_profile().nickname,
                 'university': None,
+                'campus': None,
             }
             campus = user.get_profile().campus
             if campus:
                 response['university'] = {
                     'id': campus.university.pk,
                     'name': campus.university.name,
+                }
+                response['campus'] = {
+                    'id': campus.pk,
+                    'name': campus.name,
                 }
         else:
             response = {
