@@ -14,5 +14,8 @@ chinese_week_numbers = {
     u'天': 7,
 }
 
+def pretty_format(obj):
+    return yaml.dump(obj, allow_unicode=True)
+
 def pretty_print(obj):
-    print yaml.dump(obj, allow_unicode=True)
+    print pretty_format(obj),

@@ -4,8 +4,9 @@
 import requests
 import os.path
 import re
+import string
 from bs4 import BeautifulSoup, SoupStrainer
-from helpers import pretty_print, chinese_week_numbers
+from helpers import pretty_print, pretty_format, chinese_week_numbers
 from grabber_base import BaseParser, LoginError
 
 class TeapotParser(BaseParser):
@@ -17,6 +18,32 @@ class TeapotParser(BaseParser):
         self.available = True
         self.url_prefix = "http://jwbinfosys.zju.edu.cn/"
         self.charset = "gbk"
+
+        '''data for 2012-2013, should be updated every year
+        first week: 2012-09-10
+        '''
+        self.week_data = {
+            u"短": {
+                "odd":  [],
+                "even": [],
+                "all":  [],
+            },
+            u"秋": {
+                "odd":  [1, 3, 5, 7],
+                "even": [2, 6, 8, 9],
+                "all":  [1, 2, 3, 5, 6, 7, 8, 9],
+            },
+            u"冬": {
+                "odd":  [11, 13, 15, 17],
+                "even": [12, 14, 16, 18],
+                "all":  [11, 12, 13, 14, 15, 16, 17, 18],
+            },
+            u"秋冬": {
+                "odd":  [1, 3, 5, 7, 11, 13, 15, 17],
+                "even": [2, 6, 8, 9, 12, 14, 16, 18],
+                "all":  [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18],
+            },
+        }
 
     def _fetch_img(self):
         url_captcha = self.url_prefix + "CheckCode.aspx"
@@ -36,6 +63,15 @@ class TeapotParser(BaseParser):
                 log.write(response)
 
     @staticmethod
+    def parse_odd_or_even(text):
+        if u"单" in text:
+            return "odd"
+        elif u"双" in text:
+            return "even"
+        else:
+            return "all"
+
+    @staticmethod
     def trim_location(l):
         l = l.replace(u"(网络五边菱)", "")
         l = l.replace(u"(五边菱形)", "")
@@ -45,9 +81,65 @@ class TeapotParser(BaseParser):
         l = l.replace("*", "")
         return l
 
+    def get_lessons(self, time_texts, locations, semester_text):
+        '''parse lesson'''
+        ''' - parse time'''
+        lessons = []
+        for time_text in time_texts:
+            '''parse week'''
+            odd_or_even = self.parse_odd_or_even(time_text)
+            weeks = self.week_data[semester_text][odd_or_even]
+
+            number = re.findall("\d{1,2}", time_text[3:])
+            if time_text:
+                try:
+                    lessons.append({
+                        'day': chinese_week_numbers[time_text[1]],
+                        'start': int(number[0]),
+                        'end': int(number[-1]),
+                        'weeks': weeks,
+                    })
+                except KeyError:
+                    print time_text
+            else:
+                lessons.append({})
+
+        ''' - parse location'''
+        locations = map(self.trim_location, locations)
+        if len(locations) > 1:
+            '''each lesson has different location'''
+            for i in range(len(lessons)):
+                if lessons[i]:
+                    try:
+                        lessons[i]['location'] = locations[i]
+                    except IndexError:
+                        # TODO: log
+                        pass
+        elif len(locations) == 1:
+            '''lessons share the same location'''
+            for l in lessons:
+                if l:
+                    l['location'] = locations[0]
+
+        lessons = filter(bool, lessons)
+
+        '''deal w/ special case: one lesson separated to two'''
+        lessons = sorted(lessons, key=lambda x: (x['day'], x['start']))
+        for i in range(1, len(lessons)):
+            if (lessons[i]['day'] == lessons[i - 1]['day'] and
+              lessons[i]['start'] == lessons[i - 1]['end'] + 1 and
+              lessons[i]['location'] == lessons[i - 1]['location']):
+                lessons[i - 1]['end'] = lessons[i]['end']
+                lessons[i]['delete'] = True
+        lessons = filter(lambda x: 'delete' not in x, lessons)
+
+        return lessons
+
+
     def grab_all(self):
-        self._local_setup()
-        self._login()
+        # self._local_setup()
+        # self._login()
+        self._fake_login()
 
         url_courses = self.url_prefix + "jxrw_zd.aspx?xh=" + self.username
 
@@ -58,21 +150,71 @@ class TeapotParser(BaseParser):
 
         print "Get viewstate: done."
 
-        data = {
-            '__EVENTTARGET': "",
-            '__EVENTARGUMENT': "",
-            '__VIEWSTATE': viewstate,
-            'ddlXN': "2012-2013",
-            'ddlXQ': "1",
-            'ddlXY': u'本科生院'.encode(self.charset),
-            'ddlZY': "",
-            'ddlKC': "",
-            'btnFilter': u' 查 询 '.encode(self.charset),
-        }
-        r_courses = requests.post(url_courses, data=data, cookies=self.cookies)
+        '''parser, start.'''
 
-        with open(os.path.join(os.path.dirname(__file__), 'log.html'), 'w') as log:
-            log.write(r_courses.content)
+        ''' - get colleges'''
+        strainer_colleges = SoupStrainer("select", id="ddlXY")
+        soup_colleges = BeautifulSoup(r_viewstate.content.decode(self.charset), parse_only=strainer_colleges)
+        colleges = [option['value'] for option in soup_colleges.select("option") if option['value']]
+        pretty_print(colleges)
+        print "{} colleges.".format(len(colleges))
+
+        ''' - iter colleges'''
+        total_courses = 0
+        for i, college in enumerate(colleges):
+            if i <= 32:
+                continue
+            '''get courses'''
+            data = {
+                '__EVENTTARGET': "",
+                '__EVENTARGUMENT': "",
+                '__VIEWSTATE': viewstate,
+                'ddlXN': "2012-2013",
+                'ddlXQ': "1",
+                'ddlXY': college.encode(self.charset),
+                'ddlZY': "",
+                'ddlKC': "",
+                'btnFilter': u' 查 询 '.encode(self.charset),
+            }
+            r_courses = requests.post(url_courses, data=data, cookies=self.cookies)
+            content = r_courses.content.decode(self.charset)
+
+            strainer_courses = SoupStrainer("table", id="DBGrid")
+            soup_courses = BeautifulSoup(content, parse_only=strainer_courses)
+            rows = soup_courses.select("tr")
+
+            courses = []
+            for r in rows:
+                if r.has_key('class') and r['class'] == ["datagridhead"]:
+                    continue
+
+                cols = r.select("td")
+                semester_text = cols[0].get_text(strip=True)
+                time_texts = map(string.strip, cols[8].get_text().split(';'))
+                locations = map(string.strip, cols[9].get_text().split(';'))
+
+                lessons = self.get_lessons(time_texts, locations, semester_text)
+
+                course = {
+                    'original_id': cols[3].get_text(strip=True),
+                    'name': cols[4].get_text(strip=True),
+                    'credit': float(cols[6].get_text(strip=True)),
+                    'teacher': cols[7].get_text(strip=True),
+                    'lessons': lessons,
+                }
+                courses.append(course)
+
+            print "#{} {}: {} courses.".format(i, college.encode("utf8"), len(courses))
+            total_courses += len(courses)
+            with open(os.path.join(os.path.dirname(__file__), 'zju/{}.yaml').format(i), 'w') as yaml_file:
+                yaml_file.write(pretty_format(courses))
+            with open(os.path.join(os.path.dirname(__file__), 'zju/html/{}.html').format(i), 'w') as html_file:
+                html_file.write(soup_courses.prettify().encode("utf8"))
+        print "Done! Totally exported {} courses.".format(total_courses)
+
+    def _fake_login(self):
+        self.username = "3110000420"
+        self.cookies = {'ASP.NET_SessionId': "bn35e2epipm0xvewtjrzvw45"}
 
     def _login(self):
         url_login = self.url_prefix + "default2.aspx"
@@ -124,73 +266,7 @@ class TeapotParser(BaseParser):
             time_texts = [text for text in cols[4].stripped_strings]
             locations = [text for text in cols[5].stripped_strings]
 
-            '''parse lesson'''
-            ''' - parse time'''
-            lessons = []
-            for time_text in time_texts:
-                '''parse week'''
-                '''data for 2012-2013, should be updated every year
-                first week: 2012-09-10
-                '''
-                week_data = {
-                    u"秋": {
-                        "odd":  [1, 3, 5, 7],
-                        "even": [2, 6, 8, 9],
-                        "all":  [1, 2, 3, 5, 6, 7, 8, 9],
-                    },
-                    u"冬": {
-                        "odd":  [11, 13, 15, 17],
-                        "even": [12, 14, 16, 18],
-                        "all":  [11, 12, 13, 14, 15, 16, 17, 18],
-                    },
-                    u"秋冬": {
-                        "odd":  [1, 3, 5, 7, 11, 13, 15, 17],
-                        "even": [2, 6, 8, 9, 12, 14, 16, 18],
-                        "all":  [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18],
-                    },
-                }
-
-                if u"单" in time_text:
-                    odd_or_even = "odd"
-                elif u"双" in time_text:
-                    odd_or_even = "even"
-                else:
-                    odd_or_even = "all"
-
-                weeks = week_data[semester_text][odd_or_even]
-
-                number = re.findall("\d{1,2}", time_text[3:])
-                lessons.append({
-                    'day': chinese_week_numbers[time_text[1]],
-                    'start': int(number[0]),
-                    'end': int(number[-1]),
-                    'weeks': weeks,
-                })
-
-            ''' - parse location'''
-            locations = map(self.trim_location, locations)
-            if len(locations) > 1:
-                '''each lesson has different location'''
-                for i in range(len(lessons)):
-                    try:
-                        lessons[i]['location'] = locations[i]
-                    except IndexError:
-                        # TODO: log
-                        pass
-            elif len(locations) == 1:
-                '''lessons share the same location'''
-                for l in lessons:
-                    l['location'] = locations[0]
-
-            '''deal w/ special case: one lesson separated to two'''
-            lessons = sorted(lessons, key=lambda x: (x['day'], x['start']))
-            for i in range(1, len(lessons)):
-                if (lessons[i]['day'] == lessons[i - 1]['day'] and
-                  lessons[i]['start'] == lessons[i - 1]['end'] + 1 and
-                  lessons[i]['location'] == lessons[i - 1]['location']):
-                    lessons[i - 1]['end'] = lessons[i]['end']
-                    lessons[i]['delete'] = True
-            lessons = filter(lambda x: 'delete' not in x, lessons)
+            lessons = self.get_lessons(time_texts, locations, semester_text)
 
             course = {
                 'original_id': cols[0].get_text(strip=True),
