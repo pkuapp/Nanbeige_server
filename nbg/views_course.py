@@ -209,7 +209,10 @@ def comment_list(request, offset):
 def course_grab(request):
     user = request.user
     university = user.get_profile().campus.university
-    exec("from spider.grabbers import grabber_" + str(int(university.pk)) + " as GrabberModel")
+    try:
+        exec("from spider.grabbers import grabber_" + str(int(university.pk)) + " as GrabberModel")
+    except ImportError:
+        return {'available': False}
     grabber = GrabberModel.TeapotParser()
 
     response = grabber.work_flow_type()
