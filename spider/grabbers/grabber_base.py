@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path
+import getpass
 
 class LoginError(Exception):
     '''raise VerifyError if token is invalid.
@@ -50,6 +51,17 @@ class BaseParser(object):
                 self.captcha = kwargs['captcha']
             except:
                 raise LookupError('Captcha required.')
+
+    def _local_setup(self):
+        self._fetch_img()
+        with open(os.path.join(os.path.dirname(__file__), 'img.txt'), 'w') as img:
+            img.write(self.captcha_img)
+
+        captcha = raw_input("Captcha: ")
+        username = raw_input("Username: ")
+        password = getpass.getpass('Password: ')
+
+        self.setUp(username=username, password=password, captcha=captcha)
 
     @staticmethod
     def unique_in_db(course):

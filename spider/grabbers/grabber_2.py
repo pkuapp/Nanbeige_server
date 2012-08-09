@@ -3,7 +3,6 @@
 
 import requests
 import os.path
-import getpass
 import re
 from bs4 import BeautifulSoup, SoupStrainer
 from helpers import pretty_print, chinese_week_numbers
@@ -17,7 +16,7 @@ class TeapotParser(BaseParser):
         self.require_captcha = True
         self.available = True
         self.url_prefix = "http://jwbinfosys.zju.edu.cn/"
-        self.charset = "gb2312"
+        self.charset = "gbk"
 
     def _fetch_img(self):
         url_captcha = self.url_prefix + "CheckCode.aspx"
@@ -26,15 +25,8 @@ class TeapotParser(BaseParser):
         self.cookies = r.cookies
 
     def test(self):
-        self._fetch_img()
-        with open(os.path.join(os.path.dirname(__file__), 'img.txt'), 'w') as img:
-            img.write(self.captcha_img)
-        
-        captcha = raw_input("Captcha: ")
-        username = raw_input("Username: ")
-        password = getpass.getpass('Password: ')
-        
-        self.setUp(username=username, password=password, captcha=captcha)
+        self._local_setup()
+
         try:
             response = self.run()
         except LoginError as e:
@@ -53,8 +45,36 @@ class TeapotParser(BaseParser):
         l = l.replace("*", "")
         return l
 
-    def run(self):
-        '''login'''
+    def grab_all(self):
+        self._local_setup()
+        self._login()
+
+        url_courses = self.url_prefix + "jxrw_zd.aspx?xh=" + self.username
+
+        '''get viewstate'''
+        r_viewstate = requests.get(url_courses, cookies=self.cookies)
+        result = re.search('<input type="hidden" name="__VIEWSTATE" value="(.+)" />', r_viewstate.content)
+        viewstate = result.group(1)
+
+        print "Get viewstate: done."
+
+        data = {
+            '__EVENTTARGET': "",
+            '__EVENTARGUMENT': "",
+            '__VIEWSTATE': viewstate,
+            'ddlXN': "2012-2013",
+            'ddlXQ': "1",
+            'ddlXY': u'本科生院'.encode(self.charset),
+            'ddlZY': "",
+            'ddlKC': "",
+            'btnFilter': u' 查 询 '.encode(self.charset),
+        }
+        r_courses = requests.post(url_courses, data=data, cookies=self.cookies)
+
+        with open(os.path.join(os.path.dirname(__file__), 'log.html'), 'w') as log:
+            log.write(r_courses.content)
+
+    def _login(self):
         url_login = self.url_prefix + "default2.aspx"
         data = {
             'TextBox1': self.username,
@@ -68,8 +88,7 @@ class TeapotParser(BaseParser):
         }
         r_login = requests.post(url_login, data=data, cookies=self.cookies)
 
-        p = re.compile("<script language='javascript'>alert\('(.{,300})'\);</script>")
-        result = p.match(r_login.content)
+        result = re.match("<script language='javascript'>alert\('(.{,300})'\);</script>", r_login.content)
         if result:
             msg = result.group(1).decode(self.charset)
             if msg == u"验证码不正确！！":
@@ -78,14 +97,15 @@ class TeapotParser(BaseParser):
                 raise LoginError("auth")
             if msg[:4] == u"密码错误":
                 raise LoginError("auth")
-
         content = r_login.content.decode(self.charset)
         if u"欢迎您来到现代教务管理系统！" not in content:
             raise LoginError("unknown")
-
         '''logged in successfully'''
-        self.cookies = r_login.cookies
         print "Logged in successfully."
+        self.cookies = r_login.cookies
+
+    def run(self):
+        self._login()
 
         url_course = self.url_prefix + "xskbcx.aspx?xh=" + self.username
         r_course = requests.get(url_course, cookies=self.cookies)
@@ -184,4 +204,5 @@ class TeapotParser(BaseParser):
 
 if __name__ == "__main__":
     grabber = TeapotParser()
-    grabber.test()
+    # grabber.test()
+    grabber.grab_all()
