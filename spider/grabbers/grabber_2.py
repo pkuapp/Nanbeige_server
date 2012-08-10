@@ -176,8 +176,6 @@ class TeapotParser(BaseParser):
         ''' - iter colleges'''
         total_courses = 0
         for i, college in enumerate(colleges):
-            if i <= 32:
-                continue
             '''get courses'''
             data = {
                 '__EVENTTARGET': "",
@@ -204,6 +202,7 @@ class TeapotParser(BaseParser):
 
                 cols = r.select("td")
                 semester_text = cols[0].get_text(strip=True)
+                teacher = cols[7].get_text(strip=True).replace('/', ',')
                 time_texts = map(string.strip, cols[8].get_text().split(';'))
                 locations = map(string.strip, cols[9].get_text().split(';'))
 
@@ -213,7 +212,7 @@ class TeapotParser(BaseParser):
                     'original_id': cols[3].get_text(strip=True),
                     'name': cols[4].get_text(strip=True),
                     'credit': float(cols[6].get_text(strip=True)),
-                    'teacher': cols[7].get_text(strip=True),
+                    'teacher': teacher,
                     'lessons': lessons,
                 }
                 courses.append(course)
