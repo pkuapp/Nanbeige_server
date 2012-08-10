@@ -242,9 +242,9 @@ def course_grab_start(request):
             elif e.error == "captcha":
                 return {'error_code': 'CaptchaError'}
             else:
-                return {'error_code': 'UnknownError'}
+                return {'error_code': 'UnknownLoginError'}
         except:
-            return {'error_code': 'UnknownError'}, 501
+            return {'error_code': 'UnknownError'}
     else:
         return {'error': '导入课程无法启动或抓取器已过期。'}, 503
 
