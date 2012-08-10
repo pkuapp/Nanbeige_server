@@ -120,7 +120,7 @@ def reg_email(request):
             try:
                 campus = Campus.objects.get(pk=campus_id)
             except ValueError:
-                return {'error_code': 'BadCampusSyntax'}, 400
+                return {'error_code': 'BadSyntax'}, 400
             except Campus.DoesNotExist:
                 return {'error_code': 'CampusNotFound'}, 400
 

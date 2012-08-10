@@ -230,7 +230,7 @@ def course_grab_start(request):
         try:
             grabber.setUp(**request.POST.dict())
         except LookupError:
-            return {'error_code': 'MissingArgument'}, 400
+            return {'error_code': 'SyntaxError'}, 400
 
         try:
             grabber.run()

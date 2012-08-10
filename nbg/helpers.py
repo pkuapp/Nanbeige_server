@@ -35,5 +35,5 @@ def auth_required(func):
         if request.user.is_authenticated():
             return func(request, *args, **kwargs)
         else:
-            return HttpResponse(dumps({'error': '请先登录。'}), mimetype="application/json", status=403)
+            return HttpResponse(dumps({'error_code': 'NotLoggedIn'}), mimetype="application/json", status=403)
     return inner
