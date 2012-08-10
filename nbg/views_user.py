@@ -106,6 +106,7 @@ def reg_email(request):
     email = request.POST.get('email', None)
     nickname = request.POST.get('nickname', None)
     password = request.POST.get('password', None)
+    campus_id = request.POST.get('campus_id', None)
 
     if email and nickname and password:
         try:
@@ -115,11 +116,22 @@ def reg_email(request):
         if len(email) > 30:
             return {'error': 'Email 地址过长。'}, 400
 
+        if campus_id:
+            try:
+                campus = Campus.objects.get(pk=campus_id)
+            except ValueError:
+                return {'error_code': 'BadCampusSyntax'}, 400
+            except Campus.DoesNotExist:
+                return {'error_code': 'CampusNotFound'}, 400
+
         try:
             user = User.objects.create_user(username=email, email=email, password=password)
         except IntegrityError:
             return {'error': 'Email 已被使用。'}, 403
-        UserProfile.objects.create(user=user, nickname=nickname)
+        user_profile = UserProfile.objects.create(user=user, nickname=nickname)
+        if campus_id:
+            user_profile.campus = campus
+            user_profile.save()
 
         user = auth.authenticate(username=email, password=password)
         auth.login(request, user)
