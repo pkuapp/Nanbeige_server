@@ -78,16 +78,8 @@ class BaseParser(object):
           "orig_id": "2011-325763QR",
           "name": "21天精通阿拉伯语（变态冲刺班）",
           "credit": 2.5,
-          "teacher":
-          [
-            "张塔",
-            "ZHANG Ta"
-          ],
-          "ta":
-          [
-            "塔"
-          ],
-          "semester_id": 2,
+          "teacher": "张塔,ZHANG Ta",
+          "ta": "塔,Ta,宝塔",
           "lessons":
           [
             {
@@ -103,7 +95,8 @@ class BaseParser(object):
               "end": 5,
               "location": "张塔家中",
               "weeks": [1, 2, 3, 4, 5, 6, 7, 8]
-            }
+            },
+          ],
         }
         """
         return []

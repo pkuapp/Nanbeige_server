@@ -298,8 +298,8 @@ class TeapotParser(BaseParser):
                 'lessons': lessons,
             }
             courses.append(course)
-        pretty_print(courses)
-        return soup.prettify().encode("utf8")
+        self.courses = courses
+        print "Grabbed successfully."
 
 if __name__ == "__main__":
     grabber = TeapotParser()
