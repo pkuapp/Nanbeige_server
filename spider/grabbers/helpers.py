@@ -2,7 +2,7 @@
 
 import yaml
 
-chinese_week_numbers = {
+chinese_weekdays = {
     u'一': 1,
     u'二': 2,
     u'三': 3,

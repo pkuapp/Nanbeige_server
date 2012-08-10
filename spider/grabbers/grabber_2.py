@@ -6,7 +6,7 @@ import os.path
 import re
 import string
 from bs4 import BeautifulSoup, SoupStrainer
-from helpers import pretty_print, pretty_format, chinese_week_numbers
+from helpers import pretty_print, pretty_format, chinese_weekdays
 from grabber_base import BaseParser, LoginError
 
 class TeapotParser(BaseParser):
@@ -44,6 +44,16 @@ class TeapotParser(BaseParser):
                 "all":  [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18],
             },
         }
+
+    def get_semester_from_time(self, time_text):
+        if u"秋冬" in time_text:
+            return u"秋冬"
+        elif u"秋" in time_text:
+            return u"秋"
+        elif u"冬" in time_text:
+            return u"冬"
+        else:
+            return None
 
     def _fetch_img(self):
         url_captcha = self.url_prefix + "CheckCode.aspx"
@@ -88,19 +98,23 @@ class TeapotParser(BaseParser):
         for time_text in time_texts:
             '''parse week'''
             odd_or_even = self.parse_odd_or_even(time_text)
-            weeks = self.week_data[semester_text][odd_or_even]
+
+            '''sometimes, lesson has its own semester text'''
+            semester = self.get_semester_from_time(time_text)
+            if semester:
+                weeks = self.week_data[semester][odd_or_even]
+            else:
+                weeks = self.week_data[semester_text][odd_or_even]
 
             number = re.findall("\d{1,2}", time_text[3:])
             if time_text:
-                try:
-                    lessons.append({
-                        'day': chinese_week_numbers[time_text[1]],
-                        'start': int(number[0]),
-                        'end': int(number[-1]),
-                        'weeks': weeks,
-                    })
-                except KeyError:
-                    print time_text
+                weekday = re.search(u"周(.)", time_text).group(1)
+                lessons.append({
+                    'day': chinese_weekdays[weekday],
+                    'start': int(number[0]),
+                    'end': int(number[-1]),
+                    'weeks': weeks,
+                })
             else:
                 lessons.append({})
 
