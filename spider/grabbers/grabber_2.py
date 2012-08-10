@@ -83,9 +83,19 @@ class TeapotParser(BaseParser):
 
     @staticmethod
     def trim_location(l):
+        l = l.replace(u"(多媒体，音乐教室)", "")
+        l = l.replace(u"(科创专用教室)", "")
+        l = l.replace(u"(网络五边语音)", "")
         l = l.replace(u"(网络五边菱)", "")
+        l = l.replace(u"(长方无黑板)", "")
         l = l.replace(u"(五边菱形)", "")
         l = l.replace(u"(六边圆形)", "")
+        l = l.replace(u"(网络六边)", "")
+        l = l.replace(u"(网络五边)", "")
+        l = l.replace(u"(传统语音)", "")
+        l = l.replace(u"(长方形)", "")
+        l = l.replace(u"(语音)", "")
+        l = l.replace(u"(成多)", "")
         l = l.replace(u"(普)", "")
         l = l.replace(u"(多)", "")
         l = l.replace("*", "")
