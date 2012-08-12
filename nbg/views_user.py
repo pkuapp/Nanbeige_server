@@ -42,7 +42,7 @@ def login_email(request):
                     'university': {
                             'id': campus.university.pk,
                             'name': campus.university.name,
-                    }
+                    },
                     'campus': {
                             'id': campus.pk,
                             'name': campus.name
@@ -97,7 +97,7 @@ def login_weibo(request):
                     'university': {
                             'id': campus.university.pk,
                             'name': campus.university.name,
-                    }
+                    },
                     'campus': {
                             'id': campus.pk,
                             'name': campus.name
