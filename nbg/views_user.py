@@ -9,7 +9,7 @@ from django.db import IntegrityError
 from urllib2 import HTTPError
 from nbg.models import UserProfile, Campus
 from nbg.helpers import json_response, auth_required
-from sns.verifiers import VerifyError, get_weibo_uid
+from sns.verifiers import VerifyError, get_weibo_profile
 
 @auth_required
 @json_response
@@ -27,22 +27,27 @@ def login_email(request):
     if user is not None:
         if user.is_active:
             auth.login(request, user)
+            user_profile = user.get_profile()
+
             response = {
                 'id': user.pk,
-                'nickname': user.get_profile().nickname,
-                'university': None,
-                'campus': None,
+                'email': user.email,
+                'nickname': user_profile.nickname,
+                'weibo_name': user_profile.weibo_name,
+                'weibo_id': user_profile.weibo_id,
             }
-            campus = user.get_profile().campus
+            campus = user_profile.campus
             if campus:
-                response['university'] = {
-                    'id': campus.university.pk,
-                    'name': campus.university.name,
-                }
-                response['campus'] = {
-                    'id': campus.pk,
-                    'name': campus.name,
-                }
+                response.update({
+                    'university': {
+                            'id': campus.university.pk,
+                            'name': campus.university.name,
+                    }
+                    'campus': {
+                            'id': campus.pk,
+                            'name': campus.name
+                    }
+                })
         else:
             response = {
                 'error': "用户已被吊销。",
@@ -77,18 +82,27 @@ def login_weibo(request):
     if user is not None:
         if user.is_active:
             auth.login(request, user)
+            user_profile = user.get_profile()
+
             response = {
                 'id': user.pk,
                 'email': user.email,
-                'nickname': user.get_profile().nickname,
-                'university': None,
+                'nickname': user_profile.nickname,
+                'weibo_name': user_profile.weibo_name,
+                'weibo_id': user_profile.weibo_id,
             }
-            campus = user.get_profile().campus
+            campus = user_profile.campus
             if campus:
-                response['university'] = {
-                    'id': campus.university.pk,
-                    'name': campus.university.name,
-                }
+                response.update({
+                    'university': {
+                            'id': campus.university.pk,
+                            'name': campus.university.name,
+                    }
+                    'campus': {
+                            'id': campus.pk,
+                            'name': campus.name
+                    }
+                })
         else:
             response = {
                 'error': "用户已被吊销。",
@@ -148,7 +162,7 @@ def reg_weibo(request):
 
     if token and nickname:
         try:
-            weibo_id = get_weibo_uid(token)
+            weibo_id, screen_name = get_weibo_profile(token)
         except HTTPError:
             return {
                 'error_code': "ErrorConnectingWeiboServer",
@@ -165,7 +179,8 @@ def reg_weibo(request):
             user = User.objects.create_user(username=weibo_id, password="WeiboUser")
         except IntegrityError:
             return {'error': '微博帐号已被使用。'}, 403
-        UserProfile.objects.create(user=user, weibo_id=weibo_id, nickname=nickname)
+        UserProfile.objects.create(user=user, weibo_id=weibo_id,\
+            nickname=nickname, weibo_name=screen_name)
 
         user = auth.authenticate(weibo_token=token)
         auth.login(request, user)

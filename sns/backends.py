@@ -1,5 +1,5 @@
 from urllib2 import HTTPError
-from verifiers import get_weibo_uid, VerifyError
+from verifiers import get_weibo_profile, VerifyError
 from django.contrib.auth.models import User
 from nbg.models import UserProfile
 
@@ -28,8 +28,8 @@ class WeiboBackend(object):
 
     def authenticate(self, weibo_token=None):
         if weibo_token:
-            weibo_id = get_weibo_uid(weibo_token)
-
+            weibo_id, screen_name = get_weibo_profile(weibo_token)
+            
             try:
                 user_profile = UserProfile.objects.get(weibo_id=weibo_id)
             except UserProfile.DoesNotExist:
