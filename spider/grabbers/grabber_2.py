@@ -231,8 +231,8 @@ class TeapotParser(BaseParser):
             total_courses += len(courses)
             with open(os.path.join(os.path.dirname(__file__), 'zju/{}.yaml').format(i), 'w') as yaml_file:
                 yaml_file.write(pretty_format(courses))
-            with open(os.path.join(os.path.dirname(__file__), 'zju/html/{}.html').format(i), 'w') as html_file:
-                html_file.write(soup_courses.prettify().encode("utf8"))
+            # with open(os.path.join(os.path.dirname(__file__), 'zju/html/{}.html').format(i), 'w') as html_file:
+            #     html_file.write(soup_courses.prettify().encode("utf8"))
         print "Done! Totally exported {} courses.".format(total_courses)
 
     def _fake_login(self):

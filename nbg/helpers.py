@@ -4,6 +4,7 @@ from string import split
 from datetime import datetime
 from json import dumps
 from django.http import HttpResponse
+from nbg.models import Course
 
 def listify_str(str):
     ret_list = split(str, ',')
@@ -37,3 +38,20 @@ def auth_required(func):
         else:
             return HttpResponse(dumps({'error_code': 'NotLoggedIn'}), mimetype="application/json", status=403)
     return inner
+
+def is_same(lesson_set, lessons):
+    if lesson_set.count() != len(lessons):
+        return False
+    for l in lessons:
+        if not lesson_set.filter(**l).exists():
+            return False
+    return True
+
+def find_in_db(c):
+    c = c.copy()
+    lessons = c.pop('lessons')
+    similar_courses = Course.objects.filter(**c)
+    for course in similar_courses:
+        if is_same(course.lesson_set, lessons):
+            return course
+    return None

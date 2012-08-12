@@ -3,6 +3,7 @@
 import os
 import yaml
 from nbg.models import Course, Lesson, Semester
+from nbg.helpers import find_in_db
 from django.core.management.base import BaseCommand, CommandError
 
 class Command(BaseCommand):
@@ -13,7 +14,7 @@ class Command(BaseCommand):
         try:
             semester_id = int(args[0])
             dir = args[1]
-        except IndexError, ValueError:
+        except (IndexError, ValueError):
             raise CommandError('Invalid syntax.')
 
         try:
@@ -26,14 +27,21 @@ class Command(BaseCommand):
         files = [os.path.join(dir, f) for f in files]
 
         semester = Semester.objects.get(pk=semester_id)
-        for file in files:
-            with open(file) as f:
+        total = 0
+        for file_i in files:
+            with open(file_i) as f:
                 courses = yaml.load(f)
+            count = 0
             for c in courses:
+                if find_in_db(c):
+                    continue
+                count += 1
                 lessons = c.pop('lessons')
                 course = Course(semester=semester, **c)
                 course.save()
                 for l in lessons:
                     lesson = Lesson(course=course, **l)
                     lesson.save()
-            self.stdout.write('{}: successfully imported.\n'.format(file))
+            total += count
+            self.stdout.write('{filename}: {count} courses successfully imported.\n'.format(filename=file_i), count=count)
+        self.stdout.write('Total: {} courses imported.'.format(total))

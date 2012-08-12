@@ -3,9 +3,9 @@
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
 from nbg.models import Course, Assignment, Comment, Lesson
-from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime
+from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime, find_in_db
 from spider.grabbers.grabber_base import LoginError
-from spider.grabbers.helpers import pretty_print, pretty_format
+from spider.grabbers.helpers import pretty_format
 from django.core.cache import cache
 from django.http import HttpResponse
 
@@ -221,22 +221,6 @@ def course_grab(request):
     cache.set(request.session.session_key+'_grabber', grabber)
 
     return response
-
-def is_same(lesson_set, lessons):
-    if lesson_set.count() != len(lessons):
-        return False
-    for l in lessons:
-        if not lesson_set.filter(**l).exists():
-            return False
-    return True
-
-def find_in_db(course):
-    lessons = course.pop('lessons')
-    similar_courses = Course.objects.filter(**course)
-    for course in similar_courses:
-        if is_same(course.lesson_set, lessons):
-            return course
-    return None
 
 @require_http_methods(['POST'])
 @auth_required
