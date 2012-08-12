@@ -35,9 +35,9 @@ def login_email(request):
                 'nickname': user_profile.nickname,
             }
 
-            user_profile.id && response['weibo_id'] = weibo_id
-            user_profile.name && response['weibo_name'] = weibo_name
-            
+            user_profile.weibo_id and response.update({'weibo_id': user_profile.weibo_id}) 
+            user_profile.weibo_name and response.update({'weibo_name': user_profile.weibo_name})
+
             campus = user_profile.campus
             if campus:
                 response.update({
@@ -92,9 +92,9 @@ def login_weibo(request):
                 'nickname': user_profile.nickname,
             }
 
-            user_profile.id && response['weibo_id'] = weibo_id
-            user_profile.name && response['weibo_name'] = weibo_name
-
+            user_profile.weibo_id and response.update({'weibo_id': user_profile.weibo_id}) 
+            user_profile.weibo_name and response.update({'weibo_name': user_profile.weibo_name})
+            
             campus = user_profile.campus
             if campus:
                 response.update({
