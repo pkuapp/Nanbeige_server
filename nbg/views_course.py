@@ -2,9 +2,10 @@
 
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
-from nbg.models import Course, Assignment, Comment
+from nbg.models import Course, Assignment, Comment, Lesson
 from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime
 from spider.grabbers.grabber_base import LoginError
+from spider.grabbers.helpers import pretty_print, pretty_format
 from django.core.cache import cache
 from django.http import HttpResponse
 
@@ -221,6 +222,22 @@ def course_grab(request):
 
     return response
 
+def is_same(lesson_set, lessons):
+    if lesson_set.count() != len(lessons):
+        return False
+    for l in lessons:
+        if not lesson_set.filter(**l).exists():
+            return False
+    return True
+
+def find_in_db(course):
+    lessons = course.pop('lessons')
+    similar_courses = Course.objects.filter(**course)
+    for course in similar_courses:
+        if is_same(course.lesson_set, lessons):
+            return course
+    return None
+
 @require_http_methods(['POST'])
 @auth_required
 @json_response
@@ -234,8 +251,14 @@ def course_grab_start(request):
 
         try:
             grabber.run()
-            courses_set = grabber.courses
-            return 0
+            response = []
+            for c in grabber.courses:
+                course = find_in_db(c)
+                if course:
+                    response.append(course.pk)
+                else:
+                    response.append(None)
+            return response
         except LoginError as e:
             if e.error == "auth":
                 return {'error_code': 'AuthError'}
@@ -243,8 +266,6 @@ def course_grab_start(request):
                 return {'error_code': 'CaptchaError'}
             else:
                 return {'error_code': 'UnknownLoginError'}
-        except:
-            return {'error_code': 'UnknownError'}
     else:
         return {'error': '导入课程无法启动或抓取器已过期。'}, 503
 

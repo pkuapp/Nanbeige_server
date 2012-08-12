@@ -5,9 +5,6 @@ import yaml
 from nbg.models import Course, Lesson, Semester
 from django.core.management.base import BaseCommand, CommandError
 
-def list_to_comma_separated(l):
-    return ",".join(map(str, l))
-
 class Command(BaseCommand):
     args = '<semester_id, directory>'
     help = 'Import courses from YAML files'
@@ -37,7 +34,6 @@ class Command(BaseCommand):
                 course = Course(semester=semester, **c)
                 course.save()
                 for l in lessons:
-                    l['weeks'] = list_to_comma_separated(l['weeks'])
                     lesson = Lesson(course=course, **l)
                     lesson.save()
             self.stdout.write('{}: successfully imported.\n'.format(file))

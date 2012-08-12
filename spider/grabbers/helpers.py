@@ -19,3 +19,6 @@ def pretty_format(obj):
 
 def pretty_print(obj):
     print pretty_format(obj),
+
+def list_to_comma_separated(l):
+    return ",".join(map(str, l))

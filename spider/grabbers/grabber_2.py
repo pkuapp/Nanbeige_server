@@ -6,7 +6,7 @@ import os.path
 import re
 import string
 from bs4 import BeautifulSoup, SoupStrainer
-from helpers import pretty_print, pretty_format, chinese_weekdays
+from helpers import pretty_print, pretty_format, chinese_weekdays, list_to_comma_separated
 from grabber_base import BaseParser, LoginError
 
 class TeapotParser(BaseParser):
@@ -112,9 +112,9 @@ class TeapotParser(BaseParser):
             '''sometimes, lesson has its own semester text'''
             semester = self.get_semester_from_time(time_text)
             if semester:
-                weeks = self.week_data[semester][odd_or_even]
+                weeks = list_to_comma_separated(self.week_data[semester][odd_or_even])
             else:
-                weeks = self.week_data[semester_text][odd_or_even]
+                weeks = list_to_comma_separated(self.week_data[semester_text][odd_or_even])
 
             number = re.findall("\d{1,2}", time_text[3:])
             if time_text:

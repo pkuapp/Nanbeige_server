@@ -63,13 +63,6 @@ class BaseParser(object):
 
         self.setUp(username=username, password=password, captcha=captcha)
 
-    @staticmethod
-    def unique_in_db(course):
-        """
-        If needed, override this general method to provide a valid method to determine whether a course should be regard as a
-        new course in database.
-        """
-
     def run(self):
         """Implement your request and parse code here.
 
@@ -87,14 +80,14 @@ class BaseParser(object):
               "start": 1,
               "end": 2,
               "location": "牛街清真寺广场",
-              "weeks": [1, 3, 5, 7, 9, 11, 13, 15, 17]
+              "weeks": "1,3,5,7,9,11,13,15,17",
             },
             {
               "day": 1,
               "start": 1,
               "end": 5,
               "location": "张塔家中",
-              "weeks": [1, 2, 3, 4, 5, 6, 7, 8]
+              "weeks": "1,2,3,4,5,6,7,8",
             },
           ],
         }

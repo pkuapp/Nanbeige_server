@@ -1,13 +1,26 @@
 from django.contrib import admin
 from nbg.models import *
 
+class CourseAdmin(admin.ModelAdmin):
+    def lessons(self, course):
+        ret = ""
+        for l in course.lesson_set.values():
+            l['location'] = l['location'].encode('utf8')
+            l['weeks'] = l['weeks'].encode('utf8')
+
+            ret += "{day} {start}-{end}, [{weeks}], {location}; ".format(**l)
+        return ret
+
+    search_fields = ['name']
+    list_display = ('id', 'semester', 'original_id', 'name', 'teacher', 'lessons')
+
 admin.site.register(App)
 admin.site.register(University)
 admin.site.register(Campus)
 admin.site.register(Semester)
 admin.site.register(UserProfile)
 admin.site.register(ScheduleUnit)
-admin.site.register(Course)
+admin.site.register(Course, CourseAdmin)
 admin.site.register(Lesson)
 admin.site.register(Assignment)
 admin.site.register(Comment)
