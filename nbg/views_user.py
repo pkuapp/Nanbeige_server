@@ -29,14 +29,12 @@ def sync_credentials_to_couchdb(user, username, password_or_token):
         userdb.save(doc)
     except ResourceNotFound:
         userdb.save(doc)
-
-    db = server['user_sync_db_{0}'.format(user.pk)]
-    
     try:
-        security = db.resource.get_json('_security')[2]
-    except ServerError:
+        db = server['user_sync_db_{0}'.format(user.pk)]
+    except ResourceNotFound:
         server.create('user_sync_db_{0}'.format(user.pk))
-
+        
+    security = db.resource.get_json('_security')[2]
     if not security:
         security = {
             'admins': {'names':[], 'roles': []},
