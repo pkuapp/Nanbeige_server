@@ -2,14 +2,42 @@
 
 from django.contrib import auth
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth.models import User
+from nbg.models import UserProxy as User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from urllib2 import HTTPError
-from nbg.models import UserProfile, Campus
+from nbg.models import UserProfile, Campus, userdb, server
 from nbg.helpers import json_response, auth_required
 from sns.verifiers import VerifyError, get_weibo_profile
+
+def sync_credentials_to_couchdb(user, username, password_or_token):
+    from couchdb.http import ResourceNotFound
+    user_id = 'org.couchdb.user:{}'.format(username)
+    doc = {
+            '_id': user_id,
+            'type': 'user',
+            'roles': [],
+            'name': username,
+            'password': password_or_token,
+        }
+    try:
+        doc = userdb[user_id]
+        doc['_rev'] = doc.rev
+        userdb.save(doc)
+    except ResourceNotFound:
+        userdb.save(doc)
+
+    db = server['user_sync_db_{}'.format(user.pk)]
+    security = db.resource.get_json('_security')[2]
+    if not security:
+        security = {
+            'admins': {'names':[], 'roles': []},
+            'readers': {'names':[], 'roles': []}, 
+        }
+    if not username in security['readers']['names']:
+        security['readers']['names'].append(username)
+        db.resource.put_json('_security',body=security)
 
 @auth_required
 @json_response
@@ -22,11 +50,17 @@ def login_email(request):
     username = request.POST.get('email', '')
     password = request.POST.get('password', '')
 
+    if username.find(':') >= 0:
+        return {
+            'error': "Email 或密码错误。",
+        }, 403
+
     user = auth.authenticate(username=username, password=password)
 
     if user is not None:
         if user.is_active:
             auth.login(request, user)
+            sync_credentials_to_couchdb(user, user.email, password)
             user_profile = user.get_profile()
 
             response = {
@@ -84,16 +118,22 @@ def login_weibo(request):
     if user is not None:
         if user.is_active:
             auth.login(request, user)
+            weibo_id, weibo_name = get_weibo_profile(weibo_token)
+            sync_credentials_to_couchdb(user, 'weibo:{}'.format(weibo_id), weibo_token)
             user_profile = user.get_profile()
 
             response = {
                 'id': user.pk,
                 'email': user.email,
                 'nickname': user_profile.nickname,
+                'weibo_id': weibo_id,
+                'weibo_name': weibo_name,
             }
 
-            user_profile.weibo_id and response.update({'weibo_id': user_profile.weibo_id}) 
-            user_profile.weibo_name and response.update({'weibo_name': user_profile.weibo_name})
+            if not user_profile.weibo_id or not user_profile.weibo_name:
+                user_profile.weibo_id = weibo_id
+                user_profile.weibo_name = weibo_name
+                user_profile.save()
             
             campus = user_profile.campus
             if campus:
@@ -131,7 +171,7 @@ def reg_email(request):
             validate_email(email)
         except ValidationError:
             return {'error': 'Email 格式不正确。'}, 400
-        if len(email) > 30:
+        if len(email) > 70:
             return {'error': 'Email 地址过长。'}, 400
 
         if campus_id:
@@ -141,7 +181,6 @@ def reg_email(request):
                 return {'error_code': 'BadSyntax'}, 400
             except Campus.DoesNotExist:
                 return {'error_code': 'CampusNotFound'}, 400
-
         try:
             user = User.objects.create_user(username=email, email=email, password=password)
         except IntegrityError:
@@ -153,6 +192,7 @@ def reg_email(request):
 
         user = auth.authenticate(username=email, password=password)
         auth.login(request, user)
+        sync_credentials_to_couchdb(user, email, password)
 
         return {'id': user.pk}
     else:
@@ -180,7 +220,7 @@ def reg_weibo(request):
 
         try:
             # this password is not used for auth
-            user = User.objects.create_user(username=weibo_id, password="WeiboUser")
+            user = User.objects.create_user(username='weibo:{}'.format(weibo_id), password=token)
         except IntegrityError:
             return {'error': '微博帐号已被使用。'}, 403
         UserProfile.objects.create(user=user, weibo_id=weibo_id,\
@@ -188,7 +228,7 @@ def reg_weibo(request):
 
         user = auth.authenticate(weibo_token=token)
         auth.login(request, user)
-
+        sync_credentials_to_couchdb(user, 'weibo:{}'.format(weibo_id), token)
         return {'id': user.pk}
     else:
         return {'error_code': "BadSyntax"}, 400
@@ -197,7 +237,11 @@ def reg_weibo(request):
 @auth_required
 @json_response
 def edit(request):
-    password = request.POST.get('password', None)
+    """
+    temporarily not allowed to change password, not decided when request from weibo-user and renren-user
+
+    """
+    # password = request.POST.get('password', None)
     nickname = request.POST.get('nickname', None)
     # weibo_token = request.POST.get('weibo_token', None)
     campus_id = request.POST.get('campus_id', None)
@@ -206,8 +250,8 @@ def edit(request):
     user = request.user
     user_profile = user.get_profile()
 
-    if password:
-        user.set_password(password)
+    # if password:
+        # user.set_password(password)
 
     if nickname:
         user_profile.nickname = nickname

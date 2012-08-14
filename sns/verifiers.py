@@ -38,4 +38,4 @@ def get_renren_uid():
 
 if __name__ == "__main__":
     print "Hi!"
-    print get_weibo_profile("2.002taL8B7oJLUBd61a402e38Mwbz5C")
+    print get_weibo_profile("2.00jcKICD7oJLUBc5e59db603T6CmeE")

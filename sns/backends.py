@@ -1,6 +1,6 @@
 from urllib2 import HTTPError
 from verifiers import get_weibo_profile, VerifyError
-from django.contrib.auth.models import User
+from nbg.models import UserProxy as User
 from nbg.models import UserProfile
 
 class EmailBackend(object):

@@ -3,6 +3,42 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.db.models.signals import class_prepared
+from django.contrib.auth.models import UserManager as Manager
+from couchdb.client import Server, Database
+from couchdb.http import PreconditionFailed
+
+COUCHDB_HOST = 'http://211.101.12.224'
+COUCHDB_PORT = '5984'
+server = Server('{}:{}'.format(COUCHDB_HOST, COUCHDB_PORT))
+server.resource.credentials = ('nbgd4P4eCTr4Vb4xQmL', 'CFh1oF1yqILzCXlagD6K')
+userdb = Database('{}:{}/_users'.format(COUCHDB_HOST, COUCHDB_PORT))
+userdb.resource.credentials = ('nbgd4P4eCTr4Vb4xQmL', 'CFh1oF1yqILzCXlagD6K')
+
+class UserManager(Manager):
+    """automatically create corresponding user syncable database in couchdb"""
+    def create_user(self, username, email=None, password=None):
+        user = super(UserManager, self).create_user(username, email, password)
+        if user:
+            try:
+                server.create('user_sync_db_{}'.format(user.pk))
+            except PreconditionFailed:
+                user.delete()
+                raise PreconditionFailed
+        return user
+
+def extend_username(sender, *args, **kwargs):
+    """extend username max_length to 75"""
+    if sender.__name__ == "User" and sender.__module__ == "django.contrib.auth.models":
+        sender._meta.get_field("username").max_length = 75
+
+class_prepared.connect(extend_username)
+
+class UserProxy(User):
+    objects = UserManager()
+
+    class Meta:
+        proxy = True
 
 class App(models.Model):
     version_android_beta = models.CharField(max_length=30)
