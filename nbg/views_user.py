@@ -10,6 +10,7 @@ from urllib2 import HTTPError
 from nbg.models import UserProfile, Campus, userdb, server
 from nbg.helpers import json_response, auth_required
 from sns.verifiers import VerifyError, get_weibo_profile
+from couchdb.http import PreconditionFailed
 
 def sync_credentials_to_couchdb(user, username, password_or_token):
     from couchdb.http import ResourceNotFound
@@ -183,7 +184,7 @@ def reg_email(request):
                 return {'error_code': 'CampusNotFound'}, 400
         try:
             user = User.objects.create_user(username=email, email=email, password=password)
-        except IntegrityError:
+        except IntegrityError, PreconditionFailed:
             return {'error': 'Email 已被使用。'}, 403
         user_profile = UserProfile.objects.create(user=user, nickname=nickname)
         if campus_id:
