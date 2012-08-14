@@ -20,11 +20,12 @@ class UserManager(Manager):
     def create_user(self, username, email=None, password=None):
         user = super(UserManager, self).create_user(username, email, password)
         if user:
-            try:
-                server.create('user_sync_db_{0}'.format(user.pk))
-            except PreconditionFailed:
-                user.delete()
-                raise PreconditionFailed
+            server.create('user_sync_db_{0}'.format(user.pk))
+            # try:
+            #     server.create('user_sync_db_{0}'.format(user.pk))
+            # except PreconditionFailed:
+            #     user.delete()
+            #     raise PreconditionFailed
         return user
 
 def extend_username(sender, *args, **kwargs):
