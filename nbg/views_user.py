@@ -14,6 +14,7 @@ from couchdb.http import PreconditionFailed
 
 def sync_credentials_to_couchdb(user, username, password_or_token):
     from couchdb.http import ResourceNotFound
+    from couchdb.http import ServerError
     user_id = 'org.couchdb.user:{0}'.format(username)
     doc = {
             '_id': user_id,
@@ -30,7 +31,12 @@ def sync_credentials_to_couchdb(user, username, password_or_token):
         userdb.save(doc)
 
     db = server['user_sync_db_{0}'.format(user.pk)]
-    security = db.resource.get_json('_security')[2]
+    
+    try:
+        security = db.resource.get_json('_security')[2]
+    except ServerError:
+        server.create('user_sync_db_{0}'.format(user.pk))
+
     if not security:
         security = {
             'admins': {'names':[], 'roles': []},
