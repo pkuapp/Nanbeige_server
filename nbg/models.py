@@ -10,9 +10,9 @@ from couchdb.http import PreconditionFailed
 
 COUCHDB_HOST = 'http://211.101.12.224'
 COUCHDB_PORT = '5984'
-server = Server('{}:{}'.format(COUCHDB_HOST, COUCHDB_PORT))
+server = Server('{0}:{1}'.format(COUCHDB_HOST, COUCHDB_PORT))
 server.resource.credentials = ('nbgd4P4eCTr4Vb4xQmL', 'CFh1oF1yqILzCXlagD6K')
-userdb = Database('{}:{}/_users'.format(COUCHDB_HOST, COUCHDB_PORT))
+userdb = Database('{0}:{1}/_users'.format(COUCHDB_HOST, COUCHDB_PORT))
 userdb.resource.credentials = ('nbgd4P4eCTr4Vb4xQmL', 'CFh1oF1yqILzCXlagD6K')
 
 class UserManager(Manager):
@@ -21,7 +21,7 @@ class UserManager(Manager):
         user = super(UserManager, self).create_user(username, email, password)
         if user:
             try:
-                server.create('user_sync_db_{}'.format(user.pk))
+                server.create('user_sync_db_{0}'.format(user.pk))
             except PreconditionFailed:
                 user.delete()
                 raise PreconditionFailed

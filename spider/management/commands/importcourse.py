@@ -44,4 +44,4 @@ class Command(BaseCommand):
                     lesson.save()
             total += count
             self.stdout.write('{filename}: {count} courses successfully imported.\n'.format(filename=file_i, count=count))
-        self.stdout.write('Total: {} courses imported.'.format(total))
+        self.stdout.write('Total: {0} courses imported.'.format(total))

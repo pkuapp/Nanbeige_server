@@ -13,7 +13,7 @@ from sns.verifiers import VerifyError, get_weibo_profile
 
 def sync_credentials_to_couchdb(user, username, password_or_token):
     from couchdb.http import ResourceNotFound
-    user_id = 'org.couchdb.user:{}'.format(username)
+    user_id = 'org.couchdb.user:{0}'.format(username)
     doc = {
             '_id': user_id,
             'type': 'user',
@@ -28,7 +28,7 @@ def sync_credentials_to_couchdb(user, username, password_or_token):
     except ResourceNotFound:
         userdb.save(doc)
 
-    db = server['user_sync_db_{}'.format(user.pk)]
+    db = server['user_sync_db_{0}'.format(user.pk)]
     security = db.resource.get_json('_security')[2]
     if not security:
         security = {
@@ -119,7 +119,7 @@ def login_weibo(request):
         if user.is_active:
             auth.login(request, user)
             weibo_id, weibo_name = get_weibo_profile(weibo_token)
-            sync_credentials_to_couchdb(user, 'weibo:{}'.format(weibo_id), weibo_token)
+            sync_credentials_to_couchdb(user, 'weibo:{0}'.format(weibo_id), weibo_token)
             user_profile = user.get_profile()
 
             response = {
@@ -220,7 +220,7 @@ def reg_weibo(request):
 
         try:
             # this password is not used for auth
-            user = User.objects.create_user(username='weibo:{}'.format(weibo_id), password=token)
+            user = User.objects.create_user(username='weibo:{0}'.format(weibo_id), password=token)
         except IntegrityError:
             return {'error': '微博帐号已被使用。'}, 403
         UserProfile.objects.create(user=user, weibo_id=weibo_id,\
@@ -228,7 +228,7 @@ def reg_weibo(request):
 
         user = auth.authenticate(weibo_token=token)
         auth.login(request, user)
-        sync_credentials_to_couchdb(user, 'weibo:{}'.format(weibo_id), token)
+        sync_credentials_to_couchdb(user, 'weibo:{0}'.format(weibo_id), token)
         return {'id': user.pk}
     else:
         return {'error_code': "BadSyntax"}, 400
