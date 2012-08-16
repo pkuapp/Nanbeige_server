@@ -3,7 +3,7 @@
 import os
 import yaml
 from nbg.models import Course, Lesson, Semester
-from nbg.helpers import find_in_db
+from nbg.helpers import find_in_db, add_to_db
 from django.core.management.base import BaseCommand, CommandError
 
 class Command(BaseCommand):
@@ -36,12 +36,7 @@ class Command(BaseCommand):
                 if find_in_db(c):
                     continue
                 count += 1
-                lessons = c.pop('lessons')
-                course = Course(semester=semester, **c)
-                course.save()
-                for l in lessons:
-                    lesson = Lesson(course=course, **l)
-                    lesson.save()
+                add_to_db(c, semester)
             total += count
             self.stdout.write('{filename}: {count} courses successfully imported.\n'.format(filename=file_i, count=count))
         self.stdout.write('Total: {0} courses imported.'.format(total))

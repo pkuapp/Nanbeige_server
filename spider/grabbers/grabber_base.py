@@ -31,13 +31,13 @@ class BaseParser(object):
     Or, if there's anything wrong with the script for the corresponding university, set self.available to False
     and provide error info.
     2. Say the captcha is required, you MUST override *_fetch_img()* and set self.captcha_img in it.
-    3. You may wanna provide an unique_in_db method to determine whether a course should be regard as
-    a new course in database. (If not provided, the default one will be used.)
+    3. You MUST override *semester_id* to match the semester id in database.
     """
     def __init__(self):
         super(BaseParser, self).__init__()
         self.require_captcha = False
         self.available = True
+        self.semester_id = 0 
         self.error = None
         self.captcha_img = None
         self.courses = None

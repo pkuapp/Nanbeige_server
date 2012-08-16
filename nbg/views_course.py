@@ -2,8 +2,8 @@
 
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
-from nbg.models import Course, Assignment, Comment, Lesson
-from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime, find_in_db
+from nbg.models import Course, Assignment, Comment, Lesson, Semester
+from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db
 from spider.grabbers.grabber_base import LoginError
 from spider.grabbers.helpers import pretty_format
 from django.core.cache import cache
@@ -235,14 +235,15 @@ def course_grab_start(request):
 
         try:
             grabber.run()
-            response = []
+            semester = Semester.objects.get(pk=grabber.semester_id)
             for c in grabber.courses:
                 course = find_in_db(c)
                 if course:
-                    response.append(course.pk)
+                    request.user.get_profile().courses.add(course)
                 else:
-                    response.append(None)
-            return response
+                    course = add_to_db(c, semester)
+                    request.user.get_profile().courses.add(course)
+            return 0
         except LoginError as e:
             if e.error == "auth":
                 return {'error_code': 'AuthError'}

@@ -16,6 +16,7 @@ class TeapotParser(BaseParser):
         super(TeapotParser, self).__init__()
         self.require_captcha = True
         self.available = True
+        self.semester_id = 5
         self.url_prefix = "http://jwbinfosys.zju.edu.cn/"
         self.charset = "gbk"
 

@@ -4,7 +4,7 @@ from string import split
 from datetime import datetime
 from json import dumps
 from django.http import HttpResponse
-from nbg.models import Course
+from nbg.models import Course, Lesson
 
 def listify_str(str):
     ret_list = split(str, ',')
@@ -55,3 +55,12 @@ def find_in_db(c):
         if is_same(course.lesson_set, lessons):
             return course
     return None
+
+def add_to_db(c, semester):
+    """add a course to database"""
+    c = c.copy()
+    lessons = c.pop('lessons')
+    course = Course.objects.create(semester=semester, **c)
+    for l in lessons:
+        Lesson.objects.create(course=course, **l)
+    return course
