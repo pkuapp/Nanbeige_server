@@ -289,7 +289,7 @@ def reg_weibo(request):
 
         try:
             # this password is not used for auth
-            user = User.objects.create_user(username='weibo:{0}'.format(weibo_id), password=token)
+            user = User.objects.create_user(username='-weibo-{0}'.format(weibo_id), password=token)
         except IntegrityError:
             return {'error': '微博帐号已被使用。'}, 403
         UserProfile.objects.create(user=user, weibo_id=weibo_id,\
@@ -297,7 +297,7 @@ def reg_weibo(request):
 
         user = auth.authenticate(weibo_token=token)
         auth.login(request, user)
-        sync_credentials_to_couchdb(user, 'weibo:{0}'.format(weibo_id), token)
+        sync_credentials_to_couchdb(user, '-weibo-{0}'.format(weibo_id), token)
         return {'id': user.pk}
     else:
         return {'error_code': "BadSyntax"}, 400
@@ -324,7 +324,7 @@ def reg_renren(request):
 
         try:
             # this password is not used for auth
-            user = User.objects.create_user(username='renren:{0}'.format(renren_id), password=token)
+            user = User.objects.create_user(username='-renren-{0}'.format(renren_id), password=token)
         except IntegrityError:
             return {'error': '人人帐号已被使用。'}, 403
         UserProfile.objects.create(user=user, renren_id=renren_id,\
@@ -332,7 +332,7 @@ def reg_renren(request):
 
         user = auth.authenticate(renren_token=token)
         auth.login(request, user)
-        sync_credentials_to_couchdb(user, 'renren:{0}'.format(renren_id), token)
+        sync_credentials_to_couchdb(user, '-renren-{0}'.format(renren_id), token)
         return {'id': user.pk}
     else:
         return {'error_code': "BadSyntax"}, 400
