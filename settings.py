@@ -128,7 +128,8 @@ INSTALLED_APPS = (
     'spider',
 )
 
-AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', 'sns.backends.WeiboBackend')
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', 'sns.backends.WeiboBackend', \
+    'sns.backends.RenRenBackend')
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 

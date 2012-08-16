@@ -109,6 +109,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     weibo_id = models.BigIntegerField(null=True, blank=True)
     weibo_name = models.CharField(max_length=100, blank=True)
+    renren_id = models.BigIntegerField(null=True, blank=True)
+    renren_name = models.CharField(max_length=100, blank=True)
     nickname = models.CharField(max_length=100, blank=True)
     realname = models.CharField(max_length=100, blank=True)
     courses = models.ManyToManyField(Course, blank=True)
