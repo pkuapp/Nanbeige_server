@@ -132,7 +132,7 @@ SESSION_COOKIE_AGE = 4838400 # two months
 SESSION_SAVE_EVERY_REQUEST = True
 
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', 'sns.backends.WeiboBackend', \
-    'sns.backends.RenRenBackend')
+    'sns.backends.RenrenBackend')
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 

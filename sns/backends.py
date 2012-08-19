@@ -29,7 +29,7 @@ class WeiboBackend(object):
     def authenticate(self, weibo_token=None):
         if weibo_token:
             weibo_id, screen_name = get_renren_profile(weibo_token)
-            
+
             try:
                 user_profile = UserProfile.objects.get(weibo_id=weibo_id)
             except UserProfile.DoesNotExist:
@@ -46,7 +46,7 @@ class WeiboBackend(object):
         except User.DoesNotExist:
             return None
 
-class RenRenBackend(object):
+class RenrenBackend(object):
     supports_object_permissions = False
     supports_anonymous_user = False
     supports_inactive_user = False
@@ -54,7 +54,7 @@ class RenRenBackend(object):
     def authenticate(self, renren_token=None):
         if renren_token:
             renren_id, name = get_renren_profile(renren_token)
-            
+
             try:
                 user_profile = UserProfile.objects.get(renren_id=renren_id)
             except UserProfile.DoesNotExist:
@@ -70,4 +70,3 @@ class RenRenBackend(object):
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return None
-        

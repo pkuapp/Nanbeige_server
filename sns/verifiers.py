@@ -24,8 +24,7 @@ def get_weibo_profile(token):
     client.set_access_token(token, END_OF_THE_WORLD)
     try:
         ret = client.get.account__get_uid()
-        profile = client.get.users__show(uid=ret.uid)#.screen_name
-        # ret = client.get.statuses__friends_timeline()
+        profile = client.get.users__show(uid=ret.uid)
     except HTTPError as e:
         if e.code == 403:
             raise VerifyError("Invalid weibo token.")
@@ -39,10 +38,10 @@ def get_renren_profile(token):
     APP_SECRET = '6885dc0d0c1b4c35ab71e5fe1cddd8ee'
     client = RenRenAPIClient(app_key=APP_KEY, app_secret=APP_SECRET, token=token)
     try:
-        ret = client.request({'access_token':token,  
-            'method':'users.getInfo', 'v':'1.0', 'format':'JSON'})
-    except HTTPError as e:
-        raise VerifyError('failed connecting to RenRen')
+        ret = client.request({'access_token': token,  
+            'method': 'users.getInfo', 'v': '1.0', 'format': 'JSON'})
+    except HTTPError:
+        raise VerifyError('Failed connecting to Renren')
     else:
         return ret['uid'], ret['name']
 

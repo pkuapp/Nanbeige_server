@@ -6,23 +6,22 @@ from nbg.models import UserProxy as User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
+from couchdb.http import PreconditionFailed
 from urllib2 import HTTPError
 from nbg.models import UserProfile, Campus, userdb, server
 from nbg.helpers import json_response, auth_required
 from sns.verifiers import VerifyError, get_weibo_profile, get_renren_profile
-from couchdb.http import PreconditionFailed
 
 def sync_credentials_to_couchdb(user, username, password_or_token):
     from couchdb.http import ResourceNotFound
-    from couchdb.http import ServerError
     user_id = 'org.couchdb.user:{0}'.format(username)
     doc = {
-            '_id': user_id,
-            'type': 'user',
-            'roles': [],
-            'name': username,
-            'password': password_or_token,
-        }
+        '_id': user_id,
+        'type': 'user',
+        'roles': [],
+        'name': username,
+        'password': password_or_token,
+    }
     try:
         doc = userdb[user_id]
         doc['_rev'] = doc.rev
@@ -33,12 +32,12 @@ def sync_credentials_to_couchdb(user, username, password_or_token):
         db = server['user_sync_db_{0}'.format(user.pk)]
     except ResourceNotFound:
         server.create('user_sync_db_{0}'.format(user.pk))
-        
+
     security = db.resource.get_json('_security')[2]
     if not security:
         security = {
-            'admins': {'names':[], 'roles': []},
-            'readers': {'names':[], 'roles': []}, 
+            'admins': {'names': [], 'roles': []},
+            'readers': {'names': [], 'roles': []}, 
         }
     if not username in security['readers']['names']:
         security['readers']['names'].append(username)
@@ -81,12 +80,12 @@ def login_email(request):
             if campus:
                 response.update({
                     'university': {
-                            'id': campus.university.pk,
-                            'name': campus.university.name,
+                        'id': campus.university.pk,
+                        'name': campus.university.name,
                     },
                     'campus': {
-                            'id': campus.pk,
-                            'name': campus.name
+                        'id': campus.pk,
+                        'name': campus.name
                     }
                 })
         else:
@@ -144,12 +143,12 @@ def login_weibo(request):
             if campus:
                 response.update({
                     'university': {
-                            'id': campus.university.pk,
-                            'name': campus.university.name,
+                        'id': campus.university.pk,
+                        'name': campus.university.name,
                     },
                     'campus': {
-                            'id': campus.pk,
-                            'name': campus.name
+                        'id': campus.pk,
+                        'name': campus.name
                     }
                 })
         else:
@@ -208,12 +207,12 @@ def login_renren(request):
             if campus:
                 response.update({
                     'university': {
-                            'id': campus.university.pk,
-                            'name': campus.university.name,
+                        'id': campus.university.pk,
+                        'name': campus.university.name,
                     },
                     'campus': {
-                            'id': campus.pk,
-                            'name': campus.name
+                        'id': campus.pk,
+                        'name': campus.name
                     }
                 })
         else:
@@ -252,7 +251,7 @@ def reg_email(request):
                 return {'error_code': 'CampusNotFound'}, 400
         try:
             user = User.objects.create_user(username=email, email=email, password=password)
-        except IntegrityError, PreconditionFailed:
+        except (IntegrityError, PreconditionFailed):
             return {'error': 'Email 已被使用。'}, 403
         user_profile = UserProfile.objects.create(user=user, nickname=nickname)
         if campus_id:
