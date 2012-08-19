@@ -28,7 +28,7 @@ class WeiboBackend(object):
 
     def authenticate(self, weibo_token=None):
         if weibo_token:
-            weibo_id, screen_name = get_renren_profile(weibo_token)
+            weibo_id, screen_name = get_weibo_profile(weibo_token)
 
             try:
                 user_profile = UserProfile.objects.get(weibo_id=weibo_id)

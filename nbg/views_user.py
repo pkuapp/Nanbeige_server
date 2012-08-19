@@ -291,8 +291,8 @@ def reg_weibo(request):
             user = User.objects.create_user(username='-weibo-{0}'.format(weibo_id), password=token)
         except IntegrityError:
             return {'error': '微博帐号已被使用。'}, 403
-        UserProfile.objects.create(user=user, weibo_id=weibo_id,\
-            nickname=nickname, weibo_name=screen_name)
+        UserProfile.objects.create(user=user, weibo_id=weibo_id,
+          nickname=nickname, weibo_name=screen_name)
 
         user = auth.authenticate(weibo_token=token)
         auth.login(request, user)
@@ -326,8 +326,8 @@ def reg_renren(request):
             user = User.objects.create_user(username='-renren-{0}'.format(renren_id), password=token)
         except IntegrityError:
             return {'error': '人人帐号已被使用。'}, 403
-        UserProfile.objects.create(user=user, renren_id=renren_id,\
-            nickname=nickname, renren_name=name)
+        UserProfile.objects.create(user=user, renren_id=renren_id,
+          nickname=nickname, renren_name=name)
 
         user = auth.authenticate(renren_token=token)
         auth.login(request, user)
