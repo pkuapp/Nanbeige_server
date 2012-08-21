@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from couchdb.http import PreconditionFailed
 from urllib2 import HTTPError
-from nbg.models import UserProfile, Campus, userdb, server
+from nbg.models import UserProfile, UserAction, Campus, userdb, server
 from nbg.helpers import json_response, auth_required
 from sns.verifiers import VerifyError, get_weibo_profile, get_renren_profile
 
@@ -71,6 +71,8 @@ def login_email(request):
                 'id': user.pk,
                 'email': user.email,
                 'nickname': user_profile.nickname,
+                'course_imported': [action.semester.pk for action in
+                  user.useraction_set.filter(action_type=UserAction.COURSE_IMPORTED)],
             }
 
             user_profile.weibo_id and response.update({'weibo_id': user_profile.weibo_id}) 
@@ -132,6 +134,8 @@ def login_weibo(request):
                 'nickname': user_profile.nickname,
                 'weibo_id': weibo_id,
                 'weibo_name': weibo_name,
+                'course_imported': [action.semester.pk for action in
+                  user.useraction_set.filter(action_type=UserAction.COURSE_IMPORTED)],
             }
 
             if not user_profile.weibo_id or not user_profile.weibo_name:
@@ -196,6 +200,8 @@ def login_renren(request):
                 'nickname': user_profile.nickname,
                 'renren_id': renren_id,
                 'renren_name': name,
+                'course_imported': [action.semester.pk for action in
+                  user.useraction_set.filter(action_type=UserAction.COURSE_IMPORTED)],
             }
 
             if not user_profile.renren_id or not user_profile.renren_name:

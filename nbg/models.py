@@ -120,7 +120,8 @@ class UserProfile(models.Model):
         return u'#%s (#%s %s)' % (self.id, self.user.id, self.user.username)
 
 class UserAction(models.Model):
-    ACTION_CHOICES = ((0, 'courses_imported'),)
+    COURSE_IMPORTED = 0
+    ACTION_CHOICES = ((COURSE_IMPORTED, 'Course Imported'),)
     user = models.ForeignKey(User)
     semester = models.ForeignKey(Semester)
     time = models.DateTimeField(auto_now_add=True)

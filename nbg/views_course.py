@@ -2,7 +2,7 @@
 
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
-from nbg.models import Course, Assignment, Comment, Lesson, Semester
+from nbg.models import Course, Assignment, Comment, Lesson, Semester, UserAction
 from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db
 from spider.grabbers.grabber_base import LoginError
 from spider.grabbers.helpers import pretty_format
@@ -243,6 +243,7 @@ def course_grab_start(request):
                 else:
                     course = add_to_db(c, semester)
                     request.user.get_profile().courses.add(course)
+            UserAction.objects.create(user=request.user, semester=semester, action_type=UserAction.COURSE_IMPORTED)
             return 0
         except LoginError as e:
             if e.error == "auth":
