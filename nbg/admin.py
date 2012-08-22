@@ -14,11 +14,14 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ['name']
     list_display = ('id', 'semester', 'original_id', 'name', 'teacher', 'lessons')
 
+class UserProfileAdmin(admin.ModelAdmin):
+    raw_id_fields = ('courses',)
+
 admin.site.register(App)
 admin.site.register(University)
 admin.site.register(Campus)
 admin.site.register(Semester)
-admin.site.register(UserProfile)
+admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(ScheduleUnit)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Lesson)
