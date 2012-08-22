@@ -34,6 +34,7 @@ def detail(request, offset):
         'support': {
             'import_course': university.support_import_course,
             'list_course': university.support_list_course,
+            'ta': university.support_ta,
         },
         'lessons': {
             'count': {
