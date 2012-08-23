@@ -5,6 +5,7 @@ import requests
 import os.path
 import re
 import string
+import getpass
 from bs4 import BeautifulSoup, SoupStrainer
 from helpers import pretty_print, pretty_format, chinese_weekdays, list_to_comma_separated
 from grabber_base import BaseParser, LoginError
@@ -16,14 +17,36 @@ class TeapotParser(BaseParser):
         super(TeapotParser, self).__init__()
         self.require_captcha = True
         self.available = True
-        self.url_prefix = "https://portal.ruc.edu.cn/"
+        self.semester_id = 7
+        self.url_prefix = "http://portal.ruc.edu.cn/"
+        self.url_prefix_s = "https://portal.ruc.edu.cn/"
         self.charset = "gbk"
 
     def _fetch_img(self):
-        url_captcha = self.url_prefix + "cas/Captcha.jpg"
+        url_captcha = self.url_prefix_s + "cas/Captcha.jpg"
         r = requests.get(url_captcha, verify=False)
         self.captcha_img = r.content
         self.cookies = r.cookies
+
+    def _local_setup(self):
+        self._fetch_img()
+        with open(os.path.join(os.path.dirname(__file__), 'img.jpg'), 'w') as img:
+            img.write(self.captcha_img)
+
+        captcha = raw_input("Captcha: ")
+        username = raw_input("Username: ")
+        password = getpass.getpass('Password: ')
+
+        self.setUp(username=username, password=password, captcha=captcha)
+
+    def test(self):
+        try:
+            response = self.run()
+        except LoginError as e:
+            print e.error
+        else:
+            with open(os.path.join(os.path.dirname(__file__), 'log.html'), 'w') as log:
+                log.write(response)
 
     def get_lessons(self, time_and_location_texts):
         lessons = []
@@ -48,6 +71,7 @@ class TeapotParser(BaseParser):
         return lessons
 
     def grab_all(self):
+        self.next_url = 'http://portal.ruc.edu.cn/cas/login?service=http%3A%2F%2Fportal.ruc.edu.cn%2Fidc%2Feducation%2Fselectcourses%2Fresultquery%2FResultQueryAction.do%3Fmethod%3DforwardAllQueryXkjg'
         self._login()
 
         test = requests.post(self.next_url, cookies=self.cookies, verify=False)
@@ -109,16 +133,7 @@ class TeapotParser(BaseParser):
         print "Done! Totally exported {} courses.".format(total_courses)
 
     def _login(self):
-        self.username = '2009201243'
-        self.password = 'alleluia_11'
-
-        self._fetch_img()
-        with open(os.path.join(os.path.dirname(__file__), 'img.jpg'), 'w') as img:
-            img.write(self.captcha_img)
-        captcha = raw_input("Captcha: ")
-        self.captcha = captcha
-
-        url_login = 'http://portal.ruc.edu.cn/cas/login?service=http%3A%2F%2Fportal.ruc.edu.cn%2Fidc%2Feducation%2Fselectcourses%2Fresultquery%2FResultQueryAction.do%3Fmethod%3DforwardAllQueryXkjg'
+        url_login = self.next_url
 
         page_login = requests.get(url_login, cookies=self.cookies, verify=False)
         result = re.search('<input type="hidden" name="lt" value="(.+)" />', page_login.content)
@@ -146,6 +161,24 @@ class TeapotParser(BaseParser):
         print "Logged in successfully."
         self.cookies = r_login.cookies
 
+    def run(self):
+        self.next_url = 'http://portal.ruc.edu.cn/cas/login?service=http%3A%2F%2Fportal.ruc.edu.cn%2Fidc%2Feducation%2Fselectcourses%2Fschedulequery%2FScheduleQueryAction.do%3Fmethod%3DstudentSchedule'
+        self._login()
+
+        url_course = self.next_url
+        data = {
+            'method': 'studentSchedule',
+            'condition_xh': self.username,
+            'condition_xnd': '2012-2013',
+            'condition_xq': '1',
+        }
+        r_course = requests.get(url_course, data=data, cookies=self.cookies)
+        print r_course.content.decode('gbk')
+
+        print "Grabbed successfully."
+
 if __name__ == "__main__":
     grabber = TeapotParser()
-    grabber.grab_all()
+    grabber._local_setup()
+    grabber.test()
+    # grabber.grab_all()
