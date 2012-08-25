@@ -72,15 +72,11 @@ class Campus(models.Model):
         return u'#%s %s%s' % (self.id, self.university.name, self.name)
 
 class Semester(models.Model):
-    """
-        excluded: 不同学校的公共假期或考试周等无课时间
-    """
     name = models.CharField(max_length=100)
     year = models.CharField(max_length=50)
     university = models.ForeignKey(University)
     week_start = models.DateField()
     week_end = models.DateField()
-    excluded = models.CommaSeparatedIntegerField(max_length=100, blank=True)
 
     def __unicode__(self):
         return  u'#%s %s - %s' % (self.id, self.university.name, self.name)

@@ -66,8 +66,7 @@ def semester(request, offset):
         'year': semester.year,
         'week': {
             'start': semester.week_start.isoformat(),
-            'end': semester.week_end.isoformat(),
-            'excluded': listify_int(semester.excluded)
-        }
+            'end': semester.week_end.isoformat()
+        },
     } for semester in semesters]
     return response
