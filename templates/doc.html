@@ -545,6 +545,30 @@ td:last-child {
   <td align="left">返回 <code>id</code> 大学的学期列表。</td>
 </tr>
 
+<tr>
+  <td align="left">/:id/weekset/</td>
+  <td align="left"><code>GET</code></td>
+  <td align="left">none</td>
+  <td align="left"><pre>[
+  {
+    "id": 1,
+    "name": "秋学期每周",
+    "weeks": [1, 2, 3, 5, 6, 7, 8, 9]
+  },
+  {
+    "id": 2,
+    "name": "秋学期单周",
+    "weeks": [1, 3, 5, 7]
+  },
+  {
+    "id": 3,
+    "name": "秋学期双周",
+    "weeks": [2, 6, 8, 9]
+  }
+]</pre></td>
+  <td align="left">返回 <code>id</code> 大学的周次集列表。</td>
+</tr>
+
 </tbody>
 </table>
 
@@ -593,16 +617,15 @@ td:last-child {
         "start": 1,
         "end": 2,
         "location": "牛街清真寺广场",
-        "weeks": [1, 3, 5, 7, 9, 11, 13, 15, 17]
+        "weekset": 1
       },
       {
         "day": 1,
         "start": 1,
         "end": 5,
         "location": "张塔家中",
-        "weeks": [1, 2, 3, 4, 5, 6, 7, 8]
-      },
-      ...
+        "weekset": 2
+      }
     ]
   },
   ...
