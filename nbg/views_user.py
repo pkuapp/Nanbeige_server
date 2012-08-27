@@ -280,7 +280,7 @@ def reg_weibo(request):
 
     if token and nickname:
         try:
-            weibo_id, screen_name = get_weibo_profile(token)
+            weibo_id, weibo_name = get_weibo_profile(token)
         except HTTPError:
             return {
                 'error_code': "ErrorConnectingWeiboServer",
@@ -292,13 +292,16 @@ def reg_weibo(request):
                 'error': "微博 token 错误。"
             }, 403
 
-        try:
-            # this password is not used for auth
-            user = User.objects.create_user(username='-weibo-{0}'.format(weibo_id), password=token)
-        except IntegrityError:
-            return {'error': '微博帐号已被使用。'}, 403
+        if UserProfile.objects.filter(weibo_id=weibo_id).exists():
+            return {
+                'error_code': "TokenAlreadyUsed",
+                'error': "微博帐号已被使用。",
+            }, 403
+        # this password is not used for auth
+        user = User.objects.create_user(username='-weibo-{0}'.format(weibo_id), password=token)
+
         UserProfile.objects.create(user=user, weibo_id=weibo_id,
-          nickname=nickname, weibo_name=screen_name)
+          nickname=nickname, weibo_name=weibo_name)
 
         user = auth.authenticate(weibo_token=token)
         auth.login(request, user)
@@ -382,8 +385,8 @@ def edit(request):
         if weibo_id != user_profile.weibo_id and UserProfile.objects.filter(weibo_id=weibo_id).exists():
             return {
                 'error_code': "TokenAlreadyUsed",
-                'error': "该微博帐号已绑定至其他用户。",
-            }
+                'error': "微博帐号已被使用。",
+            }, 403
         user_profile.weibo_id = weibo_id
         user_profile.weibo_name = weibo_name
 
