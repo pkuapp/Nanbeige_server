@@ -4,7 +4,7 @@ from django.views.decorators.http import require_http_methods
 from datetime import datetime
 from nbg.models import Course, Assignment, Comment, Lesson, Semester, UserAction
 from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db
-from spider.grabbers.grabber_base import LoginError
+from spider.grabbers.grabber_base import LoginError, GrabError
 from spider.grabbers.helpers import pretty_format
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -252,6 +252,11 @@ def course_grab_start(request):
                 return {'error_code': 'CaptchaError'}
             else:
                 return {'error_code': 'UnknownLoginError'}
+        except GrabError as e:
+            return {
+                'error_code': 'GrabError',
+                'error': e.error,
+            }
     else:
         return {'error': '导入课程无法启动或抓取器已过期。'}, 503
 

@@ -7,7 +7,7 @@ import re
 import string
 from bs4 import BeautifulSoup, SoupStrainer
 from helpers import pretty_print, pretty_format, chinese_weekdays, list_to_comma_separated
-from grabber_base import BaseParser, LoginError
+from grabber_base import BaseParser, LoginError, GrabError
 
 class TeapotParser(BaseParser):
     """Parser for Zhejiang University.
@@ -69,6 +69,8 @@ class TeapotParser(BaseParser):
             response = self.run()
         except LoginError as e:
             print e.error
+        except:
+            raise
         else:
             with open(os.path.join(os.path.dirname(__file__), 'log.html'), 'w') as log:
                 log.write(response)
@@ -277,6 +279,8 @@ class TeapotParser(BaseParser):
         r_course = requests.get(url_course, cookies=self.cookies)
 
         '''parse'''
+        if u"调查问卷".encode(self.charset) in r_course.content:
+            raise GrabError("无法抓取您的课程，请先填写教务网调查问卷。")
         strainer = SoupStrainer("table", id="xsgrid")
         soup = BeautifulSoup(r_course.content, parse_only=strainer)
         rows = soup.select("tr")
@@ -300,9 +304,9 @@ class TeapotParser(BaseParser):
             }
             courses.append(course)
         self.courses = courses
-        print "Grabbed successfully."
+        return pretty_format(courses)
 
 if __name__ == "__main__":
     grabber = TeapotParser()
-    # grabber.test()
-    grabber.grab_all()
+    grabber.test()
+    # grabber.grab_all()

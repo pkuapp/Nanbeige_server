@@ -679,7 +679,11 @@ td:last-child {
     <pre>{"semester_id": 5}</pre>
     <pre>{"error_code": "AuthError"}</pre>
     <pre>{"error_code": "CaptchaError"}</pre>
-    <pre>{"error_code": "UnknownError"}</pre>
+    <pre>{"error_code": "UnknownLoginError"}</pre>
+    <pre>{
+  "error_code": "GrabError",
+  "error": "无法抓取您的课程，请先填写教务网调查问卷。"
+}</pre>
   </td>
   <td align="left">启动课程抓取器，若抓取成功返回 semester_id。</td>
 </tr>

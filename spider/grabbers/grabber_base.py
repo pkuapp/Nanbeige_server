@@ -4,13 +4,22 @@ import os.path
 import getpass
 
 class LoginError(Exception):
-    '''raise VerifyError if token is invalid.
+    '''raise LoginError if error occurs in login process.
     '''
     def __init__(self, error):
         self.error = error
 
     def __str__(self):
         return 'LoginError: {}'.format(self.error)
+
+class GrabError(Exception):
+    '''raise GrabError if error occurs in grab process.
+    '''
+    def __init__(self, error):
+        self.error = error
+
+    def __str__(self):
+        return 'GrabError: {}'.format(self.error)
 
 class BaseParser(object):
     """All your grabber are belong to us.
@@ -54,7 +63,7 @@ class BaseParser(object):
 
     def _local_setup(self):
         self._fetch_img()
-        with open(os.path.join(os.path.dirname(__file__), 'img.txt'), 'w') as img:
+        with open(os.path.join(os.path.dirname(__file__), 'img.gif'), 'w') as img:
             img.write(self.captcha_img)
 
         captcha = raw_input("Captcha: ")
