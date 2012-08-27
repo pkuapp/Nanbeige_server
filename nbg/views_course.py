@@ -244,7 +244,7 @@ def course_grab_start(request):
                     course = add_to_db(c, semester)
                     request.user.get_profile().courses.add(course)
             UserAction.objects.create(user=request.user, semester=semester, action_type=UserAction.COURSE_IMPORTED)
-            return 0
+            return {'semester_id': grabber.semester_id}
         except LoginError as e:
             if e.error == "auth":
                 return {'error_code': 'AuthError'}
