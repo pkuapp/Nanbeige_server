@@ -17,6 +17,9 @@ class CourseAdmin(admin.ModelAdmin):
 class UserProfileAdmin(admin.ModelAdmin):
     raw_id_fields = ('courses',)
 
+class UserActionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'semester', 'action_type')
+
 admin.site.register(App)
 admin.site.register(University)
 admin.site.register(Campus)
@@ -24,7 +27,7 @@ admin.site.register(Semester)
 admin.site.register(ScheduleUnit)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
-admin.site.register(UserAction)
+admin.site.register(UserAction, UserActionAdmin)
 admin.site.register(Lesson)
 admin.site.register(Assignment)
 admin.site.register(Comment)
