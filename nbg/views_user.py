@@ -352,7 +352,7 @@ def edit(request):
     """
     # password = request.POST.get('password', None)
     nickname = request.POST.get('nickname', None)
-    # weibo_token = request.POST.get('weibo_token', None)
+    weibo_token = request.POST.get('weibo_token', None)
     campus_id = request.POST.get('campus_id', None)
     campus_none = request.POST.get('campus_none', None)
 
@@ -365,8 +365,27 @@ def edit(request):
     if nickname:
         user_profile.nickname = nickname
 
-    # if weibo_token:
-    #     user_profile.weibo_token = weibo_token
+    if weibo_token:
+        user_profile.weibo_token = weibo_token
+        try:
+            weibo_id, weibo_name = get_weibo_profile(weibo_token)
+        except HTTPError:
+            return {
+                'error_code': "ErrorConnectingWeiboServer",
+                'error': "连接微博服务器时发生错误。",
+            }, 503
+        except VerifyError:
+            return {
+                'error_code': "InvalidToken",
+                'error': "微博 token 错误。",
+            }, 403
+        if weibo_id != user_profile.weibo_id and UserProfile.objects.filter(weibo_id=weibo_id).exists():
+            return {
+                'error_code': "TokenAlreadyUsed",
+                'error': "该微博帐号已绑定至其他用户。",
+            }
+        user_profile.weibo_id = weibo_id
+        user_profile.weibo_name = weibo_name
 
     if campus_id:
         try:
