@@ -62,6 +62,15 @@ class University(models.Model):
     def __unicode__(self):
         return u'#%s %s' % (self.id, self.name)
 
+class ScheduleUnit(models.Model):
+    number = models.SmallIntegerField()
+    start = models.TimeField()
+    end = models.TimeField()
+    university = models.ForeignKey(University)
+
+    def __unicode__(self):
+        return u'#%s %s - 第%s节' % (self.id, self.university.name, self.number)
+
 class Campus(models.Model):
     name = models.CharField(max_length=100, blank=True)
     university = models.ForeignKey(University)
@@ -81,14 +90,9 @@ class Semester(models.Model):
     def __unicode__(self):
         return  u'#%s %s - %s' % (self.id, self.university.name, self.name)
 
-class ScheduleUnit(models.Model):
-    number = models.SmallIntegerField()
-    start = models.TimeField()
-    end = models.TimeField()
-    university = models.ForeignKey(University)
-
-    def __unicode__(self):
-        return u'#%s %s - 第%s节' % (self.id, self.university.name, self.number)
+class Weekset(models.Model):
+    name = models.CharField(max_length=100)
+    weeks = models.CommaSeparatedIntegerField(max_length=200)
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
@@ -129,6 +133,7 @@ class Lesson(models.Model):
     day = models.SmallIntegerField()
     start = models.SmallIntegerField()
     end = models.SmallIntegerField()
+    weekset = models.ForeignKey(Weekset, null=True)
     weeks = models.CommaSeparatedIntegerField(max_length=200)
     location = models.CharField(max_length=200)
     course = models.ForeignKey(Course)

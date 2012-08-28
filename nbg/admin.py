@@ -22,9 +22,10 @@ class UserActionAdmin(admin.ModelAdmin):
 
 admin.site.register(App)
 admin.site.register(University)
+admin.site.register(ScheduleUnit)
 admin.site.register(Campus)
 admin.site.register(Semester)
-admin.site.register(ScheduleUnit)
+admin.site.register(Weekset)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(UserAction, UserActionAdmin)
