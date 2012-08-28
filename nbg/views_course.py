@@ -26,7 +26,7 @@ def course_list(request):
             'start': lesson.start,
             'end': lesson.end,
             'location': lesson.location,
-            'week': listify_int(lesson.weeks),
+            'weekset_id': lesson.weekset,
         } for lesson in item.lesson_set.all()]
     } for item in course_objs]
     return response

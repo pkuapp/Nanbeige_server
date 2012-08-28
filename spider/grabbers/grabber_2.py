@@ -231,9 +231,12 @@ class TeapotParser(BaseParser):
 
             print "#{} {}: {} courses.".format(i, college.encode("utf8"), len(courses))
             total_courses += len(courses)
-            with open(os.path.join(os.path.dirname(__file__), 'zju/{}.yaml').format(i), 'w') as yaml_file:
+            output_dir = os.path.join(os.path.dirname(__file__), 'zju')
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            with open(os.path.join(output_dir, str(i) + '.yaml'), 'w') as yaml_file:
                 yaml_file.write(pretty_format(courses))
-            # with open(os.path.join(os.path.dirname(__file__), 'zju/html/{}.html').format(i), 'w') as html_file:
+            # with open(os.path.join(output_dir, str(i) + '.html'), 'w') as html_file:
             #     html_file.write(soup_courses.prettify().encode("utf8"))
         print "Done! Totally exported {} courses.".format(total_courses)
 
@@ -307,5 +310,5 @@ class TeapotParser(BaseParser):
 
 if __name__ == "__main__":
     grabber = TeapotParser()
-    grabber.test()
-    # grabber.grab_all()
+    # grabber.test()
+    grabber.grab_all()
