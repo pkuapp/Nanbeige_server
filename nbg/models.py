@@ -88,17 +88,20 @@ class Semester(models.Model):
     week_end = models.DateField()
 
     def __unicode__(self):
-        return  u'#%s %s - %s' % (self.id, self.university.name, self.name)
+        return u'#%s %s - %s' % (self.id, self.university.name, self.name)
 
 class Weekset(models.Model):
     name = models.CharField(max_length=100)
     weeks = models.CommaSeparatedIntegerField(max_length=200, blank=True)
     semester = models.ForeignKey(Semester)
 
+    def __unicode__(self):
+        return self.name
+
 class Course(models.Model):
     name = models.CharField(max_length=200)
     original_id = models.CharField(max_length=100)
-    credit = models.DecimalField(max_digits=3, decimal_places=1)
+    credit = models.DecimalField(max_digits=3, decimal_places=1, null=True)
     semester = models.ForeignKey(Semester)
     teacher = models.CharField(max_length=200, blank=True)
     ta = models.CharField(max_length=200, blank=True)

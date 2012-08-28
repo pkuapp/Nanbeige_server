@@ -4,13 +4,13 @@ from django.contrib import admin
 from nbg.models import *
 
 class WeeksetAdmin(admin.ModelAdmin):
-    list_display = ('name', 'semester', 'weeks')
+    list_display = ('id', 'name', 'semester', 'weeks')
 
 class CourseAdmin(admin.ModelAdmin):
     def lessons(self, course):
         ret = ""
         for l in course.lesson_set.all():
-            ret += u"周{day} {start}-{end} {weekset} {location}; ".format(
+            ret += "周{day} {start}-{end} {weekset} {location}; ".format(
               day=l.day, start=l.start, end=l.end, weekset=l.weekset, location=l.location.encode('utf8'))
         return ret
 

@@ -89,14 +89,14 @@ class BaseParser(object):
               "start": 1,
               "end": 2,
               "location": "牛街清真寺广场",
-              "weeks": "1,3,5,7,9,11,13,15,17",
+              "weekset_id": 9,
             },
             {
               "day": 1,
               "start": 1,
               "end": 5,
               "location": "张塔家中",
-              "weeks": "1,2,3,4,5,6,7,8",
+              "weekset_id": 10,
             },
           ],
         }

@@ -20,29 +20,28 @@ class TeapotParser(BaseParser):
         self.url_prefix = "http://jwbinfosys.zju.edu.cn/"
         self.charset = "gbk"
 
-        '''data for 2012-2013, should be updated every year
-        first week: 2012-09-10
+        '''weekset data ONLY FOR SEMESTER 5, should be updated every semester
         '''
         self.week_data = {
             u"短": {
-                "odd":  [],
-                "even": [],
-                "all":  [],
+                "odd":  1,
+                "even": 1,
+                "all":  1,
             },
             u"秋": {
-                "odd":  [1, 3, 5, 7],
-                "even": [2, 6, 8, 9],
-                "all":  [1, 2, 3, 5, 6, 7, 8, 9],
+                "odd":  2,
+                "even": 3,
+                "all":  4,
             },
             u"冬": {
-                "odd":  [11, 13, 15, 17],
-                "even": [12, 14, 16, 18],
-                "all":  [11, 12, 13, 14, 15, 16, 17, 18],
+                "odd":  5,
+                "even": 6,
+                "all":  7,
             },
             u"秋冬": {
-                "odd":  [1, 3, 5, 7, 11, 13, 15, 17],
-                "even": [2, 6, 8, 9, 12, 14, 16, 18],
-                "all":  [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18],
+                "odd":  8,
+                "even": 9,
+                "all":  10,
             },
         }
 
@@ -115,9 +114,9 @@ class TeapotParser(BaseParser):
             '''sometimes, lesson has its own semester text'''
             semester = self.get_semester_from_time(time_text)
             if semester:
-                weeks = list_to_comma_separated(self.week_data[semester][odd_or_even])
+                weekset_id = self.week_data[semester][odd_or_even]
             else:
-                weeks = list_to_comma_separated(self.week_data[semester_text][odd_or_even])
+                weekset_id = self.week_data[semester_text][odd_or_even]
 
             number = re.findall("\d{1,2}", time_text[3:])
             if time_text:
@@ -126,7 +125,7 @@ class TeapotParser(BaseParser):
                     'day': chinese_weekdays[weekday],
                     'start': int(number[0]),
                     'end': int(number[-1]),
-                    'weeks': weeks,
+                    'weekset_id': weekset_id,
                 })
             else:
                 lessons.append({})
