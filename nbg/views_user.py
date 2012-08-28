@@ -41,7 +41,7 @@ def sync_credentials_to_couchdb(user, username, password_or_token):
         }
     if not username in security['readers']['names']:
         security['readers']['names'].append(username)
-        db.resource.put_json('_security',body=security)
+        db.resource.put_json('_security', body=security)
 
 @auth_required
 @json_response
@@ -75,8 +75,14 @@ def login_email(request):
                   user.useraction_set.filter(action_type=UserAction.COURSE_IMPORTED)],
             }
 
-            user_profile.weibo_id and response.update({'weibo_id': user_profile.weibo_id}) 
-            user_profile.weibo_name and response.update({'weibo_name': user_profile.weibo_name})
+            if user_profile.weibo_id:
+               response.update({
+                   'weibo': {
+                       'id': user_profile.weibo_id,
+                       'name': user_profile.weibo_name,
+                       'token': user_profile.weibo_token,
+                    },
+                })
 
             campus = user_profile.campus
             if campus:
@@ -88,7 +94,7 @@ def login_email(request):
                     'campus': {
                         'id': campus.pk,
                         'name': campus.name
-                    }
+                    },
                 })
         else:
             response = {
@@ -132,17 +138,18 @@ def login_weibo(request):
                 'id': user.pk,
                 'email': user.email,
                 'nickname': user_profile.nickname,
-                'weibo_id': weibo_id,
-                'weibo_name': weibo_name,
                 'course_imported': [action.semester.pk for action in
                   user.useraction_set.filter(action_type=UserAction.COURSE_IMPORTED)],
             }
 
-            if not user_profile.weibo_id or not user_profile.weibo_name:
-                user_profile.weibo_id = weibo_id
+            if user_profile.weibo_token != weibo_token:
+                user_profile.weibo_token = weibo_token
+                user_profile.save()
+
+            if user_profile.weibo_name != weibo_name:
                 user_profile.weibo_name = weibo_name
                 user_profile.save()
-            
+
             campus = user_profile.campus
             if campus:
                 response.update({
@@ -300,8 +307,8 @@ def reg_weibo(request):
         # this password is not used for auth
         user = User.objects.create_user(username='-weibo-{0}'.format(weibo_id), password=token)
 
-        UserProfile.objects.create(user=user, weibo_id=weibo_id,
-          nickname=nickname, weibo_name=weibo_name)
+        UserProfile.objects.create(user=user, nickname=nickname,
+          weibo_id=weibo_id, weibo_name=weibo_name, weibo_token=token)
 
         user = auth.authenticate(weibo_token=token)
         auth.login(request, user)
@@ -369,7 +376,6 @@ def edit(request):
         user_profile.nickname = nickname
 
     if weibo_token:
-        user_profile.weibo_token = weibo_token
         try:
             weibo_id, weibo_name = get_weibo_profile(weibo_token)
         except HTTPError:
@@ -389,6 +395,7 @@ def edit(request):
             }, 403
         user_profile.weibo_id = weibo_id
         user_profile.weibo_name = weibo_name
+        user_profile.weibo_token = weibo_token
 
     if campus_id:
         try:

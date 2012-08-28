@@ -2,10 +2,9 @@
 
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
-from nbg.models import Course, Assignment, Comment, Lesson, Semester, UserAction
+from nbg.models import Course, Assignment, Comment, Semester, UserAction
 from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db
 from spider.grabbers.grabber_base import LoginError, GrabError
-from spider.grabbers.helpers import pretty_format
 from django.core.cache import cache
 from django.http import HttpResponse
 
