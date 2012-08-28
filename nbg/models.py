@@ -93,6 +93,7 @@ class Semester(models.Model):
 class Weekset(models.Model):
     name = models.CharField(max_length=100)
     weeks = models.CommaSeparatedIntegerField(max_length=200)
+    semester = models.ForeignKey(Semester)
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
@@ -134,7 +135,6 @@ class Lesson(models.Model):
     start = models.SmallIntegerField()
     end = models.SmallIntegerField()
     weekset = models.ForeignKey(Weekset, null=True)
-    weeks = models.CommaSeparatedIntegerField(max_length=200)
     location = models.CharField(max_length=200)
     course = models.ForeignKey(Course)
 
