@@ -26,6 +26,7 @@ def building_list(request):
 
 @json_response
 def room_list(request, offset):
+    # TODO: need optimizaiton
     building_id = int(offset)
     date = request.GET.get('date', datetime_date.today())
 

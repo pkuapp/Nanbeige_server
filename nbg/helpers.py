@@ -35,8 +35,14 @@ def json_response(func):
 def append_query(func):
     def inner(request=None, *args, **kwargs):
         response = func(request, *args, **kwargs)
-        response.append(connection.queries)
-        response.append(len(connection.queries))
+        if isinstance(response, dict):
+            response.update({
+                'queries': connection.queries,
+                'queries_count': len(connection.queries),
+            })
+        elif isinstance(response, list):
+            response.append(connection.queries)
+            response.append(len(connection.queries))
         return response
     return inner
 
