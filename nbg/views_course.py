@@ -12,23 +12,24 @@ from django.http import HttpResponse
 @json_response
 def course_list(request):
     user = request.user
-    course_objs = user.get_profile().courses.all()
+    course_statuses = user.get_profile().coursestatus_set.all()
     response = [{
-        'id': item.pk,
-        'orig_id': item.original_id,
-        'name': item.name,
-        'credit': float(item.credit),
-        'teacher': listify_str(item.teacher),
-        'ta': listify_str(item.ta),
-        'semester_id': item.semester.pk,
+        'id': course_status.course.pk,
+        'status': CourseStatus.STATUS_CHOICES[course_status.status][1],
+        'orig_id': course_status.course.original_id,
+        'name': course_status.course.name,
+        'credit': float(course_status.course.credit),
+        'teacher': listify_str(course_status.course.teacher),
+        'ta': listify_str(course_status.course.ta),
+        'semester_id': course_status.course.semester.pk,
         'lessons': [{
             'day': lesson.day,
             'start': lesson.start,
             'end': lesson.end,
             'location': lesson.location,
             'weekset_id': lesson.weekset.pk,
-        } for lesson in item.lesson_set.all()]
-    } for item in course_objs]
+        } for lesson in course_status.course.lesson_set.all()]
+    } for course_status in course_statuses]
     return response
 
 @auth_required
@@ -271,11 +272,10 @@ def course_grab_start(request):
             semester = Semester.objects.get(pk=grabber.semester_id)
             for c in grabber.courses:
                 course = find_in_db(c)
-                if course:
-                    request.user.get_profile().courses.add(course)
-                else:
+                if not course:
                     course = add_to_db(c, semester)
-                    request.user.get_profile().courses.add(course)
+                CourseStatus.objects.create(user_profile=request.user.get_profile(),
+                  course=course, status=CourseStatus.SELECT)
             UserAction.objects.create(user=request.user, semester=semester, action_type=UserAction.COURSE_IMPORTED)
             return {'semester_id': grabber.semester_id}
         except LoginError as e:

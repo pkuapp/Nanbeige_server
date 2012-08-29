@@ -128,7 +128,7 @@ class UserProfile(models.Model):
 class CourseStatus(models.Model):
     SELECT = 0
     AUDIT = 1
-    STATUS_CHOICES = ((SELECT, 'Select'), (AUDIT, 'Audit'))
+    STATUS_CHOICES = ((SELECT, 'select'), (AUDIT, 'audit'))
     user_profile = models.ForeignKey(UserProfile)
     course = models.ForeignKey(Course)
     status = models.IntegerField(choices=STATUS_CHOICES)
