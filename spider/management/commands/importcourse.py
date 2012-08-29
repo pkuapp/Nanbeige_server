@@ -39,4 +39,4 @@ class Command(BaseCommand):
                 add_to_db(c, semester)
             total += count
             self.stdout.write('{filename}: {count} courses successfully imported.\n'.format(filename=file_i, count=count))
-        self.stdout.write('Total: {0} courses imported.'.format(total))
+        self.stdout.write('Total: {0} courses imported.\n'.format(total))

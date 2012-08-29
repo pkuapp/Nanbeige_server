@@ -693,7 +693,7 @@ td:last-child {
   <td align="left">启动课程抓取器，若抓取成功返回 semester_id。</td>
 </tr>
 
-<tr>
+<!--<tr>
   <td align="left">/assignment/</td>
   <td align="left"><code>GET*</code></td>
   <td align="left">none</td>
@@ -793,6 +793,22 @@ td:last-child {
 }</pre>
   </td>
   <td align="left">添加一项作业，返回添加的作业 id。</td>
+</tr>-->
+
+<tr>
+  <td align="left">/:id/edit/</td>
+  <td align="left"><code>POST*</code></td>
+  <td align="left">
+    <ul>
+      <li><code class="optional">str</code> status</li>
+    </ul>
+  </td>
+  <td align="left">
+    <ul>
+      <li><code>0</code> success</li>
+    </ul>
+  </td>
+  <td align="left">修改用户对 id 课程的选课情况。<code>status</code> 的取值可以是 select、audit 和 none。</td>
 </tr>
 
 <tr>

@@ -119,11 +119,19 @@ class UserProfile(models.Model):
     renren_name = models.CharField(max_length=100, blank=True)
     nickname = models.CharField(max_length=100, blank=True)
     realname = models.CharField(max_length=100, blank=True)
-    courses = models.ManyToManyField(Course, blank=True)
+    courses = models.ManyToManyField(Course, blank=True, through='CourseStatus')
     campus = models.ForeignKey(Campus, null=True)
 
     def __unicode__(self):
         return u'#%s (#%s %s)' % (self.id, self.user.id, self.user.username)
+
+class CourseStatus(models.Model):
+    SELECT = 0
+    AUDIT = 1
+    STATUS_CHOICES = ((SELECT, 'Select'), (AUDIT, 'Audit'))
+    user_profile = models.ForeignKey(UserProfile)
+    course = models.ForeignKey(Course)
+    status = models.IntegerField(choices=STATUS_CHOICES)
 
 class UserAction(models.Model):
     COURSE_IMPORTED = 0

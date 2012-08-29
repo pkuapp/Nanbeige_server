@@ -17,8 +17,15 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ['name']
     list_display = ('id', 'semester', 'original_id', 'name', 'teacher', 'lessons')
 
+class CourseStatusInline(admin.TabularInline):
+    model = CourseStatus
+    raw_id_fields = ("course",)
+
 class UserProfileAdmin(admin.ModelAdmin):
-    raw_id_fields = ('courses',)
+    inlines = (CourseStatusInline,)
+
+class CourseStatusAdmin(admin.ModelAdmin):
+    list_display = ('user_profile', 'course', 'status')
 
 class UserActionAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'semester', 'action_type')
@@ -31,6 +38,7 @@ admin.site.register(Semester)
 admin.site.register(Weekset, WeeksetAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(CourseStatus, CourseStatusAdmin)
 admin.site.register(UserAction, UserActionAdmin)
 admin.site.register(Lesson)
 admin.site.register(Assignment)

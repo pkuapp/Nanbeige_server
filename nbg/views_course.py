@@ -2,8 +2,8 @@
 
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
-from nbg.models import Course, Assignment, Comment, Semester, UserAction
-from nbg.helpers import listify_int, listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db
+from nbg.models import Course, Assignment, Comment, Semester, UserAction, CourseStatus
+from nbg.helpers import listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db
 from spider.grabbers.grabber_base import LoginError, GrabError
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -162,6 +162,41 @@ def assignment_add(request):
 @require_http_methods(['POST'])
 @auth_required
 @json_response
+def edit(request, offset):
+    course_id = int(offset)
+    status = request.POST.get('status', None)
+
+    try:
+        course = Course.objects.get(pk=course_id)
+    except Course.DoesNotExist:
+        return {'error_code': 'CourseNotFound'}, 404
+
+    if status not in ('select', 'audit', 'none'):
+        return {'error_code': 'SyntaxError'}, 400
+
+    user_profile = request.user.get_profile()
+
+    if status == 'select' or status == 'audit':
+        if status == 'select':
+            status_value = CourseStatus.SELECT
+        elif status == 'audit':
+            status_value = CourseStatus.AUDIT
+
+        try:
+            course_status = CourseStatus.objects.get(user_profile=user_profile, course=course)
+        except CourseStatus.DoesNotExist:
+            CourseStatus.objects.create(user_profile=user_profile, course=course, status=status_value)
+        else:
+            course_status.status = status_value
+            course_status.save()
+    elif status == 'none':
+        CourseStatus.objects.filter(user_profile=user_profile, course=course).delete()
+
+    return 0
+
+@require_http_methods(['POST'])
+@auth_required
+@json_response
 def comment_add(request, offset):
     course_id = int(offset)
     content = request.POST.get('content', None)
@@ -177,8 +212,7 @@ def comment_add(request, offset):
     except Course.DoesNotExist:
         return {'error': '课程不属于当前用户。'}, 403
 
-    comment = Comment(course=course, writer=request.user, time=datetime.now(), content=content)
-    comment.save()
+    Comment.objects.create(course=course, writer=request.user, time=datetime.now(), content=content)
 
     return 0
 
