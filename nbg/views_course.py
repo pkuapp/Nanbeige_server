@@ -3,11 +3,10 @@
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
 from nbg.models import Course, Assignment, Comment, Semester, UserAction, CourseStatus
-from nbg.helpers import listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db
+from nbg.helpers import listify_str, json_response, append_query, auth_required, parse_datetime, find_in_db, add_to_db
 from spider.grabbers.grabber_base import LoginError, GrabError
 from django.core.cache import cache
 from django.http import HttpResponse
-from django.db import connection
 
 @auth_required
 @json_response
@@ -32,11 +31,11 @@ def course_list(request):
             'weekset_id': lesson.weekset_id,
         } for lesson in course_status.course.lesson_set.all()]
     } for course_status in course_statuses]
-    # response.append(len(connection.queries))
-    # response.append(connection.queries)
+
     return response
 
 @json_response
+@append_query
 def all(request):
     semester_id = request.GET.get('semester_id', None)
 
