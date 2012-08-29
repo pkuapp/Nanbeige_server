@@ -47,7 +47,7 @@ def all(request):
     except Semester.DoesNotExist:
         return {'error_code': 'SemesterNotFound'}, 404
 
-    courses = semester.course_set.all()
+    courses = semester.course_set.only("name").all()
     # courses = semester.course_set.all().prefetch_related('lesson_set')
     response = [{
         'id': course.pk,
