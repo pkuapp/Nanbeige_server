@@ -640,6 +640,52 @@ td:last-child {
 </tr>
 
 <tr>
+  <td align="left">/all/</td>
+  <td align="left"><code>GET</code></td>
+  <td align="left">
+    <ul>
+      <li><code class="required">int</code> semester_id</li>
+    </ul>
+  </td>
+  <td align="left"><pre>[
+  {
+    "id": 65537,
+    "orig_id": "2011-325763QR",
+    "name": "21天精通阿拉伯语（变态冲刺班）",
+    "credit": 2.5,
+    "teacher":
+    [
+      "张塔",
+      "ZHANG Ta"
+    ],
+    "ta":
+    [
+      "塔"
+    ],
+    "lessons":
+    [
+      {
+        "day": 5,
+        "start": 1,
+        "end": 2,
+        "location": "牛街清真寺广场",
+        "weekset_id": 1
+      },
+      {
+        "day": 1,
+        "start": 1,
+        "end": 5,
+        "location": "张塔家中",
+        "weekset_id": 2
+      }
+    ]
+  },
+  ...
+]</pre></td>
+  <td align="left">返回 <code>semester_id</code> 学期的全部课程。</td>
+</tr>
+
+<tr>
   <td align="left">/grabber/</td>
   <td align="left"><code>POST*</code></td>
   <td align="left">none</td>

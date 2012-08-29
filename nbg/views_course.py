@@ -32,9 +32,38 @@ def course_list(request):
     } for course_status in course_statuses]
     return response
 
-@auth_required
 @json_response
-def assignment_list(request):
+def all(request):
+    semester_id = request.GET.get('semester_id', None)
+
+    if not semester_id:
+        return {'error_code': 'SyntaxError'}, 400
+
+    try:
+        semester = Semester.objects.get(pk=semester_id)
+    except Semester.DoesNotExist:
+        return {'error_code': 'SemesterNotFound'}, 404
+
+    courses = semester.course_set.all()
+    response = [{
+        'id': course.pk,
+        'orig_id': course.original_id,
+        'name': course.name,
+        'credit': float(course.credit),
+        'teacher': listify_str(course.teacher),
+        'ta': listify_str(course.ta),
+        'lessons': [{
+            'day': lesson.day,
+            'start': lesson.start,
+            'end': lesson.end,
+            'location': lesson.location,
+            'weekset_id': lesson.weekset.pk,
+        } for lesson in course.lesson_set.all()]
+    } for course in courses]
+    return response
+
+@json_response
+def course_all(request):
     user = request.user
     assignment_objs = user.assignment_set.all()
     response = [{
@@ -89,7 +118,7 @@ def assignment_delete(request, offset):
 @require_http_methods(['POST'])
 @auth_required
 @json_response
-def assignment_modify(request,offset):
+def assignment_modify(request, offset):
     id = int(offset)
 
     try:
