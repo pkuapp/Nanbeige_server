@@ -74,15 +74,15 @@ class TeapotParser(BaseParser):
         self.next_url = 'http://portal.ruc.edu.cn/cas/login?service=http%3A%2F%2Fportal.ruc.edu.cn%2Fidc%2Feducation%2Fselectcourses%2Fresultquery%2FResultQueryAction.do%3Fmethod%3DforwardAllQueryXkjg'
         self._login()
 
-        test = requests.post(self.next_url, cookies=self.cookies, verify=False)
-        content = test.content.decode(self.charset)
-        self.cookies = test.cookies
+        r_cookies = requests.post(self.next_url, cookies=self.cookies, verify=False)
+        content = r_cookies.content.decode(self.charset)
+        self.cookies = r_cookies.cookies
 
         '''parser, start.'''
 
         ''' - get colleges'''
         strainer_colleges = SoupStrainer("select", id="condition_yx")
-        soup_colleges = BeautifulSoup(test.content.decode('gbk'), parse_only=strainer_colleges)
+        soup_colleges = BeautifulSoup(r_cookies.content.decode('gbk'), parse_only=strainer_colleges)
         colleges = [option['value'] for option in soup_colleges.select("option") if option['value']]
         colleges_name = [option.get_text() for option in soup_colleges.select("option") if option['value']]
         pretty_print(colleges_name)
@@ -180,5 +180,5 @@ class TeapotParser(BaseParser):
 if __name__ == "__main__":
     grabber = TeapotParser()
     grabber._local_setup()
-    grabber.test()
-    # grabber.grab_all()
+    # grabber.test()
+    grabber.grab_all()
