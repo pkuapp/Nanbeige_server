@@ -35,39 +35,21 @@ def course_list(request):
     return response
 
 @json_response
-@append_query
 def all(request):
     semester_id = request.GET.get('semester_id', None)
 
     if not semester_id:
         return {'error_code': 'SyntaxError'}, 400
-
     try:
         semester = Semester.objects.get(pk=semester_id)
     except Semester.DoesNotExist:
         return {'error_code': 'SemesterNotFound'}, 404
 
-    courses = semester.course_set.only("name").all()
-    # courses = semester.course_set.all().prefetch_related('lesson_set')
-    response = [{
-        'id': course.pk,
-        # 'orig_id': course.original_id,
-        'name': course.name,
-        # 'credit': float(course.credit),
-        # 'teacher': listify_str(course.teacher),
-        # 'ta': listify_str(course.ta),
-        # 'lessons': [{
-        #     'day': lesson.day,
-        #     'start': lesson.start,
-        #     'end': lesson.end,
-        #     'location': lesson.location,
-        #     'weekset_id': lesson.weekset_id,
-        # } for lesson in course.lesson_set.all()]
-    } for course in courses]
-    return response
+    courses = semester.course_set.values("pk", "name")
+    return list(courses)
 
 @json_response
-def course_all(request):
+def assignment_list(request):
     user = request.user
     assignment_objs = user.assignment_set.all()
     response = [{
