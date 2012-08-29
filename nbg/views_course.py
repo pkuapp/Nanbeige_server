@@ -45,7 +45,7 @@ def all(request):
     except Semester.DoesNotExist:
         return {'error_code': 'SemesterNotFound'}, 404
 
-    courses = semester.course_set.values("pk", "name")
+    courses = semester.course_set.values("id", "name")
     return list(courses)
 
 @json_response
