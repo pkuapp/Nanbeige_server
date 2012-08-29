@@ -48,23 +48,23 @@ def all(request):
     except Semester.DoesNotExist:
         return {'error_code': 'SemesterNotFound'}, 404
 
-    courses = semester.course_set.all().prefetch_related('lesson_set')
+    courses = semester.course_set.all()
+    # courses = semester.course_set.all().prefetch_related('lesson_set')
     response = [{
         'id': course.pk,
-        'orig_id': course.original_id,
+        # 'orig_id': course.original_id,
         'name': course.name,
-        'credit': float(course.credit),
-        'teacher': listify_str(course.teacher),
-        'ta': listify_str(course.ta),
-        'lessons': [{
-            'day': lesson.day,
-            'start': lesson.start,
-            'end': lesson.end,
-            'location': lesson.location,
-            'weekset_id': lesson.weekset_id,
-        } for lesson in course.lesson_set.all()]
+        # 'credit': float(course.credit),
+        # 'teacher': listify_str(course.teacher),
+        # 'ta': listify_str(course.ta),
+        # 'lessons': [{
+        #     'day': lesson.day,
+        #     'start': lesson.start,
+        #     'end': lesson.end,
+        #     'location': lesson.location,
+        #     'weekset_id': lesson.weekset_id,
+        # } for lesson in course.lesson_set.all()]
     } for course in courses]
-    response.append(len(connection.queries))
     return response
 
 @json_response
