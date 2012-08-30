@@ -35,6 +35,33 @@ def course_list(request):
     return response
 
 @json_response
+def course(request, offset):
+    course_id = int(offset)
+
+    try:
+        course = Course.objects.get(pk=course_id)
+    except Course.DoesNotExist:
+        return {'error_code': 'CourseNotFound'}
+
+    response = {
+        'id': course_id,
+        'orig_id': course.original_id,
+        'name': course.name,
+        'credit': float(course.credit),
+        'teacher': listify_str(course.teacher),
+        'ta': listify_str(course.ta),
+        'lessons': [{
+            'day': lesson.day,
+            'start': lesson.start,
+            'end': lesson.end,
+            'location': lesson.location,
+            'weekset_id': lesson.weekset_id,
+        } for lesson in course.lesson_set.all()]
+    }
+
+    return response
+
+@json_response
 def all(request):
     semester_id = request.GET.get('semester_id', None)
 

@@ -33,6 +33,7 @@ urlpatterns = patterns('',
     (r'^university/semester/(\d+)/weekset/$', 'nbg.views_university.weekset'),
 
     (r'^course/$', 'nbg.views_course.course_list'),
+    (r'^course/(\d+)/$', 'nbg.views_course.course'),
     (r'^course/all/$', 'nbg.views_course.all'),
     (r'^course/assignment/$', 'nbg.views_course.assignment_list'),
     (r'^course/assignment/(\d+)/finish/$', 'nbg.views_course.assignment_finish'),
