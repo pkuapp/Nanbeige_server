@@ -61,7 +61,11 @@ class TeapotParser(BaseParser):
         except:
             pass
         if weeks == []:
-            weeks = None
+            if week_num == []:
+                weeks = None
+            else:
+                weeks = [week_num[0]]
+                weeks = list_to_comma_separated(weeks)
         else:
             if u'单周' in week_text:
                 weeks = [i for i in weeks if int(i) % 2 == 1]
@@ -140,7 +144,7 @@ class TeapotParser(BaseParser):
                     test_text = cols[0].get_text(strip=True)
                 except:
                     break
-                teacher = cols[3].get_text(strip=True).replace('* ', ',').rstrip(',').rstrip('*')
+                teacher = cols[3].get_text(strip=True).replace('* ', ',').rstrip(',').rstrip('*').replace(' ', ',')
                 week_text = cols[4].get_text(strip=True)
                 day_text = cols[5].get_text(strip=True)
                 start_end_text = cols[6].get_text(strip=True)
