@@ -6,6 +6,7 @@ from nbg.helpers import json_response, auth_required
 @auth_required
 @json_response
 def comment_list(request):
+    # TODO: need optimization
     start = int(request.GET.get('start', 0))
 
     courses = request.user.get_profile().courses.all()

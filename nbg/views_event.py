@@ -28,14 +28,14 @@ def query(request):
             event_objs = event_objs.filter(time__lte=before)
         except ValidationError:
             return {'error': 'before 日期格式错误。'}, 400
-    event_objs = event_objs[start:start+10]
+    event_objs = event_objs.select_related('category')[start:start+10]
 
     response = [{
         'id': item.pk,
         'title': item.title,
         'subtitle': item.subtitle,
         'category': {
-            'id': item.category.pk,
+            'id': item.category_id,
             'name': item.category.name,
         },
         'time': item.time.isoformat(' '),
@@ -61,13 +61,13 @@ def category(request):
 def get_event(request,offset):
     id = int(offset)
 
-    event = Event.objects.get(pk=id)
+    event = Event.objects.select_related('category').get(pk=id)
     response = {
         'id': event.pk,
         'title': event.title,
         'subtitle': event.subtitle,
         'category': {
-            'id': event.category.pk,
+            'id': event.category_id,
             'name': event.category.name,
         },
         'location': event.location,
@@ -97,14 +97,14 @@ def follow(request, offset):
 @auth_required
 @json_response
 def following(request):
-    events = request.user.event_set.all()
+    events = request.user.event_set.all().select_related('category')
 
     response = [{
         'id': item.pk,
         'title': item.title,
         'subtitle': item.subtitle,
         'category': {
-            'id': item.category.id,
+            'id': item.category_id,
             'name': item.category.name,
         },
         'location': item.location,

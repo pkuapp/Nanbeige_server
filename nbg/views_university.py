@@ -2,12 +2,11 @@
 
 from datetime import time
 from nbg.models import University, Semester
-from nbg.helpers import listify_int
-from nbg.helpers import json_response
+from nbg.helpers import listify_int, json_response
 
 @json_response
 def university_list(request):
-    universities = University.objects.all()
+    universities = University.objects.all().prefetch_related('campus_set')
     response = [{
         'id': university.pk,
         'name': university.name,

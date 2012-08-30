@@ -6,7 +6,7 @@ from nbg.helpers import json_response
 
 @json_response
 def version_api(request):
-    return {'version':settings.API_VERSION}
+    return {'version': settings.API_VERSION}
 
 @json_response
 def version_android(request):

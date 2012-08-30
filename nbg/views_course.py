@@ -3,7 +3,7 @@
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
 from nbg.models import Course, Assignment, Comment, Semester, UserAction, CourseStatus
-from nbg.helpers import listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db
+from nbg.helpers import listify_str, json_response, append_query, auth_required, parse_datetime, find_in_db, add_to_db
 from spider.grabbers.grabber_base import LoginError, GrabError
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -12,24 +12,26 @@ from django.http import HttpResponse
 @json_response
 def course_list(request):
     user = request.user
-    course_statuses = user.get_profile().coursestatus_set.all()
+    course_statuses = (user.get_profile().coursestatus_set.all().
+      select_related('course').prefetch_related('course__lesson_set'))
     response = [{
-        'id': course_status.course.pk,
+        'id': course_status.course_id,
         'status': CourseStatus.STATUS_CHOICES[course_status.status][1],
         'orig_id': course_status.course.original_id,
         'name': course_status.course.name,
         'credit': float(course_status.course.credit),
         'teacher': listify_str(course_status.course.teacher),
         'ta': listify_str(course_status.course.ta),
-        'semester_id': course_status.course.semester.pk,
+        'semester_id': course_status.course.semester_id,
         'lessons': [{
             'day': lesson.day,
             'start': lesson.start,
             'end': lesson.end,
             'location': lesson.location,
-            'weekset_id': lesson.weekset.pk,
+            'weekset_id': lesson.weekset_id,
         } for lesson in course_status.course.lesson_set.all()]
     } for course_status in course_statuses]
+
     return response
 
 @json_response
@@ -38,32 +40,16 @@ def all(request):
 
     if not semester_id:
         return {'error_code': 'SyntaxError'}, 400
-
     try:
         semester = Semester.objects.get(pk=semester_id)
     except Semester.DoesNotExist:
         return {'error_code': 'SemesterNotFound'}, 404
 
-    courses = semester.course_set.all()
-    response = [{
-        'id': course.pk,
-        'orig_id': course.original_id,
-        'name': course.name,
-        'credit': float(course.credit),
-        'teacher': listify_str(course.teacher),
-        'ta': listify_str(course.ta),
-        'lessons': [{
-            'day': lesson.day,
-            'start': lesson.start,
-            'end': lesson.end,
-            'location': lesson.location,
-            'weekset_id': lesson.weekset.pk,
-        } for lesson in course.lesson_set.all()]
-    } for course in courses]
-    return response
+    courses = semester.course_set.values("id", "name")
+    return list(courses)
 
 @json_response
-def course_all(request):
+def assignment_list(request):
     user = request.user
     assignment_objs = user.assignment_set.all()
     response = [{

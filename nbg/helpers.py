@@ -4,6 +4,7 @@ from string import split
 from datetime import datetime
 from json import dumps
 from django.http import HttpResponse
+from django.db import connection
 from nbg.models import Course, Lesson
 
 def listify_str(str):
@@ -29,6 +30,20 @@ def json_response(func):
         return HttpResponse(dumps(content, ensure_ascii=False, separators=(',',':')),
           mimetype="application/json", status=status_code)
 
+    return inner
+
+def append_query(func):
+    def inner(request=None, *args, **kwargs):
+        response = func(request, *args, **kwargs)
+        if isinstance(response, dict):
+            response.update({
+                'queries': connection.queries,
+                'queries_count': len(connection.queries),
+            })
+        elif isinstance(response, list):
+            response.append(connection.queries)
+            response.append(len(connection.queries))
+        return response
     return inner
 
 def auth_required(func):
