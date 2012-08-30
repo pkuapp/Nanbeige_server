@@ -63,6 +63,10 @@ class TeapotParser(BaseParser):
         if weeks == []:
             weeks = None
         else:
+            if u'单周' in week_text:
+                weeks = [i for i in weeks if int(i) % 2 == 1]
+            elif u'双周' in week_text:
+                weeks = [i for i in weeks if int(i) % 2 == 0]
             weeks = list_to_comma_separated(weeks)
 
         number = re.findall("\d{1,2}", start_end_text)

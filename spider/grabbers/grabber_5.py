@@ -34,8 +34,10 @@ class TeapotParser(BaseParser):
             img.write(self.captcha_img)
 
         captcha = raw_input("Captcha: ")
-        username = raw_input("Username: ")
-        password = getpass.getpass('Password: ')
+        # username = raw_input("Username: ")
+        # password = getpass.getpass('Password: ')
+        username = '2009201243'
+        password = 'alleluia_11'
 
         self.setUp(username=username, password=password, captcha=captcha)
 
@@ -71,6 +73,7 @@ class TeapotParser(BaseParser):
         return lessons
 
     def grab_all(self):
+        self._local_setup()
         self.next_url = 'http://portal.ruc.edu.cn/cas/login?service=http%3A%2F%2Fportal.ruc.edu.cn%2Fidc%2Feducation%2Fselectcourses%2Fresultquery%2FResultQueryAction.do%3Fmethod%3DforwardAllQueryXkjg'
         self._login()
 
@@ -179,6 +182,5 @@ class TeapotParser(BaseParser):
 
 if __name__ == "__main__":
     grabber = TeapotParser()
-    grabber._local_setup()
     # grabber.test()
     grabber.grab_all()
