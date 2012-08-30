@@ -60,8 +60,4 @@ urlpatterns = patterns('',
 
     (r'^wiki/(\d+)/$', 'nbg.views_wiki.wiki_list'),
     (r'^wiki/node/(\d+)/$', 'nbg.views_wiki.wiki_node'),
-
-
-    (r'^beiyou/$', 'spider.grabbers.grabber_3.login_urp'),
-
 )
