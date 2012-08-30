@@ -306,7 +306,9 @@ def course_grab_start(request):
                 'error': e.error,
             }
     else:
-        return {'error': '导入课程无法启动或抓取器已过期。'}, 503
+        return {
+            'error_code': 'GrabberExpired',
+        }, 503
 
 @require_http_methods(['GET'])
 @auth_required
