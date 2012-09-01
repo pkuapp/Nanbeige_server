@@ -50,6 +50,7 @@ def course(request, offset):
         'credit': float(course.credit),
         'teacher': listify_str(course.teacher),
         'ta': listify_str(course.ta),
+        'semester_id': course.semester_id,
         'lessons': [{
             'day': lesson.day,
             'start': lesson.start,
