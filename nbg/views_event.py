@@ -28,40 +28,33 @@ def query(request):
             event_objs = event_objs.filter(time__lte=before)
         except ValidationError:
             return {'error': 'before 日期格式错误。'}, 400
-    event_objs = event_objs.select_related('category')[start:start+10]
+    events = event_objs.select_related('category')[start:start+10]
 
     response = [{
-        'id': item.pk,
-        'title': item.title,
-        'subtitle': item.subtitle,
+        'id': event.pk,
+        'title': event.title,
+        'subtitle': event.subtitle,
         'category': {
-            'id': item.category_id,
-            'name': item.category.name,
+            'id': event.category_id,
+            'name': event.category.name,
         },
-        'time': item.time.isoformat(' '),
-        'location': item.location,
-        'follow_count': int(item.follow_count()),
-    } for item in event_objs]
+        'organizer': event.organizer,
+        'time': event.time.isoformat(' '),
+        'location': event.location,
+        'content': event.content,
+        'follow_count': int(event.follow_count()),
+    } for event in events]
 
     return response
 
 @json_response
-def category(request):
-    category_objs = EventCategory.objects.all()
-
-    response = [{
-        'id': category.pk,
-        'name': category.name,
-        'count': category.count(),
-    } for category in category_objs]
-
-    return response
-
-@json_response
-def get_event(request,offset):
+def event(request,offset):
     id = int(offset)
 
-    event = Event.objects.select_related('category').get(pk=id)
+    try:
+        event = Event.objects.select_related('category').get(pk=id)
+    except Event.DoesNotExist:
+        return {'error_code': 'EventNotFound'}
     response = {
         'id': event.pk,
         'title': event.title,
@@ -70,11 +63,24 @@ def get_event(request,offset):
             'id': event.category_id,
             'name': event.category.name,
         },
-        'location': event.location,
         'organizer': event.organizer,
+        'time': event.time.isoformat(' '),
+        'location': event.location,
         'content': event.content,
         'follower_count': event.follow_count(),
     }
+    return response
+
+@json_response
+def category(request):
+    categories = EventCategory.objects.all()
+
+    response = [{
+        'id': category.pk,
+        'name': category.name,
+        'count': category.count(),
+    } for category in categories]
+
     return response
 
 @require_http_methods(['POST'])
@@ -100,17 +106,18 @@ def following(request):
     events = request.user.event_set.all().select_related('category')
 
     response = [{
-        'id': item.pk,
-        'title': item.title,
-        'subtitle': item.subtitle,
+        'id': event.pk,
+        'title': event.title,
+        'subtitle': event.subtitle,
         'category': {
-            'id': item.category_id,
-            'name': item.category.name,
+            'id': event.category_id,
+            'name': event.category.name,
         },
-        'location': item.location,
-        'organizer': item.organizer,
-        'content': item.content,
-        'follower_count': item.follow_count(),
-    } for item in events]
+        'organizer': event.organizer,
+        'time': event.time.isoformat(' '),
+        'location': event.location,
+        'content': event.content,
+        'follow_count': int(event.follow_count()),
+    } for event in events]
 
     return response

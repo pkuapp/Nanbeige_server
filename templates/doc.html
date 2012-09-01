@@ -1093,8 +1093,10 @@ td:last-child {
       "id": 2,
       "name": "聚餐",
     },
+    "organizer": "我",
     "time": "2012-07-13 19:00:00",
     "location": "随便",
+    "content": "饭粒fànlì 米饭的颗粒（多指零散的）。",
     "follow_count": 16
   },
   {
@@ -1105,14 +1107,90 @@ td:last-child {
       "id": 2,
       "name": "聚餐",
     },
-    "time": "2012-07-14 19:00:00", 
+    "organizer": "水稻",
+    "time": "2012-07-14 19:00:00",
     "location": "随便",
+    "content": "地上撒了不少饭粒儿。",
     "follow_count": 32
   }
 ]</pre>
   </td>
   <td align="left">查询含有关键词 <code>keyword</code>，在 <code>after</code> （默认为现在）之后、<code>before</code>（默认为宇宙的尽头）之前的活动。返回从第 <code>start</code>（默认为 0）开始的 10 条。</td>
 </tr>
+
+<tr>
+  <td align="left">/:id/</td>
+  <td align="left"><code>GET</code></td>
+  <td align="left">none</td>
+  <td align="left"><pre>{
+  "id": 2,
+  "title": "周末聚餐",
+  "subtitle": "全聚德吃北京烤鸭",
+  "category": {
+    "id": 1,
+    "name": "聚餐"
+  },
+  "organizer": "王昊尘",
+  "time": "2012-07-14 00:52:33",
+  "location": "北京前门",
+  "content": "能去的都去阿！",
+  "follower_count": 5
+}</pre>
+  </td>
+  <td align="left">返回 <code>id</code> 活动。</td>
+</tr>
+
+<tr>
+  <td align="left">/:id/follow/</td>
+  <td align="left"><code>POST*</code></td>
+  <td align="left">none</td>
+  <td align="left">
+    <ul>
+      <li><code>0</code> success</li>
+    </ul>
+    <pre>{
+  "error": "活动不存在。"
+}</pre></td>
+  <td align="left">关注 <code>id</code> 活动。</td>
+</tr>
+
+<tr>
+  <td align="left">/following/</td>
+  <td align="left"><code>GET*</code></td>
+  <td align="left">none</td>
+  <td align="left"><pre>[
+  {
+    "id": 2,
+    "title": "周末聚餐",
+    "subtitle": "全聚德吃北京烤鸭",
+    "category": {
+      "id": 1,
+      "name": "聚餐"
+    },
+    "organizer": "王昊尘",
+    "time": "2012-07-14 00:52:33",
+    "location": "北京前门",
+    "content": "能去的都去阿！",
+    "follower_count": 5
+  },
+  {
+    "id": 3,
+    "title": "吃遍上海",
+    "subtitle": "上海小吃游",
+    "category": {
+      "id": 1,
+      "name": "聚餐"
+    },
+    "organizer": "张塔",
+    "time": "2012-07-14 00:52:33",
+    "location": "城隍庙",
+    "content": "吃货集会！",
+    "follower_count": 3
+  },
+]</pre></td>
+  <td align="left">返回当前用户关注的活动列表。</td>
+</tr>
+
 <tr>
   <td align="left">/category/</td>
   <td align="left"><code>GET</code></td>
@@ -1133,73 +1211,7 @@ td:last-child {
   <td align="left">返回活动分类列表。
   </td>
 </tr>
-<tr>
-  <td align="left">/:id/</td>
-  <td align="left"><code>GET</code></td>
-  <td align="left">none</td>
-  <td align="left"><pre>{
-  "id": 2,
-  "title": "周末聚餐",
-  "subtitle": "全聚德吃北京烤鸭",
-  "category": {
-    "id": 1,
-    "name": "聚餐"
-  },
-  "organizer": "王昊尘",
-  "location": "北京前门",
-  "content": "能去的都去阿！",
-  "follower_count": 5
-}</pre>
-  </td>
-  <td align="left">返回 <code>id</code> 活动。</td>
-</tr>
-<tr>
-  <td align="left">/:id/follow/</td>
-  <td align="left"><code>POST*</code></td>
-  <td align="left">none</td>
-  <td align="left">
-    <ul>
-      <li><code>0</code> success</li>
-    </ul>
-    <pre>{
-  "error": "活动不存在。"
-}</pre></td>
-  <td align="left">关注 <code>id</code> 活动。</td>
-</tr>
-<tr>
-  <td align="left">/following/</td>
-  <td align="left"><code>GET*</code></td>
-  <td align="left">none</td>
-  <td align="left"><pre>[
-  {
-    "id": 2,
-    "title": "周末聚餐",
-    "subtitle": "全聚德吃北京烤鸭",
-    "category": {
-      "id": 1,
-      "name": "聚餐"
-    },
-    "organizer": "王昊尘",
-    "location": "北京前门",
-    "content": "能去的都去阿！",
-    "follower_count": 5
-  },
-  {
-    "id": 3,
-    "title": "吃遍上海",
-    "subtitle": "上海小吃游",
-    "category": {
-      "id": 1,
-      "name": "聚餐"
-    },
-    "organizer": "张塔",
-    "location": "城隍庙",
-    "content": "吃货集会！",
-    "follower_count": 3
-  },
-]</pre></td>
-  <td align="left">返回当前用户关注的活动列表。</td>
-</tr>
+
 </tbody>
 </table>
 
