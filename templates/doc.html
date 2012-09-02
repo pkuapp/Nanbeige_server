@@ -1141,17 +1141,21 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">/:id/follow/</td>
+  <td align="left">/:id/edit/</td>
   <td align="left"><code>POST*</code></td>
-  <td align="left">none</td>
+  <td align="left">
+    <ul>
+      <li><code class="optional">bool</code> follow</li>
+    </ul>
+  </td>
   <td align="left">
     <ul>
       <li><code>0</code> success</li>
     </ul>
     <pre>{
-  "error": "活动不存在。"
+  "error_code": "EventNotFound"
 }</pre></td>
-  <td align="left">关注 <code>id</code> 活动。</td>
+  <td align="left">修改当前用户对 id 活动的关注情况。</td>
 </tr>
 
 <tr>

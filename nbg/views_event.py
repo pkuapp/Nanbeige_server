@@ -86,16 +86,24 @@ def category(request):
 @require_http_methods(['POST'])
 @auth_required
 @json_response
-def follow(request, offset):
+def edit(request, offset):
     id = int(offset)
     user = request.user
+    follow = request.POST.get('follow', None)
 
     try:
         event = Event.objects.get(pk=id)
     except Event.DoesNotExist:
-        return {'error': '活动不存在。'}, 404
+        return {'error_code': 'EventNotFound'}, 404
 
-    event.follower.add(user)
+    if follow:
+        if follow == '1':
+            event.follower.add(user)
+        elif follow == '0':
+            event.follower.remove(user)
+        else:
+            return {'error_code': 'BadSyntax'}, 400
+
     event.save()
 
     return 0
