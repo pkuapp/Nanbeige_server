@@ -90,6 +90,9 @@ class TeapotParser(BaseParser):
 
         return lessons
 
+    def get_teachers(self, teachers_text):
+        return teachers_text.replace('* ', ',').rstrip(',').rstrip('*').replace(' ', ',')
+
     def grab_all(self):
         self._local_setup()
         self._login()
@@ -144,7 +147,7 @@ class TeapotParser(BaseParser):
                     test_text = cols[0].get_text(strip=True)
                 except:
                     break
-                teacher = cols[3].get_text(strip=True).replace('* ', ',').rstrip(',').rstrip('*').replace(' ', ',')
+                teacher = self.get_teachers(cols[3].get_text(strip=True))
                 week_text = cols[4].get_text(strip=True)
                 day_text = cols[5].get_text(strip=True)
                 start_end_text = cols[6].get_text(strip=True)
@@ -159,6 +162,8 @@ class TeapotParser(BaseParser):
                     'teacher': teacher,
                     'lessons': lessons,
                 }
+
+                print week_text.encode('utf8')
 
                 try:
                     last_course = courses.pop()
@@ -201,7 +206,53 @@ class TeapotParser(BaseParser):
         print "Logged in successfully."
         self.cookies = r_login.cookies
 
+    def run(self):
+        self._login()
+
+        url_course = self.url_prefix + 'xkAction.do?actionType=6'
+        r_course = requests.get(url_course, cookies=self.cookies)
+
+        soup = BeautifulSoup(r_course.content.replace('class', 'id'))
+        soup.prettify()
+        soup = soup.find_all("table")[7]
+
+        print soup
+
+        rows = soup.select("tr")
+
+        courses = []
+        for r in rows:
+            print '####################'
+            print r
+            if r.has_key('id') and r['id'] != "odd":
+                continue
+
+            cols = r.select("td")
+            print '----------------------'
+            print cols
+            if cols == []:
+                continue
+
+            location = cols[15].get_text(strip=True) + ' ' + cols[16].get_text(strip=True) + ' ' + cols[17].get_text(strip=True)
+            teacher = self.get_teachers(cols[7].get_text(strip=True))
+            week_text = cols[11].get_text(strip=True)
+            day_text = cols[12].get_text(strip=True)
+            start_end_text = cols[13].get_text(strip=True) + '-' + str(int(cols[13].get_text(strip=True)) + int(cols[14].get_text(strip=True)))
+            
+            lessons = self.get_lessons(week_text, day_text, start_end_text, location)
+
+            course = {
+                'original_id': cols[1].get_text(strip=True),
+                'name': cols[2].get_text(strip=True),
+                'teacher': teacher,
+                'lessons': lessons,
+            }
+            courses.append(course)
+
+        self.courses = courses
+        return pretty_format(courses)
+
 if __name__ == "__main__":
     grabber = TeapotParser()
-    # grabber.test()
-    grabber.grab_all()
+    grabber.test()
+    # grabber.grab_all()
