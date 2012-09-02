@@ -216,20 +216,15 @@ class TeapotParser(BaseParser):
         soup.prettify()
         soup = soup.find_all("table")[7]
 
-        print soup
-
         rows = soup.select("tr")
 
         courses = []
         for r in rows:
-            print '####################'
-            print r
             if r.has_key('id') and r['id'] != "odd":
                 continue
 
             cols = r.select("td")
-            print '----------------------'
-            print cols
+
             if cols == []:
                 continue
 
