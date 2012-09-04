@@ -42,7 +42,7 @@ def query(request):
         'time': event.time.isoformat(' '),
         'location': event.location,
         'content': event.content,
-        'follow_count': int(event.follow_count()),
+        'follower_count': int(event.follower_count()),
     } for event in events]
 
     return response
@@ -67,7 +67,7 @@ def event(request,offset):
         'time': event.time.isoformat(' '),
         'location': event.location,
         'content': event.content,
-        'follower_count': event.follow_count(),
+        'follower_count': event.follower_count(),
     }
     return response
 
@@ -125,7 +125,7 @@ def following(request):
         'time': event.time.isoformat(' '),
         'location': event.location,
         'content': event.content,
-        'follow_count': int(event.follow_count()),
+        'follower_count': int(event.follower_count()),
     } for event in events]
 
     return response

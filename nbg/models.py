@@ -217,7 +217,7 @@ class Event(models.Model):
     content = models.TextField()
     follower = models.ManyToManyField(User, blank=True)
 
-    def follow_count(self):
+    def follower_count(self):
         return self.follower.count()
 
     def __unicode__(self):
