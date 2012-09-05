@@ -85,6 +85,7 @@ class TeapotParser(BaseParser):
             'start': number[0],
             'end': number[1],
             'weeks': weeks,
+            'week_raw': week_text,
             'location': location,
         })
 
@@ -249,5 +250,5 @@ class TeapotParser(BaseParser):
 
 if __name__ == "__main__":
     grabber = TeapotParser()
-    grabber.test()
-    # grabber.grab_all()
+    # grabber.test()
+    grabber.grab_all()
