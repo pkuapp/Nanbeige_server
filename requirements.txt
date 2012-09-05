@@ -1,0 +1,4 @@
+pylibmc
+django-debug-toolbar
+django_nose
+South
