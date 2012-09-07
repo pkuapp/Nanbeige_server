@@ -1,4 +1,7 @@
-pylibmc
+PyYAML
+South
+beautifulsoup4
 django-debug-toolbar
 django_nose
-South
+pylibmc
+requests

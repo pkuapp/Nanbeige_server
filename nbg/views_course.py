@@ -312,12 +312,14 @@ def course_grab_start(request):
 
         try:
             grabber.run()
+            user_profile = request.user.get_profile()
+            CourseStatus.objects.filter(user_profile=user_profile, status=CourseStatus.SELECT).delete()
             semester = Semester.objects.get(pk=grabber.semester_id)
             for c in grabber.courses:
                 course = find_in_db(c)
                 if not course:
                     course = add_to_db(c, semester)
-                CourseStatus.objects.create(user_profile=request.user.get_profile(),
+                CourseStatus.objects.create(user_profile=user_profile,
                   course=course, status=CourseStatus.SELECT)
             UserAction.objects.create(user=request.user, semester=semester, action_type=UserAction.COURSE_IMPORTED)
             return {'semester_id': grabber.semester_id}
