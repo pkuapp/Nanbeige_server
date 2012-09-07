@@ -3,11 +3,12 @@ from nbg.models import NewsFeed
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
+from nbg.helpers import parse_datetime
 
 @auth_required
 @json_response
 def newsfeed(request):
-    after = request.GET.get('after', datetime.now())
+    after = request.GET.get('after', parse_datetime('2000-1-1 00:00:00'))
     newsfeed_list = cache.get(request.session.session_key+'_newsfeed')
     if newsfeed_list:
         sub_list ＝ newsfeed_list.filter(time__gte=after).order_by('time')

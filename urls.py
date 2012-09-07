@@ -11,6 +11,8 @@ urlpatterns = patterns('',
     (r'^$', 'nbg.views.doc_html'),
     (r'^status/$', 'nbg.views.status_html'),
 
+    (r'^newsfeed/$', 'nbg.views_newsfeed.newsfeed'),
+
     (r'^app/version/api/$', 'nbg.views_app.version_api'),
     (r'^app/version/android/$', 'nbg.views_app.version_android'),
     (r'^app/version/ios/$', 'nbg.views_app.version_ios'),
