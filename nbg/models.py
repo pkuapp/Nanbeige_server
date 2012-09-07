@@ -133,6 +133,7 @@ class UserProfile(models.Model):
     weibo_token = models.CharField(max_length=32, blank=True)
     renren_id = models.BigIntegerField(null=True, blank=True)
     renren_name = models.CharField(max_length=100, blank=True)
+    renren_token = models.CharField(max_length=100, blank=True)
     nickname = models.CharField(max_length=100, blank=True)
     realname = models.CharField(max_length=100, blank=True)
     courses = models.ManyToManyField(Course, blank=True, through='CourseStatus')
