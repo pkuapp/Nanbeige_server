@@ -7,6 +7,7 @@ from django.db.models.signals import class_prepared
 from django.contrib.auth.models import UserManager as Manager
 from couchdb.client import Server, Database
 from couchdb.http import PreconditionFailed
+from django.db.models.signals import post_save
 
 COUCHDB_HOST = 'http://211.101.12.224'
 COUCHDB_PORT = '5984'
@@ -98,6 +99,21 @@ class Weekset(models.Model):
     def __unicode__(self):
         return self.name
 
+class NewsFeed(models.Model):
+    SELECT_COURSE = 0
+    AUDIT_COURSE = 1
+    COMMENT_COURSE = 2
+    FOLLOW_COURSE = 3
+    COMMENT_COURSE = 4
+    NEWS_TYPE_CHOICES = ((SELECT_COURSE, 'select_course'), (AUDIT_COURSE, 'audit_course'))
+
+    news_type = models.IntegerField(choices=NEWS_TYPE_CHOICES, null=False)
+    ref_model = models.CharField(max_length=55, null=False)
+    object_id = models.IntegerField(null=False)
+    time = models.DateTimeField(auto_now_add=True)
+    info = models.CharField(max_length=755, null=True)
+
+
 class Course(models.Model):
     name = models.CharField(max_length=200)
     original_id = models.CharField(max_length=100)
@@ -132,6 +148,28 @@ class CourseStatus(models.Model):
     user_profile = models.ForeignKey(UserProfile)
     course = models.ForeignKey(Course)
     status = models.IntegerField(choices=STATUS_CHOICES)
+
+
+def generate_news_for_course_status(sender, **kwargs):
+    instance = kwargs['instance']
+    if instance.status == CourseStatus.SELECT:
+        newsfeed_dict = {
+            'news_type': NewsFeed.SELECT_COURSE,
+            'ref_model': 'Course',
+            'object_id': sender.course,
+            'info': '{sender:{0}}'.format(sender.user_profile.nickname)
+        }
+        NewsFeed.objects.create(**newsfeed_dict)
+    elif instance.status == CourseStatus.AUDIT:
+        newsfeed_dict = {
+            'news_type': NewsFeed.AUDIT_COURSE,
+            'ref_model': 'Course',
+            'object_id': sender.course,
+            'info': '{sender:{0}}'.format(sender.user_profile.nickname)
+        }
+        NewsFeed.objects.create(**newsfeed_dict)
+
+post_save.connect(generate_news_for_course_status, sender=CourseStatus)
 
 class UserAction(models.Model):
     COURSE_IMPORTED = 0
