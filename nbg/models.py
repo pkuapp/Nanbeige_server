@@ -8,6 +8,7 @@ from django.contrib.auth.models import UserManager as Manager
 from couchdb.client import Server, Database
 from couchdb.http import PreconditionFailed
 from django.db.models.signals import post_save
+import json
 
 COUCHDB_HOST = 'http://211.101.12.224'
 COUCHDB_PORT = '5984'
@@ -160,7 +161,7 @@ def generate_news_for_course_status(sender, **kwargs):
             'news_type': NewsFeed.SELECT_COURSE,
             'ref_model': 'Course',
             'object_id': instance.course,
-            'info': '''{'sender':{0}}'''.format(instance.user_profile.nickname)
+            'info': json.dumps({'sender':instance.user_profile.nickname})
         }
         NewsFeed.objects.create(**newsfeed_dict)
     elif instance.status == CourseStatus.AUDIT:
@@ -168,7 +169,7 @@ def generate_news_for_course_status(sender, **kwargs):
             'news_type': NewsFeed.AUDIT_COURSE,
             'ref_model': 'Course',
             'object_id': instance.course,
-            'info': '''{'sender':{0}}'''.format(instance.user_profile.nickname)
+            'info': json.dumps({'sender':instance.user_profile.nickname})
         }
         NewsFeed.objects.create(**newsfeed_dict)
 
