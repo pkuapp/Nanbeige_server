@@ -160,16 +160,16 @@ def generate_news_for_course_status(sender, **kwargs):
         newsfeed_dict = {
             'news_type': NewsFeed.SELECT_COURSE,
             'ref_model': 'Course',
-            'object_id': instance.course,
-            'info': json.dumps({'sender':instance.user_profile.nickname})
+            'object_id': instance.course.pk,
+            'info': json.dumps({'sender':instance.user_profile.nickname}, ensure_ascii=False, separators=(',',':'))
         }
         NewsFeed.objects.create(**newsfeed_dict)
     elif instance.status == CourseStatus.AUDIT:
         newsfeed_dict = {
             'news_type': NewsFeed.AUDIT_COURSE,
             'ref_model': 'Course',
-            'object_id': instance.course,
-            'info': json.dumps({'sender':instance.user_profile.nickname})
+            'object_id': instance.course.pk,
+            'info': json.dumps({'sender':instance.user_profile.nickname}, ensure_ascii=False, separators=(',',':'))
         }
         NewsFeed.objects.create(**newsfeed_dict)
 
