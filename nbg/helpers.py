@@ -7,6 +7,11 @@ from django.http import HttpResponse
 from django.db import connection
 from nbg.models import Course, Lesson
 
+def float_nullable(number):
+    if number is None:
+        return None
+    return float(number)
+
 def listify_str(str):
     ret_list = split(str, ',')
     if ret_list[0] == "":

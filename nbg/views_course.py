@@ -3,7 +3,7 @@
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
 from nbg.models import Course, Assignment, Comment, Semester, UserAction, CourseStatus
-from nbg.helpers import listify_str, json_response, append_query, auth_required, parse_datetime, find_in_db, add_to_db
+from nbg.helpers import listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db, float_nullable
 from spider.grabbers.grabber_base import LoginError, GrabError
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -19,7 +19,7 @@ def course_list(request):
         'status': CourseStatus.STATUS_CHOICES[course_status.status][1],
         'orig_id': course_status.course.original_id,
         'name': course_status.course.name,
-        'credit': float(course_status.course.credit),
+        'credit': float_nullable(course_status.course.credit),
         'teacher': listify_str(course_status.course.teacher),
         'ta': listify_str(course_status.course.ta),
         'semester_id': course_status.course.semester_id,

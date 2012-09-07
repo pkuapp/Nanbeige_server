@@ -1,8 +1,6 @@
 from nbg.helpers import json_response, auth_required
 from nbg.models import NewsFeed
 from django.core.cache import cache
-from django.http import HttpResponse
-from django.views.decorators.http import require_http_methods
 from nbg.helpers import parse_datetime
 
 @auth_required
@@ -28,5 +26,4 @@ def newsfeed(request):
             } for x in sub_list]
 
     return ret
-
 
