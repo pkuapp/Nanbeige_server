@@ -103,8 +103,8 @@ class NewsFeed(models.Model):
     SELECT_COURSE = 0
     AUDIT_COURSE = 1
     COMMENT_COURSE = 2
-    FOLLOW_COURSE = 3
-    COMMENT_COURSE = 4
+    FOLLOW_EVENT = 3
+    COMMENT_EVENT = 4
     NEWS_TYPE_CHOICES = ((SELECT_COURSE, 'select_course'), (AUDIT_COURSE, 'audit_course'))
 
     news_type = models.IntegerField(choices=NEWS_TYPE_CHOICES, null=False)
