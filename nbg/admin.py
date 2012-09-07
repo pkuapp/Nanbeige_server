@@ -14,8 +14,8 @@ class CourseAdmin(admin.ModelAdmin):
               day=l.day, start=l.start, end=l.end, weekset=l.weekset, location=l.location.encode('utf8'))
         return ret
 
-    search_fields = ['name']
-    list_display = ('id', 'semester', 'original_id', 'name', 'teacher', 'lessons')
+    search_fields = ('name', 'original_id')
+    list_display = ('id', 'semester', 'original_id', 'name', 'credit', 'teacher', 'lessons')
 
 class CourseStatusInline(admin.TabularInline):
     model = CourseStatus
