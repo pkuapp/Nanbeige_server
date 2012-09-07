@@ -160,7 +160,7 @@ def generate_news_for_course_status(sender, **kwargs):
             'news_type': NewsFeed.SELECT_COURSE,
             'ref_model': 'Course',
             'object_id': instance.course,
-            'info': '{sender:{0}}'.format(instance.user_profile.nickname)
+            'info': '''{'sender':{0}}'''.format(instance.user_profile.nickname)
         }
         NewsFeed.objects.create(**newsfeed_dict)
     elif instance.status == CourseStatus.AUDIT:
@@ -168,7 +168,7 @@ def generate_news_for_course_status(sender, **kwargs):
             'news_type': NewsFeed.AUDIT_COURSE,
             'ref_model': 'Course',
             'object_id': instance.course,
-            'info': '{sender:{0}}'.format(instance.user_profile.nickname)
+            'info': '''{'sender':{0}}'''.format(instance.user_profile.nickname)
         }
         NewsFeed.objects.create(**newsfeed_dict)
 
