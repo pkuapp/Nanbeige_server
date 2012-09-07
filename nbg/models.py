@@ -105,7 +105,9 @@ class NewsFeed(models.Model):
     COMMENT_COURSE = 2
     FOLLOW_EVENT = 3
     COMMENT_EVENT = 4
-    NEWS_TYPE_CHOICES = ((SELECT_COURSE, 'select_course'), (AUDIT_COURSE, 'audit_course'))
+    NEWS_TYPE_CHOICES = ((SELECT_COURSE, 'select_course'), (AUDIT_COURSE, 'audit_course'),
+                         (COMMENT_COURSE, 'comment_course'), (FOLLOW_EVENT, 'follow_event'),
+                         (COMMENT_EVENT, 'comment_event'))
 
     news_type = models.IntegerField(choices=NEWS_TYPE_CHOICES, null=False)
     ref_model = models.CharField(max_length=55, null=False)
@@ -157,16 +159,16 @@ def generate_news_for_course_status(sender, **kwargs):
         newsfeed_dict = {
             'news_type': NewsFeed.SELECT_COURSE,
             'ref_model': 'Course',
-            'object_id': sender.course,
-            'info': '{sender:{0}}'.format(sender.user_profile.nickname)
+            'object_id': instance.course,
+            'info': '{sender:{0}}'.format(instance.user_profile.nickname)
         }
         NewsFeed.objects.create(**newsfeed_dict)
     elif instance.status == CourseStatus.AUDIT:
         newsfeed_dict = {
             'news_type': NewsFeed.AUDIT_COURSE,
             'ref_model': 'Course',
-            'object_id': sender.course,
-            'info': '{sender:{0}}'.format(sender.user_profile.nickname)
+            'object_id': instance.course,
+            'info': '{sender:{0}}'.format(instance.user_profile.nickname)
         }
         NewsFeed.objects.create(**newsfeed_dict)
 
