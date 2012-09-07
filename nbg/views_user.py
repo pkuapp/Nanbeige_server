@@ -83,6 +83,14 @@ def login_email(request):
                        'token': user_profile.weibo_token,
                     },
                 })
+            if user_profile.renren_id:
+                response.update({
+                    'renren': {
+                        'id': user_profile.weibo_id,
+                        'name': user_profile.weibo_name,
+                        'token': user_profile.weibo_token,
+                     },
+                 })
 
             campus = user_profile.campus
             if campus:
@@ -144,11 +152,11 @@ def login_weibo(request):
 
             if user_profile.weibo_token != weibo_token:
                 user_profile.weibo_token = weibo_token
-                user_profile.save()
 
             if user_profile.weibo_name != weibo_name:
                 user_profile.weibo_name = weibo_name
-                user_profile.save()
+
+            user_profile.save()
 
             campus = user_profile.campus
             if campus:
@@ -185,7 +193,7 @@ def login_renren(request):
         user = auth.authenticate(renren_token=renren_token)
     except HTTPError:
         return {
-            'error_code': "ErrorConnectingWeiboServer",
+            'error_code': "ErrorConnectingRenrenServer",
             'error': "连接人人服务器时发生错误。",
         }, 503
     except VerifyError:
@@ -197,7 +205,7 @@ def login_renren(request):
     if user is not None:
         if user.is_active:
             auth.login(request, user)
-            renren_id, name = get_renren_profile(renren_token)
+            renren_id, renren_name = get_renren_profile(renren_token)
             sync_credentials_to_couchdb(user, '-renren-{0}'.format(renren_id), renren_token)
             user_profile = user.get_profile()
 
@@ -205,17 +213,18 @@ def login_renren(request):
                 'id': user.pk,
                 'email': user.email,
                 'nickname': user_profile.nickname,
-                'renren_id': renren_id,
-                'renren_name': name,
                 'course_imported': [action.semester.pk for action in
                   user.useraction_set.filter(action_type=UserAction.COURSE_IMPORTED)],
             }
 
-            if not user_profile.renren_id or not user_profile.renren_name:
-                user_profile.renren_id = renren_id
-                user_profile.renren_name = name
-                user_profile.save()
-            
+            if user_profile.renren_token != renren_token:
+                user_profile.renren_token = renren_token
+
+            if user_profile.renren_name != renren_name:
+                user_profile.renren_name = renren_name
+
+            user_profile.save()
+
             campus = user_profile.campus
             if campus:
                 response.update({
@@ -342,8 +351,8 @@ def reg_renren(request):
             user = User.objects.create_user(username='-renren-{0}'.format(renren_id), password=token)
         except IntegrityError:
             return {'error': '人人帐号已被使用。'}, 403
-        UserProfile.objects.create(user=user, renren_id=renren_id,
-          nickname=nickname, renren_name=name)
+        UserProfile.objects.create(user=user, nickname=nickname, 
+          renren_id=renren_id, renren_name=name, renren_token=token)
 
         user = auth.authenticate(renren_token=token)
         auth.login(request, user)
@@ -363,6 +372,7 @@ def edit(request):
     # password = request.POST.get('password', None)
     nickname = request.POST.get('nickname', None)
     weibo_token = request.POST.get('weibo_token', None)
+    renren_token = request.POST.get('renren_token', None)
     campus_id = request.POST.get('campus_id', None)
     campus_none = request.POST.get('campus_none', None)
 
@@ -396,6 +406,23 @@ def edit(request):
         user_profile.weibo_id = weibo_id
         user_profile.weibo_name = weibo_name
         user_profile.weibo_token = weibo_token
+
+    if renren_token:
+        try:
+            renren_id, renren_name = get_renren_profile(renren_token)
+        except VerifyError:
+            return {
+                'error_code': "InvalidToken",
+                'error': "人人 token 错误。",
+            }, 403
+        if renren_id != user_profile.renren_id and UserProfile.objects.filter(renren_id=renren_id).exists():
+            return {
+                'error_code': "TokenAlreadyUsed",
+                'error': "人人帐号已被使用。",
+            }, 403
+        user_profile.renren_id = renren_id
+        user_profile.renren_name = renren_name
+        user_profile.renren_token = renren_token
 
     if campus_id:
         try:

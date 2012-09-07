@@ -9,13 +9,10 @@ import hashlib
 RENREN_APP_API_KEY = "d5b688951dc4406983fdc536fe64e229"
 RENREN_APP_SECRET_KEY = "6885dc0d0c1b4c35ab71e5fe1cddd8ee"
 
-
 AUTHORIZATION_URI = "http://graph.renren.com/oauth/authorize"
 ACCESS_TOKEN_URI = "http://graph.renren.com/oauth/token"
 SESSION_KEY_URI = "http://graph.renren.com/renren_api/session_key"
 API_SERVER = "http://api.renren.com/restserver.do"
-
-
 
 class RenRenAPIClient(object):
     def __init__(self, app_key=None, app_secret=None, token=None):  
