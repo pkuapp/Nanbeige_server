@@ -146,13 +146,14 @@ class UserProfile(models.Model):
         return u'#%s (#%s %s)' % (self.id, self.user.id, self.user.username)
 
 class CourseStatus(models.Model):
+    CANCEL = -1
     SELECT = 0
     AUDIT = 1
-    STATUS_CHOICES = ((SELECT, 'select'), (AUDIT, 'audit'))
+    STATUS_CHOICES = ((CANCEL, 'cancel'), (SELECT, 'select'), (AUDIT, 'audit'))
     user_profile = models.ForeignKey(UserProfile)
     course = models.ForeignKey(Course)
     status = models.IntegerField(choices=STATUS_CHOICES)
-
+    time = models.DateTimeField(auto_now=True)
 
 def generate_news_for_course_status(sender, **kwargs):
     instance = kwargs['instance']

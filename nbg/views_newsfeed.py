@@ -19,11 +19,10 @@ def newsfeed(request):
         sub_list = newsfeed_list.filter(time__gte=after).order_by('time')
 
     ret = [{
-            'news_type': NewsFeed.NEWS_TYPE_CHOICES[x.news_type][1],
-            'ref_model': 'Course',
-            'object_id': x.object_id,
-            'time': x.time.isoformat(' '),
-            } for x in sub_list]
+        'news_type': NewsFeed.NEWS_TYPE_CHOICES[x.news_type][1],
+        'ref_model': 'Course',
+        'object_id': x.object_id,
+        'time': x.time.isoformat(' '),
+    } for x in sub_list]
 
     return ret
-
