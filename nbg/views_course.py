@@ -73,7 +73,7 @@ def all(request):
     except Semester.DoesNotExist:
         return {'error_code': 'SemesterNotFound'}, 404
 
-    cache_name = 'semester_{}_courses'.format(semester.pk)
+    cache_name = 'semester_{0}_courses'.format(semester.pk)
     courses = cache.get(cache_name)
     if not courses:
         courses = semester.course_set.values("id", "name")
@@ -329,7 +329,7 @@ def course_grab_start(request):
                 CourseStatus.objects.create(user_profile=user_profile,
                   course=course, status=CourseStatus.SELECT)
             if db_updated:
-                cache_name = 'semester_{}_courses'.format(semester.pk)
+                cache_name = 'semester_{0}_courses'.format(semester.pk)
                 cache.delete(cache_name)
             UserAction.objects.create(user=request.user, semester=semester, action_type=UserAction.COURSE_IMPORTED)
             return {'semester_id': grabber.semester_id}
