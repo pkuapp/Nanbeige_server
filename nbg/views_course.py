@@ -73,7 +73,12 @@ def all(request):
     except Semester.DoesNotExist:
         return {'error_code': 'SemesterNotFound'}, 404
 
-    courses = semester.course_set.values("id", "name")
+    cache_name = 'semester_{}_courses'.format(semester.pk)
+    courses = cache.get(cache_name)
+    if not courses:
+        courses = semester.course_set.values("id", "name")
+        # timeout: one week
+        cache.set(cache_name, courses, 604800)
     return list(courses)
 
 @json_response
@@ -315,12 +320,17 @@ def course_grab_start(request):
             user_profile = request.user.get_profile()
             CourseStatus.objects.filter(user_profile=user_profile, status=CourseStatus.SELECT).delete()
             semester = Semester.objects.get(pk=grabber.semester_id)
+            db_updated = False
             for c in grabber.courses:
                 course = find_in_db(c)
                 if not course:
                     course = add_to_db(c, semester)
+                    db_updated = True
                 CourseStatus.objects.create(user_profile=user_profile,
                   course=course, status=CourseStatus.SELECT)
+            if db_updated:
+                cache_name = 'semester_{}_courses'.format(semester.pk)
+                cache.delete(cache_name)
             UserAction.objects.create(user=request.user, semester=semester, action_type=UserAction.COURSE_IMPORTED)
             return {'semester_id': grabber.semester_id}
         except LoginError as e:
