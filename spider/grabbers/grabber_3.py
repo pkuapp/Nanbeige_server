@@ -32,7 +32,7 @@ class TeapotParser(BaseParser):
             '10-13周上': '10,11,12,13',
             '教学周：第 4-19 周': '4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19',
             '教学周：第 8-11 周': '8,9,10,11',
-            '1-3，7-19周（双周）': '2,8,10,12,14,16,18',
+            '1-3，7-19周（双周）': '1,2,3,8,10,12,14,16,18',
             '9-16周上': '9,10,11,12,13,14,15,16',
             '7-14周上': '7,8,9,10,11,12,13,14',
             '4-5,10-19周上': '4,5,10,11,12,13,14,15,16,17,18,19',
@@ -68,7 +68,7 @@ class TeapotParser(BaseParser):
             '': 'None',
             '实践教学：第3周': '3',
             '教学周：第 4-17 周（单周）': '5,7,9,11,13,15,17',
-            '1-3，7-19周（单周）': '1,3,7,9,11,13,15,17,19',
+            '1-3，7-19周（单周）': '1,2,3,7,9,11,13,15,17,19',
             '4-5,10-11周上': '4,5,10,11',
             '10-12周上': '10,11,12',
             '10,12,14周上': '10,12,14',
@@ -101,18 +101,38 @@ class TeapotParser(BaseParser):
 
         if location == '  ':
             location = None
-
         if day_text == '':
             day_text = None
         else:
             day_text = int(day_text)
 
-        if week_text.encode('utf8') in self.week_data:
-            weeks = self.week_data[week_text.encode('utf8')]
-        else:
-            print week_text.encode('utf8')
-            weeks = raw_input('weeks:')
-            self.week_data[week_text.encode('utf8')] = weeks
+        weeks = []
+        slices = week_text.split(',')
+        if slices[0] == week_text:
+            slices = week_text.split(u'、')
+        if slices[0] == week_text:
+            slices = week_text.split(u'，')
+        for mouse in slices:
+            res = []
+            baidu = re.search('\d+-\d+', mouse)
+            if baidu:
+                data = re.findall('\d+', baidu.group(0))
+                res = [i for i in range(int(data[0]), int(data[1]) + 1)]
+            else:
+                google = re.search('\d+', mouse)
+                if google:
+                    data = re.findall('\d+', google.group(0))
+                    res = [int(data[0])]
+            if u'单周' in mouse:
+                res = [i for i in res if i % 2 == 1]
+            elif u'双周' in mouse:
+                res = [i for i in res if i % 2 == 0]
+            weeks.extend(res)
+
+        weeks.sort()
+        weeks = list_to_comma_separated(weeks)
+        if weeks == '':
+            weeks = 'None'
 
         number = re.findall("\d{1,2}", start_end_text)
         if number == []:
@@ -125,7 +145,7 @@ class TeapotParser(BaseParser):
             'day': day_text,
             'start': number[0],
             'end': number[1],
-            'weeks': weeks,
+            'weeks': list_to_comma_separated(weeks),
             'week_raw': week_text,
             'location': location,
         })
@@ -289,5 +309,5 @@ class TeapotParser(BaseParser):
 
 if __name__ == "__main__":
     grabber = TeapotParser()
-    grabber.test()
-    # grabber.grab_all()
+    #grabber.test()
+    grabber.grab_all()
