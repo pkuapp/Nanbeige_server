@@ -24,6 +24,9 @@ def listify_int(str):
 def parse_datetime(str):
     return datetime.strptime(str, "%Y-%m-%d %H:%M:%S")
 
+def once_upon_a_time():
+    return datetime(2000, 1, 1, 0, 0)
+
 def json_response(func):
     def inner(request=None, *args, **kwargs):
         status_code = 200
