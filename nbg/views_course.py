@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.views.decorators.http import require_http_methods
+from django.core.exceptions import ValidationError
 from datetime import datetime
 from nbg.models import Course, Assignment, Comment, Semester, UserAction, CourseStatus
 from nbg.helpers import listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db, float_nullable
@@ -8,12 +9,22 @@ from spider.grabbers.grabber_base import LoginError, GrabError
 from django.core.cache import cache
 from django.http import HttpResponse
 
+@require_http_methods(['GET'])
 @auth_required
 @json_response
 def course_list(request):
-    user = request.user
-    course_statuses = (user.get_profile().coursestatus_set.all().
+    after = request.GET.get('after', None)
+    user_profile = request.user.get_profile()
+
+    course_statuses = (user_profile.coursestatus_set.all().
       select_related('course').prefetch_related('course__lesson_set'))
+
+    if after:
+        try:
+            course_statuses = course_statuses.filter(time__gte=after)
+        except ValidationError:
+            return {'error_code': 'SyntaxError'}, 400
+
     response = [{
         'id': course_status.course_id,
         'status': CourseStatus.STATUS_CHOICES_DICT[course_status.status],
@@ -41,7 +52,7 @@ def course(request, offset):
     try:
         course = Course.objects.get(pk=course_id)
     except Course.DoesNotExist:
-        return {'error_code': 'CourseNotFound'}
+        return {'error_code': 'CourseNotFound'}, 404
 
     response = {
         'id': course_id,
@@ -88,31 +99,30 @@ def edit(request, offset):
     course_id = int(offset)
     status = request.POST.get('status', None)
 
+    if status not in ('select', 'audit', 'cancel'):
+        return {'error_code': 'SyntaxError'}, 400
+
     try:
         course = Course.objects.get(pk=course_id)
     except Course.DoesNotExist:
         return {'error_code': 'CourseNotFound'}, 404
 
-    if status not in ('select', 'audit', 'none'):
-        return {'error_code': 'SyntaxError'}, 400
-
     user_profile = request.user.get_profile()
 
-    if status == 'select' or status == 'audit':
-        if status == 'select':
-            status_value = CourseStatus.SELECT
-        elif status == 'audit':
-            status_value = CourseStatus.AUDIT
+    if status == 'select':
+        status_value = CourseStatus.SELECT
+    elif status == 'audit':
+        status_value = CourseStatus.AUDIT
+    elif status == 'cancel':
+        status_value = CourseStatus.CANCEL
 
-        try:
-            course_status = CourseStatus.objects.get(user_profile=user_profile, course=course)
-        except CourseStatus.DoesNotExist:
-            CourseStatus.objects.create(user_profile=user_profile, course=course, status=status_value)
-        else:
-            course_status.status = status_value
-            course_status.save()
-    elif status == 'none':
-        CourseStatus.objects.filter(user_profile=user_profile, course=course).delete()
+    try:
+        course_status = CourseStatus.objects.get(user_profile=user_profile, course=course)
+    except CourseStatus.DoesNotExist:
+        CourseStatus.objects.create(user_profile=user_profile, course=course, status=status_value)
+    else:
+        course_status.status = status_value
+        course_status.save()
 
     return 0
 

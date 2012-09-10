@@ -599,7 +599,11 @@ td:last-child {
 <tr>
   <td align="left">/</td>
   <td align="left"><code>GET*</code></td>
-  <td align="left">none</td>
+  <td align="left">
+    <ul>
+      <li><code class="optional">time</code> after</li>
+    </ul>
+  </td>
   <td align="left"><pre>[
   {
     "id": 65537,
@@ -637,7 +641,11 @@ td:last-child {
   },
   ...
 ]</pre></td>
-  <td align="left">返回当前用户的全部课程。<code>status</code> 可取值 select 和 audit。<code>course_id</code> 为教务网课程编号。<code>lessons</code> 中，<code>day</code> 为在星期几上课（1-7），<code>start</code> 和 <code>end</code> 为起止节次。</td>
+  <td align="left">
+    <p>返回 <code>after</code> 之后修改过的当前用户课程，若 <code>after</code> 未提供，返回全部。</p>
+    <p><code>status</code> 可取值 select、audit 和 cancel。cancel 意味着用户执行过取消选课或取消旁听的操作。</p>
+    <p><code>course_id</code> 为教务网课程编号。<code>lessons</code> 中，<code>day</code> 为在星期几上课（1-7），<code>start</code> 和 <code>end</code> 为起止节次。</p>
+  </td>
 </tr>
 
 <tr>
@@ -764,7 +772,7 @@ td:last-child {
       <li><code>0</code> success</li>
     </ul>
   </td>
-  <td align="left">修改用户对 id 课程的选课情况。<code>status</code> 的取值可以是 select、audit 和 none。</td>
+  <td align="left">修改用户对 id 课程的选课情况。<code>status</code> 的取值可以是 select、audit 和 cancel。</td>
 </tr>
 
 <tr>

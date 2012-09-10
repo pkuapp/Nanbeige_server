@@ -19,7 +19,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 class CourseStatusInline(admin.TabularInline):
     model = CourseStatus
-    raw_id_fields = ("course",)
+    raw_id_fields = ('course',)
 
 def user_id(user_profile):
     return user_profile.user.id
@@ -31,7 +31,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     inlines = (CourseStatusInline,)
 
 class CourseStatusAdmin(admin.ModelAdmin):
-    list_display = ('user_profile', 'course', 'status')
+    list_display = ('user_profile', 'course', 'time', 'status')
 
 class UserActionAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'semester', 'action_type')
