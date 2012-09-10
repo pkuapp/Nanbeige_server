@@ -149,7 +149,12 @@ class CourseStatus(models.Model):
     CANCEL = -1
     SELECT = 0
     AUDIT = 1
-    STATUS_CHOICES = ((CANCEL, 'cancel'), (SELECT, 'select'), (AUDIT, 'audit'))
+    STATUS_CHOICES_DICT = {
+        CANCEL: 'cancel',
+        SELECT: 'select',
+        AUDIT: 'audit',
+    }
+    STATUS_CHOICES = STATUS_CHOICES_DICT.items()
     user_profile = models.ForeignKey(UserProfile)
     course = models.ForeignKey(Course)
     status = models.IntegerField(choices=STATUS_CHOICES)

@@ -16,7 +16,7 @@ def course_list(request):
       select_related('course').prefetch_related('course__lesson_set'))
     response = [{
         'id': course_status.course_id,
-        'status': CourseStatus.STATUS_CHOICES[course_status.status][1],
+        'status': CourseStatus.STATUS_CHOICES_DICT[course_status.status],
         'orig_id': course_status.course.original_id,
         'name': course_status.course.name,
         'credit': float_nullable(course_status.course.credit),
