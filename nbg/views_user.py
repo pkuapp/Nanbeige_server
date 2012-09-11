@@ -46,7 +46,47 @@ def sync_credentials_to_couchdb(user, username, password_or_token):
 @auth_required
 @json_response
 def get_user(request):
-    return {'id': request.user.pk}
+    user = request.user
+    user_profile = request.user.get_profile()
+
+    response = {
+        'id': user.pk,
+        'nickname': user_profile.nickname,
+        'course_imported': [action.semester.pk for action in
+          user.useraction_set.filter(action_type=UserAction.COURSE_IMPORTED)],
+    }
+
+    if user_profile.weibo_id:
+       response.update({
+           'weibo': {
+               'id': user_profile.weibo_id,
+               'name': user_profile.weibo_name,
+               'token': user_profile.weibo_token,
+            },
+        })
+    if user_profile.renren_id:
+        response.update({
+            'renren': {
+                'id': user_profile.renren_id,
+                'name': user_profile.renren_name,
+                'token': user_profile.renren_token,
+             },
+         })
+
+    campus = user_profile.campus
+    if campus:
+        response.update({
+            'university': {
+                'id': campus.university.pk,
+                'name': campus.university.name,
+            },
+            'campus': {
+                'id': campus.pk,
+                'name': campus.name
+            },
+        })
+
+    return response
 
 @require_http_methods(['POST'])
 @json_response
@@ -127,7 +167,7 @@ def login_weibo(request):
     except HTTPError:
         return {
             'error_code': "ErrorConnectingServer",
-            'error': "连接微博服务器时发生错误。",
+            'error': "连接新浪微博服务器时发生错误。",
         }, 503
     except VerifyError:
         return {
