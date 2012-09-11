@@ -453,7 +453,7 @@ def logout(request):
 @require_http_methods(['POST'])
 @auth_required
 @json_response
-def deactive(request):
+def deactivate(request):
     request.user.is_active = False
     request.user.save()
     auth.logout(request)

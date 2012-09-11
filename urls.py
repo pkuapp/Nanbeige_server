@@ -27,7 +27,7 @@ urlpatterns = patterns('',
     (r'^user/reg/renren/$', 'nbg.views_user.reg_renren'),
     (r'^user/edit/$', 'nbg.views_user.edit'),
     (r'^user/logout/$', 'nbg.views_user.logout'),
-    (r'^user/deactive/$', 'nbg.views_user.deactive'),
+    (r'^user/deactivate/$', 'nbg.views_user.deactivate'),
 
     (r'^university/$', 'nbg.views_university.university_list'),
     (r'^university/(\d+)/$', 'nbg.views_university.detail'),
