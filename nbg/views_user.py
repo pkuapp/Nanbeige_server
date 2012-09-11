@@ -86,9 +86,9 @@ def login_email(request):
             if user_profile.renren_id:
                 response.update({
                     'renren': {
-                        'id': user_profile.weibo_id,
-                        'name': user_profile.weibo_name,
-                        'token': user_profile.weibo_token,
+                        'id': user_profile.renren_id,
+                        'name': user_profile.renren_name,
+                        'token': user_profile.renren_token,
                      },
                  })
 
@@ -337,7 +337,7 @@ def reg_renren(request):
             renren_id, name = get_renren_profile(token)
         except HTTPError:
             return {
-                'error_code': "ErrorConnectingWeiboServer",
+                'error_code': "ErrorConnectingRenrenServer",
                 'error': "连接人人服务器时发生错误。",
             }, 503
         except VerifyError:
