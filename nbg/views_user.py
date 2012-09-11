@@ -120,13 +120,13 @@ def login_email(request):
 def login_weibo(request):
     weibo_token = request.POST.get('token', None)
     if not weibo_token:
-        return {'error': '缺少必要的参数。'}, 400
+        return {'error_code': "BadSyntax"}, 400
 
     try:
         user = auth.authenticate(weibo_token=weibo_token)
     except HTTPError:
         return {
-            'error_code': "ErrorConnectingWeiboServer",
+            'error_code': "ErrorConnectingServer",
             'error': "连接微博服务器时发生错误。",
         }, 503
     except VerifyError:
@@ -158,6 +158,22 @@ def login_weibo(request):
 
             user_profile.save()
 
+            response.update({
+               'weibo': {
+                   'id': weibo_id,
+                   'name': weibo_name,
+                   'token': weibo_token,
+                },
+            })
+            if user_profile.renren_id:
+                response.update({
+                    'renren': {
+                        'id': user_profile.renren_id,
+                        'name': user_profile.renren_name,
+                        'token': user_profile.renren_token,
+                     },
+                 })
+
             campus = user_profile.campus
             if campus:
                 response.update({
@@ -187,13 +203,13 @@ def login_weibo(request):
 def login_renren(request):
     renren_token = request.POST.get('token', None)
     if not renren_token:
-        return {'error': '缺少必要的参数。'}, 400
+        return {'error_code': "BadSyntax"}, 400
 
     try:
         user = auth.authenticate(renren_token=renren_token)
     except HTTPError:
         return {
-            'error_code': "ErrorConnectingRenrenServer",
+            'error_code': "ErrorConnectingServer",
             'error': "连接人人服务器时发生错误。",
         }, 503
     except VerifyError:
@@ -224,6 +240,22 @@ def login_renren(request):
                 user_profile.renren_name = renren_name
 
             user_profile.save()
+
+            if user_profile.weibo_id:
+               response.update({
+                   'weibo': {
+                       'id': user_profile.weibo_id,
+                       'name': user_profile.weibo_name,
+                       'token': user_profile.weibo_token,
+                    },
+                })
+            response.update({
+                'renren': {
+                    'id': renren_id,
+                    'name': renren_name,
+                    'token': renren_token,
+                 },
+             })
 
             campus = user_profile.campus
             if campus:
@@ -261,8 +293,6 @@ def reg_email(request):
             validate_email(email)
         except ValidationError:
             return {'error': 'Email 格式不正确。'}, 400
-        if len(email) > 70:
-            return {'error': 'Email 地址过长。'}, 400
 
         if campus_id:
             try:
@@ -299,8 +329,8 @@ def reg_weibo(request):
             weibo_id, weibo_name = get_weibo_profile(token)
         except HTTPError:
             return {
-                'error_code': "ErrorConnectingWeiboServer",
-                'error': "连接微博服务器时发生错误。",
+                'error_code': "ErrorConnectingServer",
+                'error': "连接新浪微博服务器时发生错误。",
             }, 503
         except VerifyError:
             return {
@@ -337,7 +367,7 @@ def reg_renren(request):
             renren_id, name = get_renren_profile(token)
         except HTTPError:
             return {
-                'error_code': "ErrorConnectingRenrenServer",
+                'error_code': "ErrorConnectingServer",
                 'error': "连接人人服务器时发生错误。",
             }, 503
         except VerifyError:
@@ -390,8 +420,8 @@ def edit(request):
             weibo_id, weibo_name = get_weibo_profile(weibo_token)
         except HTTPError:
             return {
-                'error_code': "ErrorConnectingWeiboServer",
-                'error': "连接微博服务器时发生错误。",
+                'error_code': "ErrorConnectingServer",
+                'error': "连接新浪微博服务器时发生错误。",
             }, 503
         except VerifyError:
             return {
