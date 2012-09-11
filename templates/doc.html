@@ -372,12 +372,29 @@ td:last-child {
       <li><code class="required">str</code> nickname</li>
     </ul>
   </td>
-  <td align="left"><pre>{
-  "id": 930111
-}</pre><pre>{
-  "error": "微博帐号已被使用。"
-}</td>
+  <td align="left">
+    <pre>{"id": 930111}</pre>
+    <pre>{"error": "微博帐号已被使用。"}</pre>
+    <pre>{"error_code": "InvalidToken"}</pre>
+  </td>
   <td align="left">使用新浪微博 token 注册。</td>
+</tr>
+
+<tr>
+  <td align="left">/reg/renren/</td>
+  <td align="left"><code>POST</code></td>
+  <td align="left">
+    <ul>
+      <li><code class="required">str</code> token</li>
+      <li><code class="required">str</code> nickname</li>
+    </ul>
+  </td>
+  <td align="left">
+    <pre>{"id": 233}</pre>
+    <pre>{"error": "人人帐号已被使用。"}</pre>
+    <pre>{"error_code": "InvalidToken"}</pre>
+  </td>
+  <td align="left">使用人人 token 注册。</td>
 </tr>
 
 <tr>
