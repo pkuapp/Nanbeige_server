@@ -322,6 +322,15 @@ def login_renren(request):
 
 @require_http_methods(['POST'])
 @json_response
+def reg(request, offset):
+    nickname = request.POST.get('nickname', None)
+    campus_id = request.POST.get('campus_id', None)
+
+    return offset
+    pass
+
+@require_http_methods(['POST'])
+@json_response
 def reg_email(request):
     email = request.POST.get('email', None)
     nickname = request.POST.get('nickname', None)
