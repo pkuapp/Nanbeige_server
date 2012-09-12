@@ -40,7 +40,7 @@ class TeapotParser(BaseParser):
             with open(os.path.join(os.path.dirname(__file__), 'log.html'), 'w') as log:
                 log.write(response)
 
-    def get_lessons(self, week_text, day_text, start_end_text, location):
+    def get_lessons(self, weeks_text, day_text, start_end_text, location):
         lessons = []
 
         if location == '  ':
@@ -51,28 +51,34 @@ class TeapotParser(BaseParser):
             day_text = int(day_text)
 
         weeks = []
-        slices = week_text.split(',')
-        if slices[0] == week_text:
-            slices = week_text.split(u'、')
-        if slices[0] == week_text:
-            slices = week_text.split(u'，')
+        weeks_display = u'第'
+        slices = weeks_text.split(',')
+        if slices[0] == weeks_text:
+            slices = weeks_text.split(u'、')
+        if slices[0] == weeks_text:
+            slices = weeks_text.split(u'，')
         for mouse in slices:
             res = []
             baidu = re.search('\d+-\d+', mouse)
             if baidu:
                 data = re.findall('\d+', baidu.group(0))
                 res = [i for i in range(int(data[0]), int(data[1]) + 1)]
+                weeks_display = weeks_display + '{}-{}'.format(data[0], data[1])
             else:
                 google = re.search('\d+', mouse)
                 if google:
                     data = re.findall('\d+', google.group(0))
                     res = [int(data[0])]
+                    weeks_display = weeks_display + '{}'.format(data[0])
             if u'单周' in mouse:
                 res = [i for i in res if i % 2 == 1]
+                weeks_display = weeks_display + u'单'
             elif u'双周' in mouse:
                 res = [i for i in res if i % 2 == 0]
+                weeks_display = weeks_display + u'双'
             weeks.extend(res)
-
+            weeks_display = weeks_display + ' '
+        weeks_display = weeks_display[:-1] + u'周'
         weeks.sort()
         weeks = list_to_comma_separated(weeks)
         if weeks == '':
@@ -90,7 +96,8 @@ class TeapotParser(BaseParser):
             'start': number[0],
             'end': number[1],
             'weeks': weeks,
-            'week_raw': week_text,
+            'weeks_raw': weeks_text,
+            'weeks_display': weeks_display,
             'location': location,
         })
 
@@ -154,11 +161,11 @@ class TeapotParser(BaseParser):
                 except:
                     break
                 teacher = self.get_teachers(cols[3].get_text(strip=True))
-                week_text = cols[4].get_text(strip=True)
+                weeks_text = cols[4].get_text(strip=True)
                 day_text = cols[5].get_text(strip=True)
                 start_end_text = cols[6].get_text(strip=True)
                 location = cols[7].get_text(strip=True) + ' ' + cols[8].get_text(strip=True) + ' ' + cols[9].get_text(strip=True)
-                lessons = self.get_lessons(week_text, day_text, start_end_text, location)
+                lessons = self.get_lessons(weeks_text, day_text, start_end_text, location)
                 code_name = cols[10].get_text(strip=True)
 
                 course = {
@@ -234,11 +241,11 @@ class TeapotParser(BaseParser):
 
             location = cols[15].get_text(strip=True) + ' ' + cols[16].get_text(strip=True) + ' ' + cols[17].get_text(strip=True)
             teacher = self.get_teachers(cols[7].get_text(strip=True))
-            week_text = cols[11].get_text(strip=True)
+            weeks_text = cols[11].get_text(strip=True)
             day_text = cols[12].get_text(strip=True)
             start_end_text = cols[13].get_text(strip=True) + '-' + str(int(cols[13].get_text(strip=True)) + int(cols[14].get_text(strip=True)))
             
-            lessons = self.get_lessons(week_text, day_text, start_end_text, location)
+            lessons = self.get_lessons(weeks_text, day_text, start_end_text, location)
 
             course = {
                 'original_id': cols[1].get_text(strip=True),
