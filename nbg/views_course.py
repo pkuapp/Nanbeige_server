@@ -1,22 +1,33 @@
 # -*- coding: utf-8 -*-
 
 from django.views.decorators.http import require_http_methods
+from django.core.exceptions import ValidationError
 from datetime import datetime
-from nbg.models import Course, Assignment, Comment, Semester, UserAction, CourseStatus
+from nbg.models import Course, Comment, Semester, UserAction, CourseStatus
 from nbg.helpers import listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db, float_nullable
 from spider.grabbers.grabber_base import LoginError, GrabError
 from django.core.cache import cache
 from django.http import HttpResponse
 
+@require_http_methods(['GET'])
 @auth_required
 @json_response
 def course_list(request):
-    user = request.user
-    course_statuses = (user.get_profile().coursestatus_set.all().
+    after = request.GET.get('after', None)
+    user_profile = request.user.get_profile()
+
+    course_statuses = (user_profile.coursestatus_set.all().
       select_related('course').prefetch_related('course__lesson_set'))
+
+    if after:
+        try:
+            course_statuses = course_statuses.filter(time__gte=after)
+        except ValidationError:
+            return {'error_code': 'SyntaxError'}, 400
+
     response = [{
         'id': course_status.course_id,
-        'status': CourseStatus.STATUS_CHOICES[course_status.status][1],
+        'status': CourseStatus.STATUS_CHOICES_DICT[course_status.status],
         'orig_id': course_status.course.original_id,
         'name': course_status.course.name,
         'credit': float_nullable(course_status.course.credit),
@@ -41,7 +52,7 @@ def course(request, offset):
     try:
         course = Course.objects.get(pk=course_id)
     except Course.DoesNotExist:
-        return {'error_code': 'CourseNotFound'}
+        return {'error_code': 'CourseNotFound'}, 404
 
     response = {
         'id': course_id,
@@ -81,133 +92,6 @@ def all(request):
         cache.set(cache_name, courses, 604800)
     return list(courses)
 
-@json_response
-def assignment_list(request):
-    user = request.user
-    assignment_objs = user.assignment_set.all()
-    response = [{
-        'id': item.pk,
-        'course': item.course.name,
-        'due': item.due.isoformat(' '),
-        'content': item.content, 
-        'finished': item.finished,
-        'last_modified': item.last_modified.isoformat(' '),
-    } for item in assignment_objs]
-    return response
-
-@require_http_methods(['POST'])
-@auth_required
-@json_response
-def assignment_finish(request, offset):
-    id = int(offset)
-    finished = int(request.POST.get('finished', 1))
-
-    try:
-        assignment = Assignment.objects.get(pk=id)
-    except Assignment.DoesNotExist:
-        return {'error': '作业不存在。'}, 404
-
-    if assignment.user != request.user:
-        return {'error': '作业不属于当前用户。'}, 403
-
-    assignment.finished = finished
-    assignment.last_modified = datetime.now()
-    assignment.save()
-
-    return 0
-
-@require_http_methods(['POST'])
-@auth_required
-@json_response
-def assignment_delete(request, offset):
-    id = int(offset)
-
-    try:
-        assignment = Assignment.objects.get(pk=id)
-    except Assignment.DoesNotExist:
-        return {'error': '作业不存在。'}, 404
-
-    if assignment.user != request.user:
-        return {'error': '作业不属于当前用户。'}, 403
-
-    assignment.delete()
-
-    return 0
-
-@require_http_methods(['POST'])
-@auth_required
-@json_response
-def assignment_modify(request, offset):
-    id = int(offset)
-
-    try:
-        assignment = Assignment.objects.get(pk=id)
-    except Assignment.DoesNotExist:
-        return {'error': '作业不存在。'}, 404
-
-    if assignment.user != request.user:
-        return {'error': '作业不属于当前用户。'}, 403
-
-    course_id = request.POST.get('course_id', None)
-    due = request.POST.get('due', None)
-    content = request.POST.get('content', None)
-    finished = request.POST.get('finished', None)
-
-    if course_id:
-        try:
-            course = Course.objects.get(pk=course_id)
-        except Course.DoesNotExist:
-            return {'error': '课程不存在。'}, 404
-        try:
-            request.user.get_profile().courses.get(pk=course_id)
-        except Course.DoesNotExist:
-            return {'error': '课程不属于当前用户。'}, 403
-        assignment.course = course
-    if due:
-        try:
-            assignment.due = parse_datetime(due)
-        except ValueError:
-            return {'error': '截止日期格式错误。'}, 400
-    if content:
-        assignment.content = content
-    if finished:
-        assignment.finished = finished
-
-    assignment.last_modified = datetime.now()
-    assignment.save()
-
-    return 0
-
-@require_http_methods(['POST'])
-@auth_required
-@json_response
-def assignment_add(request):
-    course_id = request.POST.get('course_id', None)
-    due = request.POST.get('due', None)
-    content = request.POST.get('content', None)
-
-    if course_id and due and content:
-        try:
-            course = Course.objects.get(pk=course_id)
-        except Course.DoesNotExist:
-            return {'error': '课程不存在。'}, 404
-        try:
-            request.user.get_profile().courses.get(pk=course_id)
-        except Course.DoesNotExist:
-            return {'error': '课程不属于当前用户。'}, 403
-
-        try:
-            due = parse_datetime(due)
-        except ValueError:
-            return {'error': '截止日期格式错误。'}, 400
-
-        assignment = Assignment(course=course, user=request.user, due=due, content=content,
-          finished=False, last_modified=datetime.now())
-        assignment.save()
-        return {'id': assignment.pk}
-    else:
-        return {'error': '缺少必要的参数。'}, 400
-
 @require_http_methods(['POST'])
 @auth_required
 @json_response
@@ -215,31 +99,30 @@ def edit(request, offset):
     course_id = int(offset)
     status = request.POST.get('status', None)
 
+    if status not in ('select', 'audit', 'cancel'):
+        return {'error_code': 'SyntaxError'}, 400
+
     try:
         course = Course.objects.get(pk=course_id)
     except Course.DoesNotExist:
         return {'error_code': 'CourseNotFound'}, 404
 
-    if status not in ('select', 'audit', 'none'):
-        return {'error_code': 'SyntaxError'}, 400
-
     user_profile = request.user.get_profile()
 
-    if status == 'select' or status == 'audit':
-        if status == 'select':
-            status_value = CourseStatus.SELECT
-        elif status == 'audit':
-            status_value = CourseStatus.AUDIT
+    if status == 'select':
+        status_value = CourseStatus.SELECT
+    elif status == 'audit':
+        status_value = CourseStatus.AUDIT
+    elif status == 'cancel':
+        status_value = CourseStatus.CANCEL
 
-        try:
-            course_status = CourseStatus.objects.get(user_profile=user_profile, course=course)
-        except CourseStatus.DoesNotExist:
-            CourseStatus.objects.create(user_profile=user_profile, course=course, status=status_value)
-        else:
-            course_status.status = status_value
-            course_status.save()
-    elif status == 'none':
-        CourseStatus.objects.filter(user_profile=user_profile, course=course).delete()
+    try:
+        course_status = CourseStatus.objects.get(user_profile=user_profile, course=course)
+    except CourseStatus.DoesNotExist:
+        CourseStatus.objects.create(user_profile=user_profile, course=course, status=status_value)
+    else:
+        course_status.status = status_value
+        course_status.save()
 
     return 0
 

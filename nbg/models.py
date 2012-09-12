@@ -149,7 +149,12 @@ class CourseStatus(models.Model):
     CANCEL = -1
     SELECT = 0
     AUDIT = 1
-    STATUS_CHOICES = ((CANCEL, 'cancel'), (SELECT, 'select'), (AUDIT, 'audit'))
+    STATUS_CHOICES_DICT = {
+        CANCEL: 'cancel',
+        SELECT: 'select',
+        AUDIT: 'audit',
+    }
+    STATUS_CHOICES = STATUS_CHOICES_DICT.items()
     user_profile = models.ForeignKey(UserProfile)
     course = models.ForeignKey(Course)
     status = models.IntegerField(choices=STATUS_CHOICES)
@@ -189,23 +194,14 @@ class Lesson(models.Model):
     start = models.SmallIntegerField()
     end = models.SmallIntegerField()
     weekset = models.ForeignKey(Weekset, null=True)
+    weeks = models.CommaSeparatedIntegerField(max_length=200, blank=True)
+    weeks_raw = models.CharField(max_length=200, blank=True)
+    weeks_display = models.CharField(max_length=100, blank=True)
     location = models.CharField(max_length=200)
     course = models.ForeignKey(Course)
 
     def __unicode__(self):
         return u'#%s %s' % (self.id, self.course.name)
-
-class Assignment(models.Model):
-    course = models.ForeignKey(Course)
-    user = models.ForeignKey(User)
-    due = models.DateTimeField()
-    content = models.TextField()
-    finished = models.BooleanField(default=False)
-    deleted = models.BooleanField(default=False)
-    last_modified = models.DateTimeField()
-
-    def __unicode__(self):
-        return u'#%s %s - %s' % (self.id, self.user.username, self.course.name)
 
 class Comment(models.Model):
     course = models.ForeignKey(Course)

@@ -2,7 +2,7 @@
 
 from urllib2 import HTTPError
 from weibo import APIClient
-from renren import RenRenAPIClient
+from renren import RenrenAPIClient
 
 END_OF_THE_WORLD = 4294967295
 
@@ -27,7 +27,7 @@ def get_weibo_profile(token):
         profile = client.get.users__show(uid=ret.uid)
     except HTTPError as e:
         if e.code == 403:
-            raise VerifyError("Invalid weibo token.")
+            raise VerifyError("InvalidToken")
         else:
             raise
     else:
@@ -36,13 +36,17 @@ def get_weibo_profile(token):
 def get_renren_profile(token):
     APP_KEY = 'd5b688951dc4406983fdc536fe64e229'
     APP_SECRET = '6885dc0d0c1b4c35ab71e5fe1cddd8ee'
-    client = RenRenAPIClient(app_key=APP_KEY, app_secret=APP_SECRET, token=token)
+    client = RenrenAPIClient(app_key=APP_KEY, app_secret=APP_SECRET, token=token)
     try:
-        ret = client.request({'access_token': token,  
-            'method': 'users.getInfo', 'v': '1.0', 'format': 'JSON'})
+        ret = client.request({'method': 'users.getInfo'})
     except HTTPError:
         raise VerifyError('Failed connecting to Renren')
     else:
+        if ret.has_key('error_code'):
+            if ret['error_code'] == 105:
+                raise VerifyError("InvalidToken")
+            else:
+                raise HTTPError("UnknownError")
         return ret['uid'], ret['name']
 
 if __name__ == "__main__":

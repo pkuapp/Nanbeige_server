@@ -288,7 +288,17 @@ td:last-child {
 </tr>
 </thead>
 
-<tbody> 
+<tbody>
+
+<tr>
+  <td align="left">/</td>
+  <td align="left"><code>GET*</code></td>
+  <td align="left">none</td>
+  <td align="left">
+    <ul><li>格式与 <code>/login/email/</code> 类似。</li></ul>
+  </td>
+  <td align="left">获取当前登录用户的信息。</td>
+</tr>
 
 <tr>
   <td align="left">/login/email/</td>
@@ -299,7 +309,8 @@ td:last-child {
       <li><code class="required">str</code> password</li>
     </ul>
   </td>
-  <td align="left"><pre>{
+  <td align="left">
+    <pre>{
   "id": 65537,
   "nickname": "塔",
   "weibo": {
@@ -316,11 +327,14 @@ td:last-child {
     "name": ""
   },
   "course_imported": [2, 3]
-}</pre><pre>{
-  "error": "Email 或密码错误。"
 }</pre>
+    <pre>{"error": "Email 或密码错误。"}</pre>
   </td>
-  <td align="left">使用邮箱、密码方式登录。若 university 为 null，说明尚未绑定大学（下同）。course_imported 为已导入课程的学期列表（下同）。</td>
+  <td align="left">
+    <p>使用邮箱、密码方式登录。</p>
+    <p>若 university 为 null，说明尚未绑定大学（下同）。course_imported 为已导入课程的学期列表（下同）。</p>
+    <p>若已绑定微博、人人，会含有 weibo、renren 对象（两者格式相同）。</p>
+  </td>
 </tr>
 
 <tr>
@@ -331,17 +345,26 @@ td:last-child {
       <li><code class="required">str</code> token</li>
     </ul>
   </td>
-  <td align="left"><pre>{
-  "id": 31415926,
-  "email": "coolgene@gmail.com",
-  "nickname": "Ta",
-  "university": null,
-  "campus": null,
-  "course_imported": []
-}</pre><pre>{
-  "error_code": "UserNotFound"
-}</td>
-  <td align="left">使用新浪微博 <code>token</code> 登录。若用户有 email 注册的南北阁帐号，nickname 和 email 均非空。</td>
+  <td align="left">
+    <ul><li>登录成功时格式与 <code>/login/email/</code> 类似。</li></ul>
+    <pre>{"error_code": "UserNotFound"}</pre>
+  </td>
+  <td align="left">使用微博 <code>token</code> 登录。若用户有 email 注册的南北阁帐号，nickname 和 email 均非空。其他错误信息与微博注册时一样。</td>
+</tr>
+
+<tr>
+  <td align="left">/login/renren/</td>
+  <td align="left"><code>POST</code></td>
+  <td align="left">
+    <ul>
+      <li><code class="required">str</code> token</li>
+    </ul>
+  </td>
+  <td align="left">
+    <ul><li>登录成功时格式与 <code>/login/email/</code> 类似。</li></ul>
+    <pre>{"error_code": "UserNotFound"}</pre>
+  </td>
+  <td align="left">使用人人 <code>token</code> 登录。若用户有 email 注册的南北阁帐号，nickname 和 email 均非空。其他错误信息与人人注册时一样。</td>
 </tr>
 
 <tr>
@@ -372,12 +395,37 @@ td:last-child {
       <li><code class="required">str</code> nickname</li>
     </ul>
   </td>
-  <td align="left"><pre>{
-  "id": 930111
-}</pre><pre>{
-  "error": "微博帐号已被使用。"
-}</td>
+  <td align="left">
+    <pre>{"id": 930111}</pre>
+    <pre>{"error": "微博帐号已被使用。"}</pre>
+    <pre>{"error_code": "InvalidToken"}</pre>
+    <pre>{
+  'error_code': "ErrorConnectingServer",
+  'error': "连接新浪微博服务器时发生错误。",
+}</pre>
+  </td>
   <td align="left">使用新浪微博 token 注册。</td>
+</tr>
+
+<tr>
+  <td align="left">/reg/renren/</td>
+  <td align="left"><code>POST</code></td>
+  <td align="left">
+    <ul>
+      <li><code class="required">str</code> token</li>
+      <li><code class="required">str</code> nickname</li>
+    </ul>
+  </td>
+  <td align="left">
+    <pre>{"id": 233}</pre>
+    <pre>{"error": "人人帐号已被使用。"}</pre>
+    <pre>{"error_code": "InvalidToken"}</pre>
+    <pre>{
+  'error_code': "ErrorConnectingServer",
+  'error': "连接人人服务器时发生错误。",
+}</pre>
+  </td>
+  <td align="left">使用人人 token 注册。</td>
 </tr>
 
 <tr>
@@ -398,7 +446,7 @@ td:last-child {
       <li><code>0</code> success</li>
     </ul>
   </td>
-  <td align="left">修改（或添加）用户密码为 <code>password</code>、昵称为 <code>nickname</code>、微博 token 为 <code>weibo_token</code>、人人 token 为 <code>renren_token</code>、绑定校区为 <code>campus_id</code>。若 <code>campus_none</code>（不可与 <code>campus_id</code> 同时存在）为 1，解除校区绑定。</td>
+  <td align="left">修改（或添加）用户密码为 <code>password</code>、昵称为 <code>nickname</code>、微博 token 为 <code>weibo_token</code>、人人 token 为 <code>renren_token</code>、绑定校区为 <code>campus_id</code>。若 <code>campus_none</code>（不可与 <code>campus_id</code> 同时存在）为 1，解除校区绑定。绑定微博、人人的错误信息与注册时一样。</td>
 </tr>
 
 <tr>
@@ -414,7 +462,7 @@ td:last-child {
 </tr>
 
 <tr>
-  <td align="left">/deactive/</td>
+  <td align="left">/deactivate/</td>
   <td align="left"><code>POST*</code></td>
   <td align="left">none</td>
   <td align="left">
@@ -599,7 +647,11 @@ td:last-child {
 <tr>
   <td align="left">/</td>
   <td align="left"><code>GET*</code></td>
-  <td align="left">none</td>
+  <td align="left">
+    <ul>
+      <li><code class="optional">time</code> after</li>
+    </ul>
+  </td>
   <td align="left"><pre>[
   {
     "id": 65537,
@@ -637,7 +689,11 @@ td:last-child {
   },
   ...
 ]</pre></td>
-  <td align="left">返回当前用户的全部课程。<code>status</code> 可取值 select 和 audit。<code>course_id</code> 为教务网课程编号。<code>lessons</code> 中，<code>day</code> 为在星期几上课（1-7），<code>start</code> 和 <code>end</code> 为起止节次。</td>
+  <td align="left">
+    <p>返回 <code>after</code> 之后修改过的当前用户课程，若 <code>after</code> 未提供，返回全部。</p>
+    <p><code>status</code> 可取值 select、audit 和 cancel。cancel 意味着用户执行过取消选课或取消旁听的操作。</p>
+    <p><code>course_id</code> 为教务网课程编号。<code>lessons</code> 中，<code>day</code> 为在星期几上课（1-7），<code>start</code> 和 <code>end</code> 为起止节次。</p>
+  </td>
 </tr>
 
 <tr>
@@ -751,108 +807,6 @@ td:last-child {
   <td align="left">启动课程抓取器，若抓取成功返回 semester_id。</td>
 </tr>
 
-<!--<tr>
-  <td align="left">/assignment/</td>
-  <td align="left"><code>GET*</code></td>
-  <td align="left">none</td>
-  <td align="left"><pre>[
-  {
-    "id": 618,
-    "course_id": 65535,
-    "due": "2012-07-07 08:00",
-    "content": "配置服务器",
-    "finished": true,
-    "last_modified": "2012-07-07 23:59:59"
-  },
-  {
-    "id": 2718,
-    "course_id": 65535,
-    "due": "2012-07-10",
-    "content": "完成 API 草案",
-    "finished": false,
-    "last_modified": "2012-07-08 16:00:19"
-  }
-]</pre></td>
-  <td align="left">返回当前用户的全部作业。</td>
-</tr>
-
-<tr>
-  <td align="left">/assignment/:id/finish/</td>
-  <td align="left"><code>POST*</code></td>
-  <td align="left">
-    <ul>
-      <li><code class="optional">bool</code> finished</li>
-    </ul>
-  </td>
-  <td align="left">
-    <ul>
-      <li><code>0</code> success</li>
-    </ul>
-    <pre>{
-  "error": "作业不存在。"
-}</pre>
-  </td>
-  <td align="left">设置 <code>id</code> 作业的完成状态，默认为已完成。若 <code>finished</code> 为 0，设置为未完成。</td>
-</tr>
-
-<tr>
-  <td align="left">/assignment/:id/delete/</td>
-  <td align="left"><code>POST*</code></td>
-  <td align="left">none</td>
-  <td align="left">
-    <ul>
-      <li><code>0</code> success</li>
-    </ul>
-    <pre>{
-  "error": "作业不属于当前用户。"
-}</pre>
-  </td>
-  <td align="left">删除 <code>id</code> 作业。</td>
-</tr>
-
-<tr>
-  <td align="left">/assignment/:id/modify/</td>
-  <td align="left"><code>POST*</code></td>
-  <td align="left">
-    <ul>
-      <li><code class="optional">int</code> course_id</li>
-      <li><code class="optional">time</code> due</li>
-      <li><code class="optional">str</code> content</li>
-      <li><code class="optional">bool</code> finished</li>
-    </ul>
-  </td>
-  <td align="left">
-    <ul>
-      <li><code>0</code> success</li>
-    </ul>
-    <pre>{
-  "error": "截止日期格式错误。"
-}</pre>
-  </td>
-  <td align="left">修改 <code>id</code> 作业。</td>
-</tr>
-
-<tr>
-  <td align="left">/assignment/add/</td>
-  <td align="left"><code>POST*</code></td>
-  <td align="left">
-    <ul>
-      <li><code class="required">int</code> course_id</li>
-      <li><code class="required">time</code> due</li>
-      <li><code class="required">str</code> content</li>
-    </ul>
-  </td>
-  <td align="left">
-    <pre>{
-  "id": 8
-}</pre>
-    <pre>{
-  "error": "请先登录。"
-}</pre>
-  </td>
-  <td align="left">添加一项作业，返回添加的作业 id。</td>
-</tr>-->
-
 <tr>
   <td align="left">/:id/edit/</td>
   <td align="left"><code>POST*</code></td>
@@ -866,7 +820,7 @@ td:last-child {
       <li><code>0</code> success</li>
     </ul>
   </td>
-  <td align="left">修改用户对 id 课程的选课情况。<code>status</code> 的取值可以是 select、audit 和 none。</td>
+  <td align="left">修改用户对 id 课程的选课情况。<code>status</code> 的取值可以是 select、audit 和 cancel。</td>
 </tr>
 
 <tr>
