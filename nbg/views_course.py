@@ -3,7 +3,7 @@
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ValidationError
 from datetime import datetime
-from nbg.models import Course, Assignment, Comment, Semester, UserAction, CourseStatus
+from nbg.models import Course, Comment, Semester, UserAction, CourseStatus
 from nbg.helpers import listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db, float_nullable
 from spider.grabbers.grabber_base import LoginError, GrabError
 from django.core.cache import cache

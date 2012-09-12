@@ -203,18 +203,6 @@ class Lesson(models.Model):
     def __unicode__(self):
         return u'#%s %s' % (self.id, self.course.name)
 
-class Assignment(models.Model):
-    course = models.ForeignKey(Course)
-    user = models.ForeignKey(User)
-    due = models.DateTimeField()
-    content = models.TextField()
-    finished = models.BooleanField(default=False)
-    deleted = models.BooleanField(default=False)
-    last_modified = models.DateTimeField()
-
-    def __unicode__(self):
-        return u'#%s %s - %s' % (self.id, self.user.username, self.course.name)
-
 class Comment(models.Model):
     course = models.ForeignKey(Course)
     writer = models.ForeignKey(User)
