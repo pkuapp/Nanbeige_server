@@ -89,7 +89,7 @@ class TeapotParser(BaseParser):
             'day': day_text,
             'start': number[0],
             'end': number[1],
-            'weeks': list_to_comma_separated(weeks),
+            'weeks': weeks,
             'week_raw': week_text,
             'location': location,
         })
