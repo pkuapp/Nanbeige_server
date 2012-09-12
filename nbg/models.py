@@ -194,6 +194,9 @@ class Lesson(models.Model):
     start = models.SmallIntegerField()
     end = models.SmallIntegerField()
     weekset = models.ForeignKey(Weekset, null=True)
+    weeks = models.CommaSeparatedIntegerField(max_length=200, blank=True)
+    weeks_raw = models.CharField(max_length=200, blank=True)
+    weeks_display = models.CharField(max_length=100, blank=True)
     location = models.CharField(max_length=200)
     course = models.ForeignKey(Course)
 
