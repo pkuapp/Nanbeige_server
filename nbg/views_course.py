@@ -104,7 +104,6 @@ def course_users(request, offset):
     return response
 
 @json_response
-@append_query
 def all(request):
     semester_id = request.GET.get('semester_id', None)
 
