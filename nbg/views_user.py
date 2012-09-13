@@ -172,7 +172,7 @@ def login_weibo(request):
     except VerifyError:
         return {
             'error_code': "InvalidToken",
-            'error': "微博 token 错误。"
+            'error': "新浪微博 token 错误。"
         }, 403
 
     if user is not None:
@@ -322,123 +322,132 @@ def login_renren(request):
 
 @require_http_methods(['POST'])
 @json_response
-def reg(request, offset):
+def reg(request, method):
     nickname = request.POST.get('nickname', None)
     campus_id = request.POST.get('campus_id', None)
 
-    return offset
-    pass
+    if not nickname:
+        return {'error_code': "BadSyntax"}, 400
 
-@require_http_methods(['POST'])
-@json_response
-def reg_email(request):
-    email = request.POST.get('email', None)
-    nickname = request.POST.get('nickname', None)
-    password = request.POST.get('password', None)
-    campus_id = request.POST.get('campus_id', None)
-
-    if email and nickname and password:
-        try:
-            validate_email(email)
-        except ValidationError:
-            return {'error': 'Email 格式不正确。'}, 400
-
-        if campus_id:
+    '''get necessary args, check em and create the user'''
+    if method == 'email':
+        email = request.POST.get('email', None)
+        password = request.POST.get('password', None)
+        if email and password:
             try:
-                campus = Campus.objects.get(pk=campus_id)
-            except ValueError:
-                return {'error_code': 'BadSyntax'}, 400
-            except Campus.DoesNotExist:
-                return {'error_code': 'CampusNotFound'}, 400
-        try:
-            user = User.objects.create_user(username=email, email=email, password=password)
-        except (IntegrityError, PreconditionFailed):
-            return {'error': 'Email 已被使用。'}, 403
-        user_profile = UserProfile.objects.create(user=user, nickname=nickname)
-        if campus_id:
-            user_profile.campus = campus
-            user_profile.save()
+                validate_email(email)
+            except ValidationError:
+                return {'error': 'Email 格式不正确。'}, 400
 
-        user = auth.authenticate(username=email, password=password)
-        auth.login(request, user)
-        sync_credentials_to_couchdb(user, email, password)
+            username = email
+            try:
+                user = User.objects.create_user(username=username, email=email, password=password)
+            except (IntegrityError, PreconditionFailed):
+                return {'error': 'Email 已被使用。'}, 403
 
-        return {'id': user.pk}
-    else:
-        return {'error_code': "BadSyntax"}, 400
+            profile_args = {}
+            auth_args = {
+                'username': email,
+                'password': password,
+            }
+        else:
+            return {'error_code': "BadSyntax"}, 400
+    elif method == 'weibo':
+        weibo_token = request.POST.get('token', None)
+        if weibo_token:
+            try:
+                weibo_id, weibo_name = get_weibo_profile(weibo_token)
+            except HTTPError:
+                return {
+                    'error_code': "ErrorConnectingServer",
+                    'error': "连接新浪微博服务器时发生错误。",
+                }, 503
+            except VerifyError:
+                return {
+                    'error_code': "InvalidToken",
+                    'error': "新浪微博 token 错误。"
+                }, 403
+            if UserProfile.objects.filter(weibo_id=weibo_id).exists():
+                return {
+                    'error_code': "TokenAlreadyUsed",
+                    'error': "新浪微博帐号已被使用。",
+                }, 403
 
-@require_http_methods(['POST'])
-@json_response
-def reg_weibo(request):
-    token = request.POST.get('token', None)
-    nickname = request.POST.get('nickname', None)
-
-    if token and nickname:
-        try:
-            weibo_id, weibo_name = get_weibo_profile(token)
-        except HTTPError:
-            return {
-                'error_code': "ErrorConnectingServer",
-                'error': "连接新浪微博服务器时发生错误。",
-            }, 503
-        except VerifyError:
-            return {
-                'error_code': "InvalidToken",
-                'error': "微博 token 错误。"
-            }, 403
-
-        if UserProfile.objects.filter(weibo_id=weibo_id).exists():
-            return {
-                'error_code': "TokenAlreadyUsed",
-                'error': "微博帐号已被使用。",
-            }, 403
-        # this password is not used for auth
-        user = User.objects.create_user(username='-weibo-{0}'.format(weibo_id), password=token)
-
-        UserProfile.objects.create(user=user, nickname=nickname,
-          weibo_id=weibo_id, weibo_name=weibo_name, weibo_token=token)
-
-        user = auth.authenticate(weibo_token=token)
-        auth.login(request, user)
-        sync_credentials_to_couchdb(user, '-weibo-{0}'.format(weibo_id), token)
-        return {'id': user.pk}
-    else:
-        return {'error_code': "BadSyntax"}, 400
-
-@require_http_methods(['POST'])
-@json_response
-def reg_renren(request):
-    token = request.POST.get('token', None)
-    nickname = request.POST.get('nickname', None)
-
-    if token and nickname:
-        try:
-            renren_id, name = get_renren_profile(token)
-        except HTTPError:
-            return {
-                'error_code': "ErrorConnectingServer",
-                'error': "连接人人服务器时发生错误。",
-            }, 503
-        except VerifyError:
-            return {
-                'error_code': "InvalidToken",
-                'error': "人人 token 错误。"
-            }, 403
-
-        try:
             # this password is not used for auth
-            user = User.objects.create_user(username='-renren-{0}'.format(renren_id), password=token)
-        except IntegrityError:
-            return {'error': '人人帐号已被使用。'}, 403
-        UserProfile.objects.create(user=user, nickname=nickname, 
-          renren_id=renren_id, renren_name=name, renren_token=token)
+            username = '-weibo-{0}'.format(weibo_id)
+            password = weibo_token
+            user = User.objects.create_user(username=username, password=password)
 
-        user = auth.authenticate(renren_token=token)
-        auth.login(request, user)
-        sync_credentials_to_couchdb(user, '-renren-{0}'.format(renren_id), token)
-        return {'id': user.pk}
+            profile_args = {
+                'weibo_id': weibo_id,
+                'weibo_name': weibo_name,
+                'weibo_token': weibo_token,
+            }
+            auth_args = {
+                'weibo_token': weibo_token,
+            }
+        else:
+            return {'error_code': "BadSyntax"}, 400
+    elif method == 'renren':
+        renren_token = request.POST.get('token', None)
+        if renren_token:
+            try:
+                renren_id, renren_name = get_renren_profile(renren_token)
+            except HTTPError:
+                return {
+                    'error_code': "ErrorConnectingServer",
+                    'error': "连接人人服务器时发生错误。",
+                }, 503
+            except VerifyError:
+                return {
+                    'error_code': "InvalidToken",
+                    'error': "人人 token 错误。"
+                }, 403
+            if UserProfile.objects.filter(renren_id=renren_id).exists():
+                return {
+                    'error_code': "TokenAlreadyUsed",
+                    'error': "人人帐号已被使用。",
+                }, 403
+
+            # this password is not used for auth
+            username = '-renren-{0}'.format(renren_id)
+            password = renren_token
+            user = User.objects.create_user(username=username, password=password)
+
+            profile_args = {
+                'renren_id': renren_id,
+                'renren_name': renren_name,
+                'renren_token': renren_token,
+            }
+            auth_args = {
+                'renren_token': renren_token,
+            }
+        else:
+            return {'error_code': "BadSyntax"}, 400
     else:
         return {'error_code': "BadSyntax"}, 400
+
+    '''maybe wanna set campus'''
+    if campus_id:
+        try:
+            campus = Campus.objects.get(pk=campus_id)
+        except ValueError:
+            return {'error_code': 'BadSyntax'}, 400
+        except Campus.DoesNotExist:
+            return {'error_code': 'CampusNotFound'}, 400
+
+    '''create user profile and login the user'''
+    user_profile = UserProfile(user=user, nickname=nickname, **profile_args)
+    if campus_id:
+        user_profile.campus = campus
+    user_profile.save()
+
+    '''login the user'''
+    user = auth.authenticate(**auth_args)
+    auth.login(request, user)
+    sync_credentials_to_couchdb(user, username, password)
+
+    return {'id': user.pk}
 
 @require_http_methods(['POST'])
 @auth_required
@@ -475,12 +484,12 @@ def edit(request):
         except VerifyError:
             return {
                 'error_code': "InvalidToken",
-                'error': "微博 token 错误。",
+                'error': "新浪微博 token 错误。",
             }, 403
         if weibo_id != user_profile.weibo_id and UserProfile.objects.filter(weibo_id=weibo_id).exists():
             return {
                 'error_code': "TokenAlreadyUsed",
-                'error': "微博帐号已被使用。",
+                'error': "新浪微博帐号已被使用。",
             }, 403
         user_profile.weibo_id = weibo_id
         user_profile.weibo_name = weibo_name
