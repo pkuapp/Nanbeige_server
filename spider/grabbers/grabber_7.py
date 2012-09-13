@@ -51,7 +51,7 @@ def get_lesson(weeks_text, day_text, start_end_text, location):
     # weeks = list_to_comma_separated(weeks)
 
     weeks = []
- 
+
     for col in week_text.split(','):
         if not col:
             pass
@@ -65,9 +65,10 @@ def get_lesson(weeks_text, day_text, start_end_text, location):
             elif len(wkno) == 1:
                 weeks.append(int(wkno[0]))
             else:
-                raise AssertionError
                 print week_text
-     
+                raise AssertionError
+
+
     weeks = list_to_comma_separated(weeks)
 
     number = re.findall("\d{1,2}", start_end_text)
@@ -90,7 +91,6 @@ def get_lesson(weeks_text, day_text, start_end_text, location):
 try:
     with open('data/bjtu.csv') as src:
         source = csv.reader(src)
-        #source = csv.reader(open('data/bjtu.csv'))
         source.next()
 
         prev_code_name = '-1'
@@ -135,8 +135,6 @@ try:
         if courses != []:
             with open(('bjtu.yaml'), 'w') as yaml_file:
                 yaml_file.write(pretty_format(courses))
-
-        src.close()
 
 except IOError:
     print "Cannot open data/bjtu.csv, exiting."
