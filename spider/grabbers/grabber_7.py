@@ -1,8 +1,5 @@
 #!/usr/bin/env python
-<<<<<<< HEAD
-=======
 
->>>>>>> fixed weeks of BJTU.
 # -*- coding: utf-8 -*-
 
 import csv
@@ -24,20 +21,6 @@ def get_lesson(weeks_text, day_text, start_end_text, location):
     else:
         day_text = int(day_text)
 
-<<<<<<< HEAD
-    week_num = re.findall("\d{1,2}", weeks_text)
-    try:
-        weeks = [i for i in range(int(week_num[0]), int(week_num[1]) + 1)]
-    except:
-        weeks = []
-    try:
-        weeks = weeks + [i for i in range(int(week_num[2]), int(week_num[3]) + 1)]
-    except:
-        pass
-    if weeks == []:
-        if week_num == []:
-            weeks = None
-=======
     # week_num = re.findall("\d{1,2}", week_text)
     # try:
     #     weeks = [i for i in range(int(week_num[0]), int(week_num[1]) + 1)]
@@ -74,9 +57,7 @@ def get_lesson(weeks_text, day_text, start_end_text, location):
             pass
         elif '-' in col:
             tmp = re.findall("\d{1,2}", str(re.findall("\d{1,2}-\d{1,2}", col)))
-
             weeks += range(int(tmp[0]), int(tmp[1]) + 1)
->>>>>>> fixed weeks of BJTU.
         else:
             wkno = re.findall("\d{1,2}", col)
             if not wkno:
@@ -85,11 +66,9 @@ def get_lesson(weeks_text, day_text, start_end_text, location):
                 weeks.append(int(wkno[0]))
             else:
                 raise AssertionError
-                
                 print week_text
      
     weeks = list_to_comma_separated(weeks)
-
 
     number = re.findall("\d{1,2}", start_end_text)
     if number == []:
@@ -108,52 +87,6 @@ def get_lesson(weeks_text, day_text, start_end_text, location):
 
     return lesson
 
-<<<<<<< HEAD
-source = csv.reader(open('data/bjtu.csv'))
-source.next()
-
-prev_code_name = '-1'
-
-courses = []
-for row in source:
-    try:
-        test = row[0]
-    except:
-        break
-    teacher = get_teachers(row[6])
-    weeks_text = row[7]
-    day_text = row[8]
-    start_text = row[9]
-    location = row[10] + ' ' + row[11] + ' ' + row[12]
-    lesson = get_lesson(weeks_text, day_text, start_text, location)
-    code_name = row[3]
-
-    course = {
-        'original_id': row[1],
-        'name': row[2],
-        'credit': row[4],
-        'teacher': teacher,
-        'lessons': [lesson],
-    }
-
-    if courses:
-        if (course['original_id'] == courses[-1]['original_id']
-          and course['teacher'] == courses[-1]['teacher']
-          and prev_code_name == code_name):
-            courses[-1]['lessons'].append(lesson)
-        else:
-            courses.append(course)
-    else:
-        courses.append(course)
-
-    prev_code_name = code_name
-
-# print courses
-total_courses = len(courses)
-if courses:
-    with open(('bjtu.yaml'), 'w') as yaml_file:
-        yaml_file.write(pretty_format(courses))
-=======
 try:
     with open('data/bjtu.csv') as src:
         source = csv.reader(src)
@@ -173,8 +106,8 @@ try:
             day_text = row[8]
             start_text = row[9]
             location = row[10] + ' ' + row[11] + ' ' + row[12]
-            print row[2], row[6], 
-            lessons = get_lessons(week_text, day_text, start_text, location)
+            print row[2], row[6]
+            lesson = get_lesson(week_text, day_text, start_text, location)
             code_name = row[3]
 
             course = {
@@ -182,21 +115,20 @@ try:
                 'name': row[2],
                 'credit': float(row[4]),
                 'teacher': teacher,
-                'lessons': lessons,
+                'lessons': [lesson],
             }
 
-            try:
-                last_course = courses.pop()
-            except:
-                pass
-            else:
-                if course['original_id'] == last_course['original_id'] and course['teacher'] == last_course['teacher'] and prev_code_name == code_name:
-                    course['lessons'] = course['lessons'] + last_course['lessons']
+            if courses:
+                if (course['original_id'] == courses[-1]['original_id']
+                  and course['teacher'] == courses[-1]['teacher']
+                  and prev_code_name == code_name):
+                    courses[-1]['lessons'].append(lesson)
                 else:
-                    courses.append(last_course)
+                    courses.append(course)
+            else:
+                courses.append(course)
 
             prev_code_name = code_name
-            courses.append(course)
 
         #print courses
         total_courses = len(courses)
@@ -209,5 +141,3 @@ try:
 except IOError:
     print "Cannot open data/bjtu.csv, exiting."
     exit()
-
->>>>>>> fixed weeks of BJTU.
