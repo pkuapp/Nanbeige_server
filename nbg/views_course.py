@@ -74,6 +74,36 @@ def course(request, offset):
     return response
 
 @json_response
+def course_users(request, offset):
+    course_id = int(offset)
+
+    try:
+        course = Course.objects.get(pk=course_id)
+    except Course.DoesNotExist:
+        return {'error_code': 'CourseNotFound'}, 404
+
+    user_profiles = course.userprofile_set.all()
+    response = []
+    for user_profile in user_profiles:
+        response_i = {
+            'id': user_profile.pk,
+            'nickname': user_profile.nickname,
+        }
+        if user_profile.weibo_id:
+            response_i['weibo'] = {
+                'id': user_profile.weibo_id,
+                'name': user_profile.weibo_name,
+            }
+        if user_profile.renren_id:
+            response_i['renren'] = {
+                'id': user_profile.renren_id,
+                'name': user_profile.renren_name,
+            }
+        response.append(response_i)
+
+    return response
+
+@json_response
 def all(request):
     semester_id = request.GET.get('semester_id', None)
 

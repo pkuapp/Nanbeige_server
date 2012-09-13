@@ -34,6 +34,7 @@ urlpatterns = patterns('',
 
     (r'^course/$', 'nbg.views_course.course_list'),
     (r'^course/(\d+)/$', 'nbg.views_course.course'),
+    (r'^course/(\d+)/users/$', 'nbg.views_course.course_users'),
     (r'^course/all/$', 'nbg.views_course.all'),
     (r'^course/(\d+)/edit/$', 'nbg.views_course.edit'),
     (r'^course/(\d+)/comment/$', 'nbg.views_course.comment_list'),
