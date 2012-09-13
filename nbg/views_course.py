@@ -4,7 +4,7 @@ from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ValidationError
 from datetime import datetime
 from nbg.models import Course, Comment, Semester, UserAction, CourseStatus
-from nbg.helpers import listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db, float_nullable
+from nbg.helpers import listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db, float_nullable, append_query
 from spider.grabbers.grabber_base import LoginError, GrabError
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -104,6 +104,7 @@ def course_users(request, offset):
     return response
 
 @json_response
+@append_query
 def all(request):
     semester_id = request.GET.get('semester_id', None)
 
@@ -115,12 +116,22 @@ def all(request):
         return {'error_code': 'SemesterNotFound'}, 404
 
     cache_name = 'semester_{0}_courses'.format(semester.pk)
-    courses = cache.get(cache_name)
-    if not courses:
-        courses = semester.course_set.values("id", "name")
+    response = cache.get(cache_name)
+    if not response:
+        response = [{
+            'id': course.pk,
+            'name': course.name,
+            'teacher': listify_str(course.teacher),
+            'lessons': [{
+                'day': lesson.day,
+                'start': lesson.start,
+                'end': lesson.end,
+                'location': lesson.location,
+            } for lesson in course.lesson_set.all()],
+        } for course in semester.course_set.all().prefetch_related('lesson_set')]
         # timeout: one week
-        cache.set(cache_name, courses, 604800)
-    return list(courses)
+        cache.set(cache_name, response, 604800)
+    return response
 
 @require_http_methods(['POST'])
 @auth_required
