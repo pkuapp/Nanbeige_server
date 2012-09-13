@@ -495,6 +495,11 @@ def edit(request):
         user_profile.weibo_name = weibo_name
         user_profile.weibo_token = weibo_token
 
+    if weibo_token == '':
+        user_profile.weibo_id = None
+        user_profile.weibo_name = ''
+        user_profile.weibo_token = ''
+
     if renren_token:
         try:
             renren_id, renren_name = get_renren_profile(renren_token)
@@ -511,6 +516,11 @@ def edit(request):
         user_profile.renren_id = renren_id
         user_profile.renren_name = renren_name
         user_profile.renren_token = renren_token
+
+    if renren_token == '':
+        user_profile.renren_id = None
+        user_profile.renren_name = ''
+        user_profile.renren_token = ''
 
     if campus_id:
         try:
