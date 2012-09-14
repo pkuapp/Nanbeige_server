@@ -51,6 +51,7 @@ def get_lesson(weeks_text, day_text, start_end_text, location):
     # weeks = list_to_comma_separated(weeks)
 
     weeks = []
+    weeks_show = "第"
 
     for col in week_text.split(','):
         if not col:
@@ -58,17 +59,20 @@ def get_lesson(weeks_text, day_text, start_end_text, location):
         elif '-' in col:
             tmp = re.findall("\d{1,2}", str(re.findall("\d{1,2}-\d{1,2}", col)))
             weeks += range(int(tmp[0]), int(tmp[1]) + 1)
+            weeks_show += tmp[0] + '-' + tmp[1] + ' '
         else:
             wkno = re.findall("\d{1,2}", col)
             if not wkno:
                 pass
             elif len(wkno) == 1:
                 weeks.append(int(wkno[0]))
+                weeks_show += wkno[0] + ' '
             else:
                 print week_text
                 raise AssertionError
 
-
+    weeks_show = weeks_show.rstrip()
+    weeks_show += '周'
     weeks = list_to_comma_separated(weeks)
 
     number = re.findall("\d{1,2}", start_end_text)
@@ -83,6 +87,7 @@ def get_lesson(weeks_text, day_text, start_end_text, location):
         'end': number[0],
         'weeks': weeks,
         'weeks_raw': weeks_text,
+        'weeks_display': weeks_show,
         'location': location,
     }
 
