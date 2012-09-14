@@ -174,15 +174,11 @@ def comment_add(request, offset):
     content = request.POST.get('content', None)
 
     if not content:
-        return {'error': '缺少必要的参数。'}, 400
+        return {'error_code': 'SyntaxError'}, 400
     try:
         course = Course.objects.get(pk=course_id)
     except Course.DoesNotExist:
-        return {'error': '课程不存在。'}, 404
-    try:
-        request.user.get_profile().courses.get(pk=course_id)
-    except Course.DoesNotExist:
-        return {'error': '课程不属于当前用户。'}, 403
+        return {'error_code': 'CourseNotFound'}, 404
 
     Comment.objects.create(course=course, writer=request.user, time=datetime.now(), content=content)
 
@@ -281,5 +277,5 @@ def captcha_img(request):
         return HttpResponse(grabber.captcha_img, mimetype="image")
     else:
         return json_response(lambda x:({
-            'error': '验证码不存在或已过期。'
+            'error_code': 'CaptchaExpired'
         }, 404))()

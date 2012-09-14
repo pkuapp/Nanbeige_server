@@ -172,7 +172,6 @@ def login_weibo(request):
     except VerifyError:
         return {
             'error_code': "InvalidToken",
-            'error': "新浪微博 token 错误。"
         }, 403
 
     if user is not None:
@@ -255,7 +254,6 @@ def login_renren(request):
     except VerifyError:
         return {
             'error_code': "InvalidToken",
-            'error': "人人 token 错误。"
         }, 403
 
     if user is not None:
@@ -365,7 +363,6 @@ def reg(request, method):
             except VerifyError:
                 return {
                     'error_code': "InvalidToken",
-                    'error': "新浪微博 token 错误。"
                 }, 403
             if UserProfile.objects.filter(weibo_id=weibo_id).exists():
                 return {
@@ -401,7 +398,6 @@ def reg(request, method):
             except VerifyError:
                 return {
                     'error_code': "InvalidToken",
-                    'error': "人人 token 错误。"
                 }, 403
             if UserProfile.objects.filter(renren_id=renren_id).exists():
                 return {
@@ -484,7 +480,6 @@ def edit(request):
         except VerifyError:
             return {
                 'error_code': "InvalidToken",
-                'error': "新浪微博 token 错误。",
             }, 403
         if weibo_id != user_profile.weibo_id and UserProfile.objects.filter(weibo_id=weibo_id).exists():
             return {
@@ -506,7 +501,6 @@ def edit(request):
         except VerifyError:
             return {
                 'error_code': "InvalidToken",
-                'error': "人人 token 错误。",
             }, 403
         if renren_id != user_profile.renren_id and UserProfile.objects.filter(renren_id=renren_id).exists():
             return {

@@ -122,6 +122,9 @@ pre {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+pre.error {
+  background-color: #fff2fd;
+}
 pre code {
   background-color: transparent;
   color: #bc670f;
@@ -328,8 +331,8 @@ td:last-child {
   },
   "course_imported": [2, 3]
 }</pre>
-    <pre>{"error": "Email 或密码错误。"}</pre>
-    <pre>{"error": "帐户已被注销。"}</pre>
+    <pre title="403" class="error">{"error": "Email 或密码错误。"}</pre>
+    <pre title="403" class="error">{"error": "帐户已被注销。"}</pre>
   </td>
   <td align="left">
     <p>使用邮箱、密码方式登录。</p>
@@ -348,7 +351,7 @@ td:last-child {
   </td>
   <td align="left">
     <ul><li>登录成功时格式与 <code>/login/email/</code> 类似。</li></ul>
-    <pre>{"error_code": "UserNotFound"}</pre>
+    <pre title="403" class="error">{"error_code": "UserNotFound"}</pre>
   </td>
   <td align="left">使用微博 <code>token</code> 登录。若用户有 email 注册的南北阁帐号，nickname 和 email 均非空。其他错误信息与微博注册时一样。</td>
 </tr>
@@ -363,7 +366,7 @@ td:last-child {
   </td>
   <td align="left">
     <ul><li>登录成功时格式与 <code>/login/email/</code> 类似。</li></ul>
-    <pre>{"error_code": "UserNotFound"}</pre>
+    <pre title="403" class="error">{"error_code": "UserNotFound"}</pre>
   </td>
   <td align="left">使用人人 <code>token</code> 登录。若用户有 email 注册的南北阁帐号，nickname 和 email 均非空。其他错误信息与人人注册时一样。</td>
 </tr>
@@ -381,9 +384,9 @@ td:last-child {
   </td>
   <td align="left">
     <pre>{"id": 2147483647}</pre>
-    <pre>{"error": "Email 已被使用。"}</pre>
-    <pre>{"error": "Email 格式不正确。"}</pre>
-    <pre>{"error_code": "CampusNotFound"}</pre>
+    <pre title="403" class="error">{"error": "Email 已被使用。"}</pre>
+    <pre title="400" class="error">{"error": "Email 格式不正确。"}</pre>
+    <pre title="404" class="error">{"error_code": "CampusNotFound"}</pre>
   </td>
   <td align="left">使用 email 注册。</td>
 </tr>
@@ -400,19 +403,18 @@ td:last-child {
   </td>
   <td align="left">
     <pre>{"id": 930111}</pre>
-    <pre>{
+    <pre title="403" class="error">{
   "error_code": "TokenAlreadyUsed",
   "error": "新浪微博帐号已被使用。"
 }</pre>
-    <pre>{
-  "error_code": "InvalidToken",
-  "error": "新浪微博 token 错误。"
+    <pre title="403" class="error">{
+  "error_code": "InvalidToken"
 }</pre>
-    <pre>{
+    <pre title="503" class="error">{
   'error_code': "ErrorConnectingServer",
   'error': "连接新浪微博服务器时发生错误。"
 }</pre>
-    <pre>{"error_code": "CampusNotFound"}</pre>
+    <pre title="404" class="error">{"error_code": "CampusNotFound"}</pre>
   </td>
   <td align="left">使用新浪微博 token 注册。</td>
 </tr>
@@ -429,19 +431,18 @@ td:last-child {
   </td>
   <td align="left">
     <pre>{"id": 233}</pre>
-    <pre>{
+    <pre title="403" class="error">{
   "error_code": "TokenAlreadyUsed",
   "error": "人人帐号已被使用。",
 }</pre>
-    <pre>{
-  "error_code": "InvalidToken",
-  "error": "人人 token 错误。"
+    <pre title="403" class="error">{
+  "error_code": "InvalidToken"
 }</pre>
-    <pre>{
+    <pre title="503" class="error">{
   'error_code': "ErrorConnectingServer",
   'error': "连接人人服务器时发生错误。"
 }</pre>
-    <pre>{"error_code": "CampusNotFound"}</pre>
+    <pre title="404" class="error">{"error_code": "CampusNotFound"}</pre>
   </td>
   <td align="left">使用人人 token 注册。</td>
 </tr>
@@ -463,7 +464,7 @@ td:last-child {
     <ul>
       <li><code>0</code> success</li>
     </ul>
-    <pre>{"error_code": "CampusNotFound"}</pre>
+    <pre title="404" class="error">{"error_code": "CampusNotFound"}</pre>
   </td>
   <td align="left">
     <p>修改（或添加）用户密码为 <code>password</code>、昵称为 <code>nickname</code>、微博 token 为 <code>weibo_token</code>、人人 token 为 <code>renren_token</code>、绑定校区为 <code>campus_id</code>。</p>
@@ -591,7 +592,7 @@ td:last-child {
     "separators": [2, 4, 5, 6, 8, 10, 12]
   }
 }</pre>
-    <pre>{"error_code": "UniversityNotFound"}</pre>
+    <pre title="404" class="error">{"error_code": "UniversityNotFound"}</pre>
   </td>
   <td align="left">返回 <code>id</code> 大学的详细信息。若只有一个校区，campus 的 name 为空。</td>
 </tr>
@@ -622,7 +623,7 @@ td:last-child {
     }
   }
 ]</pre>
-    <pre>{"error_code": "UniversityNotFound"}</pre>
+    <pre title="404" class="error">{"error_code": "UniversityNotFound"}</pre>
   </td>
   <td align="left">返回 <code>id</code> 大学的学期列表。</td>
 </tr>
@@ -649,7 +650,7 @@ td:last-child {
     "weeks": [2, 6, 8, 9]
   }
 ]</pre>
-    <pre>{"error_code": "SemesterNotFound"}</pre>
+    <pre title="404" class="error">{"error_code": "SemesterNotFound"}</pre>
   </td>
   <td align="left">返回 <code>id</code> 学期的周次集列表。</td>
 </tr>
@@ -759,7 +760,7 @@ td:last-child {
     }
   ]
 }</pre>
-    <pre>{"error_code": "CourseNotFound"}</pre>
+    <pre title="404" class="error">{"error_code": "CourseNotFound"}</pre>
   </td>
   <td align="left">获得 id 课程的详细信息。</td>
 </tr>
@@ -791,7 +792,7 @@ td:last-child {
     }
   }
 ]</pre>
-    <pre>{"error_code": "CourseNotFound"}</pre>
+    <pre title="404" class="error">{"error_code": "CourseNotFound"}</pre>
   </td>
   <td align="left">返回选择或旁听了 id 课程的用户列表。</td>
 </tr>
@@ -834,7 +835,7 @@ td:last-child {
   },
   ...
 ]</pre>
-    <pre>{"error_code": "SemesterNotFound"}</pre>
+    <pre title="404" class="error">{"error_code": "SemesterNotFound"}</pre>
   </td>
   <td align="left">返回 <code>semester_id</code> 学期的全部课程。</td>
 </tr>
@@ -864,9 +865,7 @@ td:last-child {
     <ul>
       <li><code>binary</code> captcha image</li>
     </ul>
-    <pre>{
-  "error": "验证码不存在或已过期。"
-}</pre>
+    <pre title="404" class="error">{"error_code": "CaptchaExpired"}</pre>
   </td>
   <td align="left">返回验证码。（若 grabber 返回的 require_captcha 为 true，须立即访问此 API 获得验证码）</td>
 </tr>
@@ -883,11 +882,11 @@ td:last-child {
   </td>
   <td align="left">
     <pre>{"semester_id": 5}</pre>
-    <pre>{"error_code": "GrabberExpired"}</pre>
-    <pre>{"error_code": "AuthError"}</pre>
-    <pre>{"error_code": "CaptchaError"}</pre>
-    <pre>{"error_code": "UnknownLoginError"}</pre>
-    <pre>{
+    <pre title="503" class="error">{"error_code": "GrabberExpired"}</pre>
+    <pre title="200" class="error">{"error_code": "AuthError"}</pre>
+    <pre title="200" class="error">{"error_code": "CaptchaError"}</pre>
+    <pre title="200" class="error">{"error_code": "UnknownLoginError"}</pre>
+    <pre title="200" class="error">{
   "error_code": "GrabError",
   "error": "无法抓取您的课程，请先填写教务网调查问卷。"
 }</pre>
@@ -907,6 +906,7 @@ td:last-child {
     <ul>
       <li><code>0</code> success</li>
     </ul>
+    <pre title="404" class="error">{"error_code": "CourseNotFound"}</pre>
   </td>
   <td align="left">修改用户对 id 课程的选课情况。<code>status</code> 的取值可以是 select、audit 和 cancel。</td>
 </tr>
@@ -957,9 +957,7 @@ td:last-child {
     <ul>
       <li><code>0</code> success</li>
     </ul>
-    <pre>{
-  "error": "请先登录。"
-}</pre>
+    <pre title="404" class="error">{"error_code": "CourseNotFound"}</pre>
   </td>
   <td align="left">在 <code>id</code> 课程下添加一条小话。</td>
 </tr>
