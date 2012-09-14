@@ -40,6 +40,8 @@ def course_list(request):
             'end': lesson.end,
             'location': lesson.location,
             'weekset_id': lesson.weekset_id,
+            'weeks': lesson.weeks,
+            'weeks_display': lesson.weeks_display,
         } for lesson in course_status.course.lesson_set.all()]
     } for course_status in course_statuses]
 
@@ -68,6 +70,8 @@ def course(request, offset):
             'end': lesson.end,
             'location': lesson.location,
             'weekset_id': lesson.weekset_id,
+            'weeks': lesson.weeks,
+            'weeks_display': lesson.weeks_display,
         } for lesson in course.lesson_set.all()]
     }
 
