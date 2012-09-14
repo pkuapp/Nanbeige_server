@@ -146,7 +146,7 @@ def login_email(request):
                 })
         else:
             response = {
-                'error': "用户已被吊销。",
+                'error': "帐户已被注销。",
             }, 403
     else:
         response = {
@@ -160,7 +160,7 @@ def login_email(request):
 def login_weibo(request):
     weibo_token = request.POST.get('token', None)
     if not weibo_token:
-        return {'error_code': "BadSyntax"}, 400
+        return {'error_code': 'SyntaxError'}, 400
 
     try:
         user = auth.authenticate(weibo_token=weibo_token)
@@ -243,7 +243,7 @@ def login_weibo(request):
 def login_renren(request):
     renren_token = request.POST.get('token', None)
     if not renren_token:
-        return {'error_code': "BadSyntax"}, 400
+        return {'error_code': 'SyntaxError'}, 400
 
     try:
         user = auth.authenticate(renren_token=renren_token)
@@ -327,7 +327,7 @@ def reg(request, method):
     campus_id = request.POST.get('campus_id', None)
 
     if not nickname:
-        return {'error_code': "BadSyntax"}, 400
+        return {'error_code': 'SyntaxError'}, 400
 
     '''get necessary args, check em and create the user'''
     if method == 'email':
@@ -351,7 +351,7 @@ def reg(request, method):
                 'password': password,
             }
         else:
-            return {'error_code': "BadSyntax"}, 400
+            return {'error_code': 'SyntaxError'}, 400
     elif method == 'weibo':
         weibo_token = request.POST.get('token', None)
         if weibo_token:
@@ -387,7 +387,7 @@ def reg(request, method):
                 'weibo_token': weibo_token,
             }
         else:
-            return {'error_code': "BadSyntax"}, 400
+            return {'error_code': 'SyntaxError'}, 400
     elif method == 'renren':
         renren_token = request.POST.get('token', None)
         if renren_token:
@@ -423,18 +423,18 @@ def reg(request, method):
                 'renren_token': renren_token,
             }
         else:
-            return {'error_code': "BadSyntax"}, 400
+            return {'error_code': 'SyntaxError'}, 400
     else:
-        return {'error_code': "BadSyntax"}, 400
+        return {'error_code': 'SyntaxError'}, 400
 
     '''maybe wanna set campus'''
     if campus_id:
         try:
             campus = Campus.objects.get(pk=campus_id)
         except ValueError:
-            return {'error_code': 'BadSyntax'}, 400
+            return {'error_code': 'SyntaxError'}, 400
         except Campus.DoesNotExist:
-            return {'error_code': 'CampusNotFound'}, 400
+            return {'error_code': 'CampusNotFound'}, 404
 
     '''create user profile and login the user'''
     user_profile = UserProfile(user=user, nickname=nickname, **profile_args)
@@ -527,9 +527,9 @@ def edit(request):
             campus_id = int(campus_id)
             campus = Campus.objects.get(pk=campus_id)
         except ValueError:
-            return {'error': 'campus_id 参数格式不正确。'}, 400
+            return {'error_code': 'SyntaxError'}, 400
         except Campus.DoesNotExist:
-            return {'error': '校区不存在。'}, 404
+            return {'error_code': 'CampusNotFound'}, 404
 
         user_profile.campus = campus
 

@@ -102,7 +102,7 @@ def edit(request, offset):
         elif follow == '0':
             event.follower.remove(user)
         else:
-            return {'error_code': 'BadSyntax'}, 400
+            return {'error_code': 'SyntaxError'}, 400
 
     event.save()
 

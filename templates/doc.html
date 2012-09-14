@@ -192,14 +192,14 @@ td:last-child {
 <ul>
   <li><code>200</code> 正常。</li>
   <li><code>400</code> 请求格式错误。</li>
-  <li><code>403</code> 没有权限。（如未登录、修改他人作业等）</li>
+  <li><code>403</code> 没有权限。（如未登录）</li>
   <li><code>404</code> 请求的资源不存在。</li>
   <li><code>501</code> 尚未实现此功能。</li>
   <li><code>503</code> 暂时无法提供服务。</li>
   <li><code>418</code> 我是一只咖啡壶☆</li>  
 </ul>
 
-<h2>Error Codes</h2>
+<h2>General Error Codes</h2>
 
 <ul>
   <li><code>NotLoggedIn</code> 须要登录。</li>
@@ -329,6 +329,7 @@ td:last-child {
   "course_imported": [2, 3]
 }</pre>
     <pre>{"error": "Email 或密码错误。"}</pre>
+    <pre>{"error": "帐户已被注销。"}</pre>
   </td>
   <td align="left">
     <p>使用邮箱、密码方式登录。</p>
@@ -378,11 +379,12 @@ td:last-child {
       <li><code class="optional">int</code> campus_id</li>
     </ul>
   </td>
-  <td align="left"><pre>{
-  "id": 2147483647
-}</pre><pre>{
-  "error": "Email 已被使用。"
-}</td>
+  <td align="left">
+    <pre>{"id": 2147483647}</pre>
+    <pre>{"error": "Email 已被使用。"}</pre>
+    <pre>{"error": "Email 格式不正确。"}</pre>
+    <pre>{"error_code": "CampusNotFound"}</pre>
+  </td>
   <td align="left">使用 email 注册。</td>
 </tr>
 
@@ -399,14 +401,18 @@ td:last-child {
   <td align="left">
     <pre>{"id": 930111}</pre>
     <pre>{
-  "error": "新浪微博帐号已被使用。",
-  "error_code": "TokenAlreadyUsed"
+  "error_code": "TokenAlreadyUsed",
+  "error": "新浪微博帐号已被使用。"
 }</pre>
-    <pre>{"error_code": "InvalidToken"}</pre>
+    <pre>{
+  "error_code": "InvalidToken",
+  "error": "新浪微博 token 错误。"
+}</pre>
     <pre>{
   'error_code': "ErrorConnectingServer",
-  'error': "连接新浪微博服务器时发生错误。",
+  'error': "连接新浪微博服务器时发生错误。"
 }</pre>
+    <pre>{"error_code": "CampusNotFound"}</pre>
   </td>
   <td align="left">使用新浪微博 token 注册。</td>
 </tr>
@@ -424,14 +430,18 @@ td:last-child {
   <td align="left">
     <pre>{"id": 233}</pre>
     <pre>{
+  "error_code": "TokenAlreadyUsed",
   "error": "人人帐号已被使用。",
-  "error_code": "TokenAlreadyUsed"
 }</pre>
-    <pre>{"error_code": "InvalidToken"}</pre>
+    <pre>{
+  "error_code": "InvalidToken",
+  "error": "人人 token 错误。"
+}</pre>
     <pre>{
   'error_code': "ErrorConnectingServer",
-  'error': "连接人人服务器时发生错误。",
+  'error': "连接人人服务器时发生错误。"
 }</pre>
+    <pre>{"error_code": "CampusNotFound"}</pre>
   </td>
   <td align="left">使用人人 token 注册。</td>
 </tr>
@@ -453,11 +463,12 @@ td:last-child {
     <ul>
       <li><code>0</code> success</li>
     </ul>
+    <pre>{"error_code": "CampusNotFound"}</pre>
   </td>
   <td align="left">
-    <p>修改（或添加）用户密码为 <code>password</code>、昵称为 <code>nickname</code>、微博 token 为 <code>weibo_token</code>、人人 token 为 <code>renren_token</code>、绑定校区为 <code>campus_id</code>。绑定微博、人人的错误信息与注册时一样。</p>
+    <p>修改（或添加）用户密码为 <code>password</code>、昵称为 <code>nickname</code>、微博 token 为 <code>weibo_token</code>、人人 token 为 <code>renren_token</code>、绑定校区为 <code>campus_id</code>。</p>
+    <p>绑定微博、人人的错误信息与注册时一样。若 <code>weibo_token</code> 或 <code>renren_token</code> 为空字符串，解除绑定。</p>
     <p>若 <code>campus_none</code>（不可与 <code>campus_id</code> 同时存在）为 1，解除校区绑定。</p>
-    <p>若 <code>weibo_token</code> 或 <code>renren_token</code> 为空字符串，解除绑定。</p>
   </td>
 </tr>
 
@@ -482,7 +493,7 @@ td:last-child {
       <li><code>0</code> success</li>
     </ul>
   </td>
-  <td align="left">吊销当前用户并登出。（仍保留用户信息）</td>
+  <td align="left">注销当前用户并登出。（仍保留用户信息，但不再能登录）</td>
 </tr>
 
 </tbody>
