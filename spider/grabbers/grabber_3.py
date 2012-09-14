@@ -64,23 +64,25 @@ class TeapotParser(BaseParser):
                 data = re.findall('\d+', baidu.group(0))
                 res = [i for i in range(int(data[0]), int(data[1]) + 1)]
                 weeks_display = weeks_display + '{}-{}'.format(data[0], data[1])
+                if u'单周' in mouse:
+                    res = [i for i in res if i % 2 == 1]
+                    weeks_display = weeks_display + u'单周'
+                elif u'双周' in mouse:
+                    res = [i for i in res if i % 2 == 0]
+                    weeks_display = weeks_display + u'双周'
+                else:
+                    weeks_display = weeks_display + u'周'
             else:
                 google = re.search('\d+', mouse)
                 if google:
                     data = re.findall('\d+', google.group(0))
                     res = [int(data[0])]
                     weeks_display = weeks_display + '{}'.format(data[0])
-            if u'单周' in mouse:
-                res = [i for i in res if i % 2 == 1]
-                weeks_display = weeks_display + u'单周'
-            elif u'双周' in mouse:
-                res = [i for i in res if i % 2 == 0]
-                weeks_display = weeks_display + u'双周'
-            else:
-                weeks_display = weeks_display + u'周'
             weeks.extend(res)
             weeks_display = weeks_display + ' '
         weeks_display = weeks_display[:-1]
+        if weeks_display[-1] != u'周':
+            weeks_display = weeks_display + u'周'
         weeks.sort()
         weeks = list_to_comma_separated(weeks)
         if weeks == '':
