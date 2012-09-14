@@ -24,12 +24,9 @@ class Command(BaseCommand):
             raise CommandError('Directory not exist.')
         files = [f for f in files if
           os.path.isfile(os.path.join(dir, f)) and os.path.splitext(f)[1] == ".yaml"]
-        files.sort(key=lambda f: int(os.path.splitext(f)[0]))
         files = [os.path.join(dir, f) for f in files]
 
         semester = Semester.objects.get(pk=semester_id)
-        cache_name = 'semester_{0}_courses'.format(semester.pk)
-        cache.delete(cache_name)
         total = 0
         for file_i in files:
             with open(file_i) as f:

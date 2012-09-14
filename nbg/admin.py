@@ -10,8 +10,12 @@ class CourseAdmin(admin.ModelAdmin):
     def lessons(self, course):
         ret = ""
         for l in course.lesson_set.all():
-            ret += "周{day} {start}-{end} {weekset} {location}; ".format(
-              day=l.day, start=l.start, end=l.end, weekset=l.weekset, location=l.location.encode('utf8'))
+            if l.weekset:
+                weeks = weekset
+            else:
+                weeks = l.weeks
+            ret += "周{day} {start}-{end} {weeks} {location}; ".format(
+              day=l.day, start=l.start, end=l.end, weeks=weeks, location=l.location.encode('utf8'))
         return ret
 
     search_fields = ('name', 'original_id')
