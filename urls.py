@@ -9,7 +9,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     (r'^$', 'nbg.views.doc_html'),
-    (r'^status/$', 'nbg.views.status_html'),
 
     (r'^newsfeed/$', 'nbg.views_newsfeed.newsfeed'),
 
