@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 # -*- coding: utf-8 -*-
 
 import csv
@@ -51,7 +50,7 @@ def get_lesson(weeks_text, day_text, start_end_text, location):
     # weeks = list_to_comma_separated(weeks)
 
     weeks = []
-    weeks_show = "第"
+    weeks_show = '第'
 
     for col in week_text.split(','):
         if not col:
