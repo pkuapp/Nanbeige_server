@@ -126,7 +126,7 @@ try:
             course = {
                 'original_id': row[1],
                 'name': row[2],
-                'credit': float(row[4]),
+                'credit': row[4],
                 'teacher': teacher,
                 'lessons': [lesson],
             }
