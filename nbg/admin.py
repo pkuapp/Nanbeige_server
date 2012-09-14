@@ -10,8 +10,8 @@ class CourseAdmin(admin.ModelAdmin):
     def lessons(self, course):
         ret = ""
         for l in course.lesson_set.all():
-            if 'weekset' in l:
-                weeks = weekset
+            if l.weekset:
+                weeks = l.weekset
             else:
                 weeks = l.weeks
             ret += "周{day} {start}-{end} {weeks} {location}; ".format(
