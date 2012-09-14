@@ -42,9 +42,10 @@ class Command(BaseCommand):
                     self.stdout.write('+')
                     count_import += 1
                     add_to_db(c, semester)
+                self.stdout.flush()
                 count_all += 1
                 if count_all % 100 == 0:
-                    self.stdout.write(' {1}\n'.format(count_all))
+                    self.stdout.write(' {0}\n'.format(count_all))
             self.stdout.write(' {0}'.format(count_all))
             total_import += count_import
             id += 1

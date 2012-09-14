@@ -85,5 +85,6 @@ def add_to_db(c, semester):
     lessons = c.pop('lessons')
     course = Course.objects.create(semester=semester, **c)
     for l in lessons:
-        Lesson.objects.create(course=course, **l)
+        if l:
+            Lesson.objects.create(course=course, **l)
     return course
