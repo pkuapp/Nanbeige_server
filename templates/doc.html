@@ -556,7 +556,8 @@ td:last-child {
   <td align="left">/:id/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
-  <td align="left"><pre>{
+  <td align="left">
+    <pre>{
   "name": "浙江大学",
   "support":
   {
@@ -589,7 +590,9 @@ td:last-child {
     ],
     "separators": [2, 4, 5, 6, 8, 10, 12]
   }
-}</pre></td>
+}</pre>
+    <pre>{"error_code": "UniversityNotFound"}</pre>
+  </td>
   <td align="left">返回 <code>id</code> 大学的详细信息。若只有一个校区，campus 的 name 为空。</td>
 </tr>
 
@@ -618,7 +621,9 @@ td:last-child {
       "end": "2013-01-06" // 最后一周周日的日期
     }
   }
-]</pre></td>
+]</pre>
+    <pre>{"error_code": "UniversityNotFound"}</pre>
+  </td>
   <td align="left">返回 <code>id</code> 大学的学期列表。</td>
 </tr>
 
@@ -626,7 +631,8 @@ td:last-child {
   <td align="left">/semester/:id/weekset/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
-  <td align="left"><pre>[
+  <td align="left">
+    <pre>[
   {
     "id": 1,
     "name": "秋学期每周",
@@ -642,7 +648,9 @@ td:last-child {
     "name": "秋学期双周",
     "weeks": [2, 6, 8, 9]
   }
-]</pre></td>
+]</pre>
+    <pre>{"error_code": "SemesterNotFound"}</pre>
+  </td>
   <td align="left">返回 <code>id</code> 学期的周次集列表。</td>
 </tr>
 
