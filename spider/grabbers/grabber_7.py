@@ -109,8 +109,14 @@ try:
             week_text = row[7]
             day_text = row[8]
             start_text = row[9]
-            location = row[10] + ' ' + row[11] + ' ' + row[12]
-            print row[2], row[6]
+            location = ''
+            for i in range(10, 13):
+                if not row[i]:
+                    pass
+                else:
+                    location += ' ' + row[i]
+            location = location.lstrip()
+
             lesson = get_lesson(week_text, day_text, start_text, location)
             code_name = row[3]
 
@@ -136,6 +142,7 @@ try:
 
         #print courses
         total_courses = len(courses)
+        print "Converted %d courses. Writing to yaml...\n" % total_courses
         if courses != []:
             with open(('bjtu.yaml'), 'w') as yaml_file:
                 yaml_file.write(pretty_format(courses))
