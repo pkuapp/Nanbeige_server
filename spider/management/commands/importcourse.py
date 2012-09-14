@@ -27,6 +27,8 @@ class Command(BaseCommand):
         files = [os.path.join(dir, f) for f in files]
 
         semester = Semester.objects.get(pk=semester_id)
+        cache_name = 'semester_{0}_courses'.format(semester.pk)
+        cache.delete(cache_name)
         total = 0
         for file_i in files:
             with open(file_i) as f:
