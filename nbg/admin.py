@@ -20,6 +20,7 @@ class CourseAdmin(admin.ModelAdmin):
 
     search_fields = ('name', 'original_id')
     list_display = ('id', 'semester', 'original_id', 'name', 'credit', 'teacher', 'lessons')
+    list_filter = ('semester',)
 
 class CourseStatusInline(admin.TabularInline):
     model = CourseStatus

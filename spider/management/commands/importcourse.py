@@ -49,5 +49,5 @@ class Command(BaseCommand):
             self.stdout.write(' {0}'.format(count_all))
             total_import += count_import
             id += 1
-            self.stdout.write('{filename}: {count} courses successfully imported.\n'.format(filename=file_i, count=count_import))
+            self.stdout.write('\n{filename}: {count} courses successfully imported.\n'.format(filename=file_i, count=count_import))
         self.stdout.write('Total: {0} courses imported.\n'.format(total_import))
