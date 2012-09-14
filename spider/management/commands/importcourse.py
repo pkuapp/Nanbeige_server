@@ -27,18 +27,26 @@ class Command(BaseCommand):
         files = [os.path.join(dir, f) for f in files]
 
         semester = Semester.objects.get(pk=semester_id)
-        cache_name = 'semester_{0}_courses'.format(semester.pk)
-        cache.delete(cache_name)
-        total = 0
+        total_import = 0
+        id = 1
         for file_i in files:
+            self.stdout.write('#{0} {1}\n'.format(id, file_i))
             with open(file_i) as f:
                 courses = yaml.load(f)
-            count = 0
+            count_import = 0
+            count_all = 0
             for c in courses:
                 if find_in_db(c):
-                    continue
-                count += 1
-                add_to_db(c, semester)
-            total += count
-            self.stdout.write('{filename}: {count} courses successfully imported.\n'.format(filename=file_i, count=count))
-        self.stdout.write('Total: {0} courses imported.\n'.format(total))
+                    self.stdout.write('-')
+                else:
+                    self.stdout.write('+')
+                    count_import += 1
+                    add_to_db(c, semester)
+                count_all += 1
+                if count_all % 100 == 0:
+                    self.stdout.write(' {1}\n'.format(count_all))
+            self.stdout.write(' {0}'.format(count_all))
+            total_import += count_import
+            id += 1
+            self.stdout.write('{filename}: {count} courses successfully imported.\n'.format(filename=file_i, count=count_import))
+        self.stdout.write('Total: {0} courses imported.\n'.format(total_import))
