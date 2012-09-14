@@ -80,6 +80,9 @@ def get_lesson(weeks_text, day_text, start_end_text, location):
     else:
         number[0] = int(number[0])
 
+    if not day_text or not start_end_text or not week_text:
+        return None
+
     lesson = {
         'day': day_text,
         'start': number[0],
