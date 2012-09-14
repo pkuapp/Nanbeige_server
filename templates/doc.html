@@ -724,6 +724,7 @@ td:last-child {
     <p>返回 <code>after</code> 之后修改过的当前用户课程，若 <code>after</code> 未提供，返回全部。</p>
     <p><code>status</code> 可取值 select、audit 和 cancel。cancel 意味着用户执行过取消选课或取消旁听的操作。</p>
     <p><code>course_id</code> 为教务网课程编号。<code>lessons</code> 中，<code>day</code> 为在星期几上课（1-7），<code>start</code> 和 <code>end</code> 为起止节次。</p>
+    <p>周次有两种表示方式（下同）：<br />1. 提供 <code>weekset_id</code>。<br />2. 提供 <code>weeks</code> 数组和 <code>weeks_display</code> 字符串（用于 UI）。</p>
   </td>
 </tr>
 
@@ -731,7 +732,8 @@ td:last-child {
   <td align="left">/:id/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
-  <td align="left"><pre>{
+  <td align="left">
+    <pre>{
   "id": 65537,
   "orig_id": "2011-325763QR",
   "name": "21天精通阿拉伯语（变态冲刺班）",
@@ -756,7 +758,9 @@ td:last-child {
       "weekset_id": 2
     }
   ]
-}</pre></td>
+}</pre>
+    <pre>{"error_code": "CourseNotFound"}</pre>
+  </td>
   <td align="left">获得 id 课程的详细信息。</td>
 </tr>
 
@@ -764,7 +768,8 @@ td:last-child {
   <td align="left">/:id/users/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
-  <td align="left"><pre>[
+  <td align="left">
+    <pre>[
   {
     "id": 1,
     "nickname": "类定义",
@@ -785,7 +790,9 @@ td:last-child {
       "name": "Ta"
     }
   }
-]</pre></td>
+]</pre>
+    <pre>{"error_code": "CourseNotFound"}</pre>
+  </td>
   <td align="left">返回选择或旁听了 id 课程的用户列表。</td>
 </tr>
 
@@ -797,7 +804,8 @@ td:last-child {
       <li><code class="required">int</code> semester_id</li>
     </ul>
   </td>
-  <td align="left"><pre>[
+  <td align="left">
+    <pre>[
   {
     "id": 65537,
     "name": "21天精通阿拉伯语（变态冲刺班）",
@@ -825,7 +833,9 @@ td:last-child {
     ]
   },
   ...
-]</pre></td>
+]</pre>
+    <pre>{"error_code": "SemesterNotFound"}</pre>
+  </td>
   <td align="left">返回 <code>semester_id</code> 学期的全部课程。</td>
 </tr>
 
