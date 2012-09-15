@@ -107,7 +107,7 @@ class TeapotParser(BaseParser):
         return lessons
 
     def get_teachers(self, teachers_text):
-        return teachers_text.replace('* ', ',').rstrip(',').rstrip('*').replace(' ', ',')
+        return teachers_text.replace('  ', ' ').replace('* ', ',').rstrip(',').rstrip('*').replace(' ', ',')
 
     def grab_all(self):
         self._local_setup()
