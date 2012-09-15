@@ -38,6 +38,9 @@ class UserProfileAdmin(admin.ModelAdmin):
 class CourseStatusAdmin(admin.ModelAdmin):
     list_display = ('user_profile', 'course', 'time', 'status')
 
+class LessonAdmin(admin.ModelAdmin):
+    raw_id_fields = ('course',)
+
 class UserActionAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'semester', 'action_type')
 
@@ -51,7 +54,7 @@ admin.site.register(Course, CourseAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(CourseStatus, CourseStatusAdmin)
 admin.site.register(UserAction, UserActionAdmin)
-admin.site.register(Lesson)
+admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Comment)
 admin.site.register(Building)
 admin.site.register(Room)
