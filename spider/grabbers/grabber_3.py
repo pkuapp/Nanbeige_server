@@ -70,8 +70,6 @@ class TeapotParser(BaseParser):
                 elif u'双周' in mouse:
                     res = [i for i in res if i % 2 == 0]
                     weeks_display = weeks_display + u'双周'
-                else:
-                    weeks_display = weeks_display + u'周'
             else:
                 google = re.search('\d+', mouse)
                 if google:
