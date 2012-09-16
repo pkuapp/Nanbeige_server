@@ -3,9 +3,14 @@
 from string import split
 from datetime import datetime
 from json import dumps
+import re
 from django.http import HttpResponse
 from django.db import connection
+from django.conf import settings
 from nbg.models import Course, Lesson
+
+def unify_brackets(text):
+    return re.sub(u'\((.{0,10})）', lambda(obj):u'（{0}）'.format(obj.group(1)), text)
 
 def float_nullable(number):
     if number is None:
@@ -35,8 +40,12 @@ def json_response(func):
         if isinstance(response, tuple):
             content = response[0]
             status_code = response[1]
-        return HttpResponse(dumps(content, ensure_ascii=False, separators=(',',':')),
-          mimetype="application/json", status=status_code)
+        if settings.DEBUG:
+            return HttpResponse(dumps(content, ensure_ascii=False, indent=2),
+              mimetype="application/json", status=status_code)
+        else:
+            return HttpResponse(dumps(content, ensure_ascii=False, separators=(',',':')),
+              mimetype="application/json", status=status_code)
 
     return inner
 

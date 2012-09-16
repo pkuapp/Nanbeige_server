@@ -4,7 +4,7 @@ from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ValidationError
 from datetime import datetime
 from nbg.models import Course, Comment, Semester, UserAction, CourseStatus
-from nbg.helpers import listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db, float_nullable, append_query
+from nbg.helpers import listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db, float_nullable, append_query, unify_brackets
 from spider.grabbers.grabber_base import LoginError, GrabError
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -29,7 +29,7 @@ def course_list(request):
         'id': course_status.course_id,
         'status': CourseStatus.STATUS_CHOICES_DICT[course_status.status],
         'orig_id': course_status.course.original_id,
-        'name': course_status.course.name,
+        'name': unify_brackets(course_status.course.name),
         'credit': float_nullable(course_status.course.credit),
         'teacher': listify_str(course_status.course.teacher),
         'ta': listify_str(course_status.course.ta),
@@ -59,7 +59,7 @@ def course(request, offset):
     response = {
         'id': course_id,
         'orig_id': course.original_id,
-        'name': course.name,
+        'name': unify_brackets(course.name),
         'credit': float(course.credit),
         'teacher': listify_str(course.teacher),
         'ta': listify_str(course.ta),
@@ -123,7 +123,7 @@ def all(request):
     if not response:
         response = [{
             'id': course.pk,
-            'name': course.name,
+            'name': unify_brackets(course.name),
             'teacher': listify_str(course.teacher),
             'lessons': [{
                 'day': lesson.day,
