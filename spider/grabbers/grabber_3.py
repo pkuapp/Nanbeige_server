@@ -63,7 +63,7 @@ class TeapotParser(BaseParser):
             baidu = re.search('\d+-\d+', mouse)
             if baidu:
                 data = re.findall('\d+', baidu.group(0))
-                res = [i for i in range(int(data[0]), int(data[1]) + 1)]
+                res = range(int(data[0]), int(data[1]) + 1)
                 weeks_display = weeks_display + '{0}-{1}'.format(data[0], data[1])
                 if u'单周' in mouse:
                     pos = weeks_display.rfind(u' ')
