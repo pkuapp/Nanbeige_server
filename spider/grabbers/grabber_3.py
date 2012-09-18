@@ -182,7 +182,7 @@ class TeapotParser(BaseParser):
                 course = {
                     'original_id': cols[0].get_text(strip=True),
                     'name': cols[1].get_text(strip=True),
-                    'credit': float(cols[2].get_text(strip=True).replace('&nbsp;', '')),
+                    'credit': str(float(cols[2].get_text(strip=True).replace('&nbsp;', ''))),
                     'teacher': teacher,
                     'lessons': lessons,
                 }
