@@ -4,7 +4,7 @@ from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ValidationError
 from datetime import datetime
 from nbg.models import Course, Comment, Semester, UserAction, CourseStatus
-from nbg.helpers import listify_str, json_response, auth_required, parse_datetime, find_in_db, add_to_db, float_nullable, append_query, unify_brackets
+from nbg.helpers import listify_str, json_response, auth_required, find_in_db, add_to_db, float_nullable, unify_brackets
 from spider.grabbers.grabber_base import LoginError, GrabError
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -216,7 +216,7 @@ def course_grab(request):
     user = request.user
     university = user.get_profile().campus.university
     try:
-        exec("from spider.grabbers import grabber_" + str(int(university.pk)) + " as GrabberModel")
+        exec('from spider.grabbers import grabber_' + str(int(university.pk)) + ' as GrabberModel')
     except ImportError:
         return {'available': False}
     grabber = GrabberModel.TeapotParser()
@@ -257,9 +257,9 @@ def course_grab_start(request):
             UserAction.objects.create(user=request.user, semester=semester, action_type=UserAction.COURSE_IMPORTED)
             return {'semester_id': grabber.semester_id}
         except LoginError as e:
-            if e.error == "auth":
+            if e.error == 'auth':
                 return {'error_code': 'AuthError'}
-            elif e.error == "captcha":
+            elif e.error == 'captcha':
                 return {'error_code': 'CaptchaError'}
             else:
                 return {'error_code': 'UnknownLoginError'}
@@ -278,7 +278,7 @@ def course_grab_start(request):
 def captcha_img(request):
     grabber = cache.get(request.session.session_key+'_grabber')
     if grabber and grabber.captcha_img:
-        return HttpResponse(grabber.captcha_img, mimetype="image")
+        return HttpResponse(grabber.captcha_img, mimetype='image')
     else:
         return json_response(lambda x:({
             'error_code': 'CaptchaExpired'
