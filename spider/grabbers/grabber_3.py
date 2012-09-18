@@ -45,6 +45,7 @@ class TeapotParser(BaseParser):
 
         if location == '  ':
             location = None
+
         if day_text == '':
             day_text = None
         else:
@@ -92,8 +93,8 @@ class TeapotParser(BaseParser):
         weeks.sort()
         weeks = list_to_comma_separated(weeks)
         if weeks == '':
-            weeks = 'None'
-            weeks_display = ''
+            weeks = None
+            weeks_display = None
 
         number = re.findall("\d{1,2}", start_end_text)
         if number == []:
@@ -101,6 +102,9 @@ class TeapotParser(BaseParser):
         else:
             number[0] = int(number[0])
             number[1] = int(number[1])
+
+        if day_text == None and location == None and weeks == None and number[0] == None and number[1] == None:
+            return lessons
 
         lessons.append({
             'day': day_text,
