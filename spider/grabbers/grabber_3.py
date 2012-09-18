@@ -258,7 +258,7 @@ class TeapotParser(BaseParser):
             teacher = self.get_teachers(cols[7].get_text(strip=True))
             weeks_text = cols[11].get_text(strip=True)
             day_text = cols[12].get_text(strip=True)
-            start_end_text = cols[13].get_text(strip=True) + '-' + str(int(cols[13].get_text(strip=True)) + int(cols[14].get_text(strip=True)))
+            start_end_text = cols[13].get_text(strip=True) + '-' + str(int(cols[13].get_text(strip=True)) + int(cols[14].get_text(strip=True)) - 1)
             
             lessons = self.get_lessons(weeks_text, day_text, start_end_text, location)
 
