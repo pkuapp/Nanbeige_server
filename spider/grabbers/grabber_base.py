@@ -22,7 +22,7 @@ class GrabError(Exception):
         return 'GrabError: {}'.format(self.error)
 
 class BaseParser(object):
-    """All your grabber are belong to us.
+    '''All your grabber are belong to us.
 
     Grabbers may be used outside of django environment as standalone script.
     Do not import packages depend on django.
@@ -41,7 +41,7 @@ class BaseParser(object):
     and provide error info.
     2. Say the captcha is required, you MUST override *_fetch_img()* and set self.captcha_img in it.
     3. You MUST override *semester_id* to match the semester id in database.
-    """
+    '''
     def __init__(self):
         super(BaseParser, self).__init__()
         self.require_captcha = False
@@ -66,48 +66,48 @@ class BaseParser(object):
         with open(os.path.join(os.path.dirname(__file__), 'img.gif'), 'w') as img:
             img.write(self.captcha_img)
 
-        captcha = raw_input("Captcha: ")
-        username = raw_input("Username: ")
+        captcha = raw_input('Captcha: ')
+        username = raw_input('Username: ')
         password = getpass.getpass('Password: ')
 
         self.setUp(username=username, password=password, captcha=captcha)
 
     def run(self):
-        """Implement your request and parse code here.
+        '''Implement your request and parse code here.
 
         Override and SET *self.courses* with courses list with each in the following format:
         {
-          "orig_id": "2011-325763QR",
-          "name": "21天精通阿拉伯语（变态冲刺班）",
-          "credit": 2.5,
-          "teacher": "张塔,ZHANG Ta",
-          "ta": "塔,Ta,宝塔",
-          "lessons":
+          'orig_id': '2011-325763QR',
+          'name': '21天精通阿拉伯语（变态冲刺班）',
+          'credit': '2.5', # should be a str-presented float, cuz python 2.6 won't convert float to decimal.
+          'teacher': '张塔,ZHANG Ta',
+          'ta': '塔,Ta,宝塔',
+          'lessons':
           [
             {
-              "day": 5,
-              "start": 1,
-              "end": 2,
-              "location": "牛街清真寺广场",
-              "weekset_id": 9,
+              'day': 5,
+              'start': 1,
+              'end': 2,
+              'location': '牛街清真寺广场',
+              'weekset_id': 9,
             },
             {
-              "day": 1,
-              "start": 1,
-              "end": 5,
-              "location": "张塔家中",
-              "weekset_id": 10,
+              'day': 1,
+              'start': 1,
+              'end': 5,
+              'location': '张塔家中',
+              'weekset_id': 10,
             },
           ],
         }
-        """
+        '''
         return []
 
     def _fetch_img(self):
-        """Implement a valid method to fetch captcha img if require_captcha is set.
+        '''Implement a valid method to fetch captcha img if require_captcha is set.
 
         Override and set self.img when called.
-        """
+        '''
         pass
 
     def work_flow_type(self):
@@ -126,8 +126,8 @@ class BaseParser(object):
             }
 
 class TeapotParser(BaseParser):
-    """An example parser shows how to override BaseParser.
-    """
+    '''An example parser shows how to override BaseParser.
+    '''
     def __init__(self):
         super(TeapotParser, self).__init__()
         self.require_captcha = True
@@ -139,34 +139,34 @@ class TeapotParser(BaseParser):
 
     def run(self):
         return [{
-            "orig_id": "2011-325763QR",
-            "name": "21天精通阿拉伯语（变态冲刺班）",
-            "credit": 2.5,
-            "teacher":
+            'orig_id': '2011-325763QR',
+            'name': '21天精通阿拉伯语（变态冲刺班）',
+            'credit': '2.5',
+            'teacher':
             [
-                "张塔",
-                "ZHANG Ta"
+                '张塔',
+                'ZHANG Ta'
             ],
-            "ta":
+            'ta':
             [
-                "塔"
+                '塔'
             ],
-            "semester_id": 2,
-            "lessons":
+            'semester_id': 2,
+            'lessons':
             [
                 {
-                    "day": 5,
-                    "start": 1,
-                    "end": 2,
-                    "location": "牛街清真寺广场",
-                    "weeks": [1, 3, 5, 7, 9, 11, 13, 15, 17]
+                    'day': 5,
+                    'start': 1,
+                    'end': 2,
+                    'location': '牛街清真寺广场',
+                    'weeks': [1, 3, 5, 7, 9, 11, 13, 15, 17]
                 },
                 {
-                    "day": 1,
-                    "start": 1,
-                    "end": 5,
-                    "location": "张塔家中",
-                    "weeks": [1, 2, 3, 4, 5, 6, 7, 8]
+                    'day': 1,
+                    'start': 1,
+                    'end': 5,
+                    'location': '张塔家中',
+                    'weeks': [1, 2, 3, 4, 5, 6, 7, 8]
                 }
             ]
         },]
