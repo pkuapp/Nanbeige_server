@@ -63,19 +63,19 @@ class TeapotParser(BaseParser):
             if baidu:
                 data = re.findall('\d+', baidu.group(0))
                 res = [i for i in range(int(data[0]), int(data[1]) + 1)]
-                weeks_display = weeks_display + '{}-{}'.format(data[0], data[1])
+                weeks_display = weeks_display + '{0}-{1}'.format(data[0], data[1])
                 if u'单周' in mouse:
                     pos = weeks_display.rfind(u' ')
                     if pos != -1:
                         weeks_display = weeks_display[:pos] + u'周 '
-                        weeks_display = weeks_display + u'第{}-{}'.format(data[0], data[1])
+                        weeks_display = weeks_display + u'第{0}-{1}'.format(data[0], data[1])
                     weeks_display = weeks_display + u'单周'
                     res = [i for i in res if i % 2 == 1]
                 elif u'双周' in mouse:
                     pos = weeks_display.rfind(u' ')
                     if pos != -1:
                         weeks_display = weeks_display[:pos] + u'周 '
-                        weeks_display = weeks_display + u'第{}-{}'.format(data[0], data[1])
+                        weeks_display = weeks_display + u'第{0}-{1}'.format(data[0], data[1])
                     weeks_display = weeks_display + u'双周'
                     res = [i for i in res if i % 2 == 0]
             else:
@@ -83,7 +83,7 @@ class TeapotParser(BaseParser):
                 if google:
                     data = re.findall('\d+', google.group(0))
                     res = [int(data[0])]
-                    weeks_display = weeks_display + '{}'.format(data[0])
+                    weeks_display = weeks_display + '{0}'.format(data[0])
             weeks.extend(res)
             weeks_display = weeks_display + ' '
         weeks_display = weeks_display[:-1]
@@ -137,7 +137,7 @@ class TeapotParser(BaseParser):
         soup_colleges = BeautifulSoup(r_viewstate.content.decode('gbk').replace('name', 'id'), parse_only=strainer_colleges)
         colleges = [option['value'] for option in soup_colleges.select("option") if option['value']]
         pretty_print(colleges)
-        print "{} colleges.".format(len(colleges))
+        print "{0} colleges.".format(len(colleges))
 
         ''' - iter colleges'''
         url_courses = self.url_prefix + 'courseSearchAction.do'
@@ -200,7 +200,7 @@ class TeapotParser(BaseParser):
                 prev_code_name = code_name
                 courses.append(course)
 
-            print "#{} {}: {} courses.".format(i, college.encode("utf8"), len(courses))
+            print "#{0} {1}: {2} courses.".format(i, college.encode("utf8"), len(courses))
             total_courses += len(courses)
             output_dir = os.path.join(os.path.dirname(__file__), 'bupt')
             if not os.path.exists(output_dir):
@@ -208,7 +208,7 @@ class TeapotParser(BaseParser):
             if courses != []:
                 with open(os.path.join(output_dir, str(i) + '.yaml'), 'w') as yaml_file:
                     yaml_file.write(pretty_format(courses))
-        print "Done! Totally exported {} courses.".format(total_courses)
+        print "Done! Totally exported {0} courses.".format(total_courses)
 
     def _login(self):
         url_login = self.url_prefix + 'jwLoginAction.do'
