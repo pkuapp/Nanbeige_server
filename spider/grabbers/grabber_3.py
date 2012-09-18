@@ -65,11 +65,19 @@ class TeapotParser(BaseParser):
                 res = [i for i in range(int(data[0]), int(data[1]) + 1)]
                 weeks_display = weeks_display + '{}-{}'.format(data[0], data[1])
                 if u'单周' in mouse:
-                    res = [i for i in res if i % 2 == 1]
+                    pos = weeks_display.rfind(u' ')
+                    if pos != -1:
+                        weeks_display = weeks_display[:pos] + u'周 '
+                        weeks_display = weeks_display + u'第{}-{}'.format(data[0], data[1])
                     weeks_display = weeks_display + u'单周'
+                    res = [i for i in res if i % 2 == 1]
                 elif u'双周' in mouse:
-                    res = [i for i in res if i % 2 == 0]
+                    pos = weeks_display.rfind(u' ')
+                    if pos != -1:
+                        weeks_display = weeks_display[:pos] + u'周 '
+                        weeks_display = weeks_display + u'第{}-{}'.format(data[0], data[1])
                     weeks_display = weeks_display + u'双周'
+                    res = [i for i in res if i % 2 == 0]
             else:
                 google = re.search('\d+', mouse)
                 if google:
