@@ -62,11 +62,13 @@ class TeapotParser(BaseParser):
             location = str(time_and_location_texts[j+2]).replace('<tagbr>　', '')
             location = location.replace('</tagbr>', '')
             location = location.replace(',', ' ')
+            weeks_display_text = str(time_and_location_texts[j]).decode('utf8')
             lessons.append({
                 'day': chinese_weekdays[weekday.decode('utf8')],
                 'start': int(number[0]),
                 'end': int(number[-1]),
                 'weeks': list_to_comma_separated(weeks),
+                'weeks_display': weeks_display_text[weeks_display_text.find(u'：')+1:weeks_display_text.find(u' ')].replace(u'～', u'-'),
                 'location': location,
             })
 
