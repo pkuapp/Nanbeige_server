@@ -122,14 +122,21 @@ def all(request):
     response = cache.get(cache_name)
     if not response:
         response = [{
-            'id': course.pk,
+            'id': course.id,
+            'orig_id': course.original_id,
             'name': unify_brackets(course.name),
+            'credit': float(course.credit),
             'teacher': listify_str(course.teacher),
+            'ta': listify_str(course.ta),
+            'semester_id': course.semester_id,
             'lessons': [{
                 'day': lesson.day,
                 'start': lesson.start,
                 'end': lesson.end,
                 'location': lesson.location,
+                'weekset_id': lesson.weekset_id,
+                'weeks': lesson.weeks,
+                'weeks_display': lesson.weeks_display,
             } for lesson in course.lesson_set.all()],
         } for course in semester.course_set.all().prefetch_related('lesson_set')]
         # timeout: one week
