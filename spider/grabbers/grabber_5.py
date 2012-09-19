@@ -63,14 +63,15 @@ class TeapotParser(BaseParser):
             location = location.replace('</tagbr>', '')
             location = location.replace(',', ' ')
             weeks_display_text = str(time_and_location_texts[j]).decode('utf8')
-            weeks_display = weeks_display_text[weeks_display_text.find(u'：')+1:weeks_display_text.find(u' ')].replace(u'～', u'-')
+            weeks_raw = weeks_display_text[weeks_display_text.find(u'：')+1:weeks_display_text.find(u' ')].replace(u'～', u'-')
+            weeks_display = re.sub(r'0([0-9])', r'\1', weeks_raw)
             lessons.append({
                 'day': chinese_weekdays[weekday.decode('utf8')],
                 'start': int(number[0]),
                 'end': int(number[-1]),
                 'weeks': list_to_comma_separated(weeks),
                 'weeks_display': weeks_display,
-                'weeks_raw': weeks_display,
+                'weeks_raw': weeks_raw,
                 'location': location,
             })
 
@@ -93,7 +94,7 @@ class TeapotParser(BaseParser):
         colleges = [option['value'] for option in soup_colleges.select("option") if option['value']]
         colleges_name = [option.get_text() for option in soup_colleges.select("option") if option['value']]
         pretty_print(colleges_name)
-        print "{} colleges.".format(len(colleges))
+        print "{0} colleges.".format(len(colleges))
 
         ''' - iter colleges'''
         total_courses = 0
@@ -114,7 +115,7 @@ class TeapotParser(BaseParser):
             rows = soup_courses.find_all("row")
 
             if len(rows) == 1:
-                print "#{} {}: {} courses.".format(i, colleges_name[i].encode('utf8'), 0)
+                print "#{0} {1}: {2} courses.".format(i, colleges_name[i].encode('utf8'), 0)
                 continue
 
             courses = []
@@ -133,17 +134,21 @@ class TeapotParser(BaseParser):
                 }
                 courses.append(course)
 
-            print "#{} {}: {} courses.".format(i, colleges_name[i].encode('utf8'), len(courses))
+            print "#{0} {1}: {2} courses.".format(i, colleges_name[i].encode('utf8'), len(courses))
             total_courses += len(courses)
-            with open(os.path.join(os.path.dirname(__file__), 'ruc/{}.yaml').format(i), 'w') as yaml_file:
-                yaml_file.write(pretty_format(courses))
-        print "Done! Totally exported {} courses.".format(total_courses)
+            output_dir = os.path.join(os.path.dirname(__file__), 'ruc')
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            if courses != []:
+                with open(os.path.join(output_dir, colleges_name[i] + '.yaml'), 'w') as yaml_file:
+                    yaml_file.write(pretty_format(courses))
+        print "Done! Totally exported {0} courses.".format(total_courses)
 
     def _login(self):
         url_login = self.next_url
 
         page_login = requests.get(url_login, cookies=self.cookies, verify=False)
-        result = re.search('<input type="hidden" name="lt" value="(.+)" />', page_login.content)
+        result = re.search(u'<input type="hidden" name="lt" value="(.+)" />', page_login.content)
         self.lt = result.group(1)
 
         data = {
