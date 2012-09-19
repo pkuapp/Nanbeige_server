@@ -12,10 +12,12 @@ import json
 
 COUCHDB_HOST = 'http://211.101.12.224'
 COUCHDB_PORT = '5984'
+COUCHDB_ROOT_USERNAME = 'nbgd4P4eCTr4Vb4xQmL'
+COUCHDB_ROOT_PASSWORD = 'CFh1oF1yqILzCXlagD6K'
 server = Server('{0}:{1}'.format(COUCHDB_HOST, COUCHDB_PORT))
-server.resource.credentials = ('nbgd4P4eCTr4Vb4xQmL', 'CFh1oF1yqILzCXlagD6K')
+server.resource.credentials = (COUCHDB_ROOT_USERNAME, COUCHDB_ROOT_PASSWORD)
 userdb = Database('{0}:{1}/_users'.format(COUCHDB_HOST, COUCHDB_PORT))
-userdb.resource.credentials = ('nbgd4P4eCTr4Vb4xQmL', 'CFh1oF1yqILzCXlagD6K')
+userdb.resource.credentials = (COUCHDB_ROOT_USERNAME, COUCHDB_ROOT_PASSWORD)
 
 class UserManager(Manager):
     """automatically create corresponding user syncable database in couchdb"""
