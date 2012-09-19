@@ -195,7 +195,7 @@ class Lesson(models.Model):
     day = models.SmallIntegerField()
     start = models.SmallIntegerField()
     end = models.SmallIntegerField()
-    weekset = models.ForeignKey(Weekset, null=True)
+    weekset = models.ForeignKey(Weekset, null=True, blank=True)
     weeks = models.CommaSeparatedIntegerField(max_length=200, blank=True)
     weeks_raw = models.CharField(max_length=200, blank=True)
     weeks_display = models.CharField(max_length=100, blank=True)
