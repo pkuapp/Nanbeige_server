@@ -128,7 +128,7 @@ class TeapotParser(BaseParser):
                 course = {
                     'original_id': r.select("jxbh")[0].get_text(strip=True),
                     'name': r.select("kcmc")[0].get_text(strip=True),
-                    'credit': float(r.select("xf")[0].get_text(strip=True)),
+                    'credit': str(float(r.select("xf")[0].get_text(strip=True))),
                     'teacher': teacher,
                     'lessons': lessons,
                 }
