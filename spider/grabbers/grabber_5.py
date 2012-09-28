@@ -52,7 +52,6 @@ class TeapotParser(BaseParser):
 
     def get_lessons(self, time_and_location_texts):
         lessons = []
-
         for i in range(0, len(time_and_location_texts) / 3):
             j = i * 3
             week_num = re.findall("\d{1,2}", str(time_and_location_texts[j]))
@@ -74,7 +73,6 @@ class TeapotParser(BaseParser):
                 'weeks_raw': weeks_raw,
                 'location': location,
             })
-
         return lessons
 
     def grab_all(self):
@@ -99,42 +97,46 @@ class TeapotParser(BaseParser):
         ''' - iter colleges'''
         total_courses = 0
         for i, college in enumerate(colleges):
-            '''get courses'''
-            data = {
-                'method': "allJxb",
-                'condition_xnd': "2012-2013",
-                'condition_xq': "1",
-                'condition_yx': college.encode('gbk'),
-                'isNeedInitSQL': "true",
-            }
-            url_courses = 'http://portal.ruc.edu.cn/idc/education/selectcourses/resultquery/ResultQueryAction.do'
-            r_courses = requests.post(url_courses, data=data, cookies=self.cookies)
-            content = r_courses.content.decode('gbk')
-
-            soup_courses = BeautifulSoup(content)
-            rows = soup_courses.find_all("row")
-
-            if len(rows) == 1:
-                print "#{0} {1}: {2} courses.".format(i, colleges_name[i].encode('utf8'), 0)
-                continue
-
             courses = []
-            for r in rows:
-                teacher = r.select("xm")[0].get_text(strip=True).replace('/', ',')
-                time_and_location_texts = r.select("sksj > tagbr")
-
-                lessons = self.get_lessons(time_and_location_texts)
-
-                course = {
-                    'original_id': r.select("jxbh")[0].get_text(strip=True),
-                    'name': r.select("kcmc")[0].get_text(strip=True),
-                    'credit': str(float(r.select("xf")[0].get_text(strip=True))),
-                    'teacher': teacher,
-                    'lessons': lessons,
+            url_courses = 'http://portal.ruc.edu.cn/idc/education/selectcourses/resultquery/ResultQueryAction.do'
+            '''get courses'''
+            for j in range(1, 15):
+                data = {
+                    'method': "allJxb",
+                    'condition_xnd': "2012-2013",
+                    'condition_xq': "1",
+                    'condition_yx': college.encode('gbk'),
+                    'isNeedInitSQL': "true",
+                    'ksj1': j,
+                    'ksj2': j,
                 }
-                courses.append(course)
+                r_courses = requests.post(url_courses, data=data, cookies=self.cookies)
+                content = r_courses.content.decode('gbk')
+
+                soup_courses = BeautifulSoup(content)
+                rows = soup_courses.find_all("row")
+
+                if len(rows) == 1:
+                    continue
+
+                for r in rows:
+                    teacher = r.select("xm")[0].get_text(strip=True).replace('/', ',')
+                    time_and_location_texts = r.select("sksj > tagbr")
+
+                    lessons = self.get_lessons(time_and_location_texts)
+
+                    course = {
+                        'original_id': r.select("jxbh")[0].get_text(strip=True),
+                        'name': r.select("kcmc")[0].get_text(strip=True),
+                        'credit': str(float(r.select("xf")[0].get_text(strip=True))),
+                        'teacher': teacher,
+                        'lessons': lessons,
+                    }
+                    courses.append(course)
 
             print "#{0} {1}: {2} courses.".format(i, colleges_name[i].encode('utf8'), len(courses))
+            if len(courses) == 0:
+                continue
             total_courses += len(courses)
             output_dir = os.path.join(os.path.dirname(__file__), 'ruc')
             if not os.path.exists(output_dir):
@@ -162,12 +164,11 @@ class TeapotParser(BaseParser):
         r_login = requests.post(url_login, data=data, cookies=self.cookies, verify=False)
 
         content = r_login.content.decode(self.charset)
-        result = re.match(u'<div class="error">(.+)</div>', content)
-        if result:
-            msg = result.group(1).decode(self.charset)
-            raise LoginError(msg)
 
-        self.next_url = re.search(u'window.location.href="(.+)";', content).group(1)
+        try:
+            self.next_url = re.search(u'window.location.href="(.+)";', content).group(1)
+        except:
+            raise LoginError('unknown')
 
         '''logged in successfully'''
         print "Logged in successfully."
