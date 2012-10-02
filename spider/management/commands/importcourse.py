@@ -2,10 +2,10 @@
 
 import os
 import yaml
+from django.core.management.base import BaseCommand, CommandError
 from nbg.models import Course, Lesson, Semester
 from nbg.helpers import find_in_db, add_to_db
-from django.core.cache import cache
-from django.core.management.base import BaseCommand, CommandError
+from spider.grabbers.helpers import pretty_format
 
 class Command(BaseCommand):
     args = '<semester_id, directory>'
@@ -25,6 +25,7 @@ class Command(BaseCommand):
         files = [f for f in files if
           os.path.isfile(os.path.join(dir, f)) and os.path.splitext(f)[1] == ".yaml"]
         files = [os.path.join(dir, f) for f in files]
+        log_file = os.path.join(dir, 'import.log')
 
         semester = Semester.objects.get(pk=semester_id)
         total_import = 0
@@ -38,6 +39,10 @@ class Command(BaseCommand):
             for c in courses:
                 if find_in_db(c):
                     self.stdout.write('-')
+                    with open(log_file, 'w') as log:
+                        log.write('Duplicated Item:\n')
+                        log.write(pretty_format(c))
+                        log.write('\n')
                 else:
                     self.stdout.write('+')
                     count_import += 1
