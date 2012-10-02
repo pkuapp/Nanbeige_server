@@ -39,7 +39,7 @@ class Command(BaseCommand):
             for c in courses:
                 if find_in_db(c):
                     self.stdout.write('-')
-                    with open(log_file, 'w') as log:
+                    with open(log_file, 'a') as log:
                         log.write('Duplicated Item:\n')
                         log.write(pretty_format(c))
                         log.write('\n')
