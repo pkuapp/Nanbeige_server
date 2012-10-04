@@ -10,8 +10,8 @@ from django.core.cache import cache
 from django.http import HttpResponse
 from icalendar import Calendar, Event
 import pytz
-import pickle
-import zlib
+import cPickle
+import bz2
 
 @require_http_methods(['GET'])
 @auth_required
@@ -143,10 +143,10 @@ def all(request):
                 'weeks_display': lesson.weeks_display,
             } for lesson in course.lesson_set.all()],
         } for course in semester.course_set.all().prefetch_related('lesson_set')]
-        # timeout: one week
-        cache.set(cache_name, zlib.compress(pickle.dumps(response)), 604800)
+        # timeout: 6 months
+        cache.set(cache_name, bz2.compress(cPickle.dumps(response), 9), 15552000)
     else:
-        response = pickle.loads(zlib.decompress(response))
+        response = cPickle.loads(bz2.decompress(response))
     return response
 
 @require_http_methods(['POST'])
