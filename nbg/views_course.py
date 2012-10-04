@@ -143,7 +143,7 @@ def all(request):
             } for lesson in course.lesson_set.all()],
         } for course in semester.course_set.all().prefetch_related('lesson_set')]
         # timeout: one week
-        # cache.set(cache_name, response, 604800)
+        cache.set(cache_name, response, 604800)
     return response
 
 @require_http_methods(['POST'])
