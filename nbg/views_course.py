@@ -2,7 +2,7 @@
 
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ValidationError
-from datetime import datetime
+from datetime import datetime, date
 from nbg.models import Course, Comment, Semester, UserAction, CourseStatus
 from nbg.helpers import listify_str, json_response, auth_required, find_in_db, add_to_db, float_nullable, unify_brackets
 from spider.grabbers.grabber_base import LoginError, GrabError
@@ -288,11 +288,12 @@ def course_grab_start(request):
 
 @require_http_methods(['GET'])
 @auth_required
+@json_response
 def gen_ical(request):
-    cal = Calendar() # create calendar
+    cal = Calendar()
     cal['version'] = '2.0' #
-    cal['prodid'] = '-//Prototype//Nanbeige//ZH' # *mandatory elements* where the prodid can be changed, see RFC xxxx(sry forgot)
-    event = Event() # create new event
+    cal['prodid'] = '-//Prototype//Nanbeige//ZH' # *mandatory elements* where the prodid can be changed, see RFC xxxx(sry forgot) 
+    event = Event()
     event.add('summary', 'Test Event') # title
     event.add('dtstart', datetime(2012, 10, 1, 10, 0, 0)) # start time/date
     event.add('dtend', datetime(2012, 10, 1, 11, 0, 0)) # end time/date
@@ -300,8 +301,19 @@ def gen_ical(request):
     cal.add_component(event) # add the event to calendal
     # Return test calendar, works
     #return HttpResponse(cal.to_ical(), mimetype="text/calendar")
+
     user_profile = request.user.get_profile()
-    from json import dumps
+
+    # get current semester
+    semesters = user_profile.campus.university.semester_set.all()
+    today = date.today()
+    for s in semesters:
+        if today > s.week_start and today < s.week_end:
+            semester = s
+            break
+
+    return semester.id
+'''
     course_statuses = (user_profile.coursestatus_set.all().
       select_related('course').prefetch_related('course__lesson_set'))
     # courses = [{ # used as reference
@@ -330,7 +342,7 @@ def gen_ical(request):
             # Start time of the class
             start = course_status.course.semester.university.scheduleunit_set.filter(number = lesson.start).get().start
             return HttpResponse(start)
-            # test work ends here, notice that the event above is not added to ical
+            # test work ends here, notice that the event above is not added to ical'''
 
 @require_http_methods(['GET'])
 @auth_required
