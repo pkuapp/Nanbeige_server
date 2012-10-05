@@ -11,7 +11,7 @@ def building_list(request):
     try:
         campus = Campus.objects.get(pk=campus_id)
     except Campus.DoesNotExist:
-        return {'error': '校区不存在。'}, 404
+        return {'error_code': 'CampusNotFound'}, 404
 
     buildings = campus.building_set.all()
     response = [{
@@ -33,7 +33,7 @@ def room_list(request, offset):
     try:
         building = Building.objects.get(pk=building_id)
     except Building.DoesNotExist:
-        return {'error': '教学楼不存在。'}, 404
+        return {'error_code': 'BuildingNotFound'}, 404
 
     room_objs = building.room_set.all()
     response = []

@@ -202,12 +202,11 @@ td:last-child {
   <li><code>418</code> 我是一只咖啡壶☆</li>  
 </ul>
 
-<h2>General Error Codes</h2>
+<h2>Error Code</h2>
 
-<ul>
-  <li><code>NotLoggedIn</code> 须要登录。</li>
-  <li><code>SyntaxError</code> 请求格式错误。</li>
-</ul>
+<p>若返回的字典含有 <code>error_code</code>，客户端要处理错误，且不应将 <code>error_code</code> 本身暴露给用户。</p>
+<p>若同时含有 <code>error</code>，要将 <code>error</code> 的内容显示给用户。</p>
+<p>如遇 <code>NotLoggedIn</code>，应将用户跳转至登录界面。</p>
 
 <hr />
 
@@ -411,8 +410,8 @@ td:last-child {
   "error_code": "InvalidToken"
 }</pre>
     <pre title="503" class="error">{
-  'error_code': "ErrorConnectingServer",
-  'error': "连接新浪微博服务器时发生错误。"
+  "error_code": "ErrorConnectingServer",
+  "error": "连接新浪微博服务器时发生错误。"
 }</pre>
     <pre title="404" class="error">{"error_code": "CampusNotFound"}</pre>
   </td>
@@ -439,8 +438,8 @@ td:last-child {
   "error_code": "InvalidToken"
 }</pre>
     <pre title="503" class="error">{
-  'error_code': "ErrorConnectingServer",
-  'error': "连接人人服务器时发生错误。"
+  "error_code": "ErrorConnectingServer",
+  "error": "连接人人服务器时发生错误。"
 }</pre>
     <pre title="404" class="error">{"error_code": "CampusNotFound"}</pre>
   </td>
@@ -955,6 +954,7 @@ td:last-child {
     "content": "我在看着你。"
   }
 ]</pre>
+    <pre title="404" class="error">{"error_code": "CourseNotFound"}</pre>
   </td>
   <td align="left">返回 <code>id</code> 课程最近 10 条小话，从第 <code>start</code> 条开始（默认为 0）。<br />若客户端在同一页面加载更多小话，须注意新的小话导致的重复。</td>
 </tr>
@@ -972,6 +972,7 @@ td:last-child {
       <li><code>0</code> success</li>
     </ul>
     <pre title="404" class="error">{"error_code": "CourseNotFound"}</pre>
+    <pre title="400" class="error">{"error_code": "SyntaxError"}</pre>
   </td>
   <td align="left">在 <code>id</code> 课程下添加一条小话。</td>
 </tr>
@@ -1065,7 +1066,8 @@ td:last-child {
   <td align="left">
     <ul><li><code class="required">int</code> campus_id</li></ul>
   </td>
-  <td align="left"><pre>[
+  <td align="left">
+    <pre>[
   {
     "id": 17,
     "name": "东一教学楼",
@@ -1083,7 +1085,9 @@ td:last-child {
     }
   },
   ...
-]</pre></td>
+]</pre>
+    <pre title="404" class="error">{"error_code": "CampusNotFound"}</pre>
+  </td>
   <td align="left">返回 <code>campus_id</code> 校区有自习室的教学楼列表。</td>
 </tr>
 
@@ -1091,7 +1095,8 @@ td:last-child {
   <td align="left">/building/:id/room/</td>
   <td align="left"><code>GET</code></td>
   <td align="left"><code class="optional">date</code> date</li></td>
-  <td align="left"><pre>[
+  <td align="left">
+    <pre>[
   {
     "id": 123,
     "name": "东一A 200",
@@ -1102,7 +1107,9 @@ td:last-child {
     "name": "东一A 404",
     "availablity": [] // 该教室没有可用信息
   }
-]</pre></td>
+]</pre>
+    <pre title="404" class="error">{"error_code": "BuildingNotFound"}</pre>
+  </td>
   <td align="left">返回 <code>id</code> 教学楼 <code>date</code> 日期（默认为今天）的自习室列表。</td>
 </tr>
 
@@ -1139,7 +1146,8 @@ td:last-child {
       <li><code class="optional">int</code> start</li>
     </ul>
   </td>
-  <td align="left"><pre>[
+  <td align="left">
+    <pre>[
   {
     "id": 200,
     "title": "这是一个活动饭粒。",
@@ -1169,6 +1177,7 @@ td:last-child {
     "follower_count": 32
   }
 ]</pre>
+    <pre title="400" class="error">{"error_code": "SyntaxError"}</pre>
   </td>
   <td align="left">查询含有关键词 <code>keyword</code>，在 <code>after</code> （默认为现在）之后、<code>before</code>（默认为宇宙的尽头）之前的活动。返回从第 <code>start</code>（默认为 0）开始的 10 条。</td>
 </tr>
@@ -1177,7 +1186,8 @@ td:last-child {
   <td align="left">/:id/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
-  <td align="left"><pre>{
+  <td align="left">
+    <pre>{
   "id": 2,
   "title": "周末聚餐",
   "subtitle": "全聚德吃北京烤鸭",
@@ -1191,6 +1201,7 @@ td:last-child {
   "content": "能去的都去阿！",
   "follower_count": 5
 }</pre>
+    <pre title="404" class="error">{"error_code": "EventNotFound"}</pre>
   </td>
   <td align="left">返回 <code>id</code> 活动。</td>
 </tr>
@@ -1207,9 +1218,9 @@ td:last-child {
     <ul>
       <li><code>0</code> success</li>
     </ul>
-    <pre>{
-  "error_code": "EventNotFound"
-}</pre></td>
+    <pre title="400" class="error">{"error_code": "SyntaxError"}</pre>
+    <pre title="404" class="error">{"error_code": "EventNotFound"}</pre>
+  </td>
   <td align="left">修改当前用户对 id 活动的关注情况。</td>
 </tr>
 
@@ -1296,7 +1307,8 @@ td:last-child {
   <td align="left">/:id/</td>
   <td align="left"><code>GET</code></td>
   <td align="left">none</td>
-  <td align="left"><pre>[
+  <td align="left">
+    <pre>[
   {
     "title": "校车信息",
     "node_id": 623
@@ -1305,7 +1317,9 @@ td:last-child {
     "title": "校园新闻",
     "node_id": 625
   }
-]</pre></td>
+]</pre>
+    <pre title="404" class="error">{"error_code": "UniversityNotFound"}</pre>
+  </td>
   <td align="left">返回 <code>id</code> 学校的自定义栏目列表。</td>
 </tr>
 

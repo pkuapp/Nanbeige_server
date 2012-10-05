@@ -209,7 +209,7 @@ def comment_list(request, offset):
     try:
         course = Course.objects.get(pk=course_id)
     except Course.DoesNotExist:
-        return {'error': '课程不存在。'}, 404
+        return {'error_code': 'CourseNotFound'}, 404
 
     comment_objs = course.comment_set.all()[start:start+10]
 
