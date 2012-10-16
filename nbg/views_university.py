@@ -36,12 +36,6 @@ def detail(request, offset):
             'ta': university.support_ta,
         },
         'lessons': {
-            'count': {
-                'total': lessons_total,
-                'morning': university.lessons_morning,
-                'afternoon': university.lessons_afternoon,
-                'evening': university.lessons_evening,
-            },
             'detail': [{
                 'number': item.number,
                 'start': time.strftime(item.start, "%H:%M"),

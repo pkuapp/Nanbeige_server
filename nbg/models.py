@@ -58,9 +58,6 @@ class University(models.Model):
     support_import_course = models.BooleanField()
     support_list_course = models.BooleanField()
     support_ta = models.BooleanField()
-    lessons_morning = models.SmallIntegerField()
-    lessons_afternoon = models.SmallIntegerField()
-    lessons_evening = models.SmallIntegerField()
     lessons_separator = models.CommaSeparatedIntegerField(max_length=50)
 
     def __unicode__(self):
