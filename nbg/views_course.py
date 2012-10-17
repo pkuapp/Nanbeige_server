@@ -254,20 +254,28 @@ def course_grab_start(request):
         try:
             grabber.run()
             user_profile = request.user.get_profile()
-            CourseStatus.objects.filter(user_profile=user_profile, status=CourseStatus.SELECT).delete()
+            CourseStatus.objects.filter(user_profile=user_profile, status=CourseStatus.SELECT).update(status=CourseStatus.CANCEL)
             semester = Semester.objects.get(pk=grabber.semester_id)
-            db_updated = False
+
+            course_added = False
             for c in grabber.courses:
                 course = find_in_db(c)
                 if not course:
                     course = add_to_db(c, semester)
-                    db_updated = True
-                CourseStatus.objects.create(user_profile=user_profile,
-                  course=course, status=CourseStatus.SELECT)
-            if db_updated:
+                    course_added = True
+                course_status = CourseStatus.objects.get(user_profile=user_profile, course=course)
+                if course_status:
+                    course_status.status=CourseStatus.SELECT
+                    course_status.save()
+                else:
+                    CourseStatus.objects.create(user_profile=user_profile,
+                      course=course, status=CourseStatus.SELECT)
+            if course_added:
                 cache_name = 'semester_{0}_courses'.format(semester.pk)
                 cache.delete(cache_name)
+
             UserAction.objects.create(user=request.user, semester=semester, action_type=UserAction.COURSE_IMPORTED)
+
             return {'semester_id': grabber.semester_id}
         except LoginError as e:
             if e.error == 'auth':
