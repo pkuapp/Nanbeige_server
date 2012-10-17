@@ -296,7 +296,6 @@ def course_grab_start(request):
 
 @require_http_methods(['GET'])
 @auth_required
-@json_response
 def gen_ical(request):
     cal = Calendar()
     cal['version'] = '2.0' #
@@ -307,8 +306,6 @@ def gen_ical(request):
     event.add('dtend', datetime(2012, 10, 1, 11, 0, 0)) # end time/date
     event['uid'] = 'TESTTEST@Nanbeige' # must be unique, an algorithm is needed
     cal.add_component(event) # add the event to calendal
-    # Return test calendar, works
-    #return HttpResponse(cal.to_ical(), mimetype="text/calendar")
 
     user_profile = request.user.get_profile()
 
@@ -320,7 +317,8 @@ def gen_ical(request):
             semester = s
             break
 
-    return semester.id
+    # Return test calendar, works
+    return HttpResponse(cal.to_ical(), mimetype="text/calendar")
 '''
     course_statuses = (user_profile.coursestatus_set.all().
       select_related('course').prefetch_related('course__lesson_set'))
