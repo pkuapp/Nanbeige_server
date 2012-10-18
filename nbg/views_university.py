@@ -27,7 +27,6 @@ def detail(request, offset):
 
     schedule_unit = university.scheduleunit_set.all()
 
-    lessons_total = university.lessons_morning + university.lessons_afternoon + university.lessons_evening
     response = {
         'name': university.name,
         'support': {
