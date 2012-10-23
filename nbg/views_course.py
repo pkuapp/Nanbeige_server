@@ -2,9 +2,9 @@
 
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ValidationError
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from nbg.models import Course, Comment, Semester, UserAction, CourseStatus
-from nbg.helpers import listify_str, json_response, auth_required, find_in_db, add_to_db, float_nullable, unify_brackets
+from nbg.helpers import listify_str, listify_int, json_response, auth_required, find_in_db, add_to_db, float_nullable, unify_brackets
 from spider.grabbers.grabber_base import LoginError, GrabError
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -12,6 +12,7 @@ from icalendar import Calendar, Event
 import pytz
 import cPickle
 import bz2
+from uuid import uuid1
 
 @require_http_methods(['GET'])
 @auth_required
@@ -296,19 +297,10 @@ def course_grab_start(request):
 
 @require_http_methods(['GET'])
 @auth_required
-@json_response
 def gen_ical(request):
     cal = Calendar()
-    cal['version'] = '2.0' #
-    cal['prodid'] = '-//Prototype//Nanbeige//ZH' # *mandatory elements* where the prodid can be changed, see RFC xxxx(sry forgot) 
-    event = Event()
-    event.add('summary', 'Test Event') # title
-    event.add('dtstart', datetime(2012, 10, 1, 10, 0, 0)) # start time/date
-    event.add('dtend', datetime(2012, 10, 1, 11, 0, 0)) # end time/date
-    event['uid'] = 'TESTTEST@Nanbeige' # must be unique, an algorithm is needed
-    cal.add_component(event) # add the event to calendal
-    # Return test calendar, works
-    #return HttpResponse(cal.to_ical(), mimetype="text/calendar")
+    cal['version'] = '2.0'
+    cal['prodid'] = '-//Prototype//Nanbeige//ZH' # *mandatory elements* where the prodid can be changed, see RFC 5445
 
     user_profile = request.user.get_profile()
 
@@ -319,38 +311,28 @@ def gen_ical(request):
         if today > s.week_start and today < s.week_end:
             semester = s
             break
-
-    return semester.id
-'''
-    course_statuses = (user_profile.coursestatus_set.all().
-      select_related('course').prefetch_related('course__lesson_set'))
-    # courses = [{ # used as reference
-    #     'id': course_status.course_id,
-    #     'status': CourseStatus.STATUS_CHOICES_DICT[course_status.status],
-    #     'orig_id': course_status.course.original_id,
-    #     'name': unify_brackets(course_status.course.name),
-    #     'credit': float_nullable(course_status.course.credit),
-    #     'teacher': listify_str(course_status.course.teacher),
-    #     'ta': listify_str(course_status.course.ta),
-    #     'semester_id': course_status.course.semester_id,
-    #     'lessons': [{
-    #         'day': lesson.day,
-    #         'start': lesson.start,
-    #         'end': lesson.end,
-    #         'location': lesson.location,
-    #         'weekset_id': lesson.weekset_id,
-    #         'weeks': lesson.weeks,
-    #         'weeks_display': lesson.weeks_display,
-    #     } for lesson in course_status.course.lesson_set.all()]
-    # } for course_status in course_statuses]
+    course_statuses = (user_profile.coursestatus_set.filter(course__semester=semester))
+    university = user_profile.campus.university
     for course_status in course_statuses:
         for lesson in course_status.course.lesson_set.all():
-            event = Event()
-            event.add('summary', unify_brackets(course_status.course.name))
-            # Start time of the class
-            start = course_status.course.semester.university.scheduleunit_set.filter(number = lesson.start).get().start
-            return HttpResponse(start)
-            # test work ends here, notice that the event above is not added to ical'''
+            if lesson.weekset == None:
+                weekgroup = listify_int(lesson.weeks)
+            else:
+                weekgroup = listify_int(lesson.weekset.weeks)
+            for recur in weekgroup:
+                event = Event()
+                event.add('summary', unify_brackets(course_status.course.name))
+                offset = timedelta(days = lesson.day - 1 + 7 * (int(recur) - 1))
+                classdate = semester.week_start + offset
+                start = university.scheduleunit_set.get(number=lesson.start).start
+                end = university.scheduleunit_set.get(number=lesson.end).end
+                event.add('dtstart', datetime.combine(classdate, start))
+                event.add('dtend', datetime.combine(classdate, end))
+                event.add('location', lesson.location)
+                event.add('description', u'教师：' + course_status.course.teacher)
+                event['uid'] = str(uuid1()) + '@Nanbeige' # change after formal name...?
+                cal.add_component(event)
+    return HttpResponse(cal.to_ical(), mimetype="text/calendar")
 
 @require_http_methods(['GET'])
 @auth_required
