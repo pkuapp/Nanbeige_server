@@ -311,27 +311,26 @@ def gen_ical(request):
         if today > s.week_start and today < s.week_end:
             semester = s
             break
-
-    course_statuses = (user_profile.coursestatus_set.all().
-      select_related('course').prefetch_related('course__lesson_set').filter(course__semester=semester))
+    course_statuses = (user_profile.coursestatus_set.filter(course__semester=semester))
+    univ_id = user_profile.campus.university
     for course_status in course_statuses:
         for lesson in course_status.course.lesson_set.all():
-            if lesson.weeks == '':
-                weekgroup = listify_int(lesson.weekset.weeks)
-            else:
+            if lesson.weekset == None:
                 weekgroup = listify_int(lesson.weeks)
+            else:
+                weekgroup = listify_int(lesson.weekset.weeks)
             for recur in weekgroup:
                 event = Event()
                 event.add('summary', unify_brackets(course_status.course.name))
                 offset = timedelta(days = lesson.day - 1 + 7 * (int(recur) - 1))
                 classdate = semester.week_start + offset
-                start = course_status.course.semester.university.scheduleunit_set.filter(number = lesson.start).get().start
-                end = course_status.course.semester.university.scheduleunit_set.filter(number = lesson.end).get().end
+                start = univ_id.scheduleunit_set.get(number=lesson.start).start
+                end = univ_id.scheduleunit_set.get(number=lesson.end).end
                 event.add('dtstart', datetime.combine(classdate, start))
                 event.add('dtend', datetime.combine(classdate, end))
                 event.add('location', lesson.location)
                 event.add('description', u'教师：' + course_status.course.teacher)
-                event['uid'] = str(uuid1()) + '@Nanbeige'
+                event['uid'] = str(uuid1()) + '@Nanbeige' # change after formal name...?
                 cal.add_component(event)
     return HttpResponse(cal.to_ical(), mimetype="text/calendar")
 
