@@ -299,7 +299,7 @@ def course_grab_start(request):
 @auth_required
 def gen_ical(request):
     cal = Calendar()
-    cal['version'] = '2.0' #
+    cal['version'] = '2.0'
     cal['prodid'] = '-//Prototype//Nanbeige//ZH' # *mandatory elements* where the prodid can be changed, see RFC 5445
 
     user_profile = request.user.get_profile()
@@ -312,7 +312,7 @@ def gen_ical(request):
             semester = s
             break
     course_statuses = (user_profile.coursestatus_set.filter(course__semester=semester))
-    univ_id = user_profile.campus.university
+    university = user_profile.campus.university
     for course_status in course_statuses:
         for lesson in course_status.course.lesson_set.all():
             if lesson.weekset == None:
@@ -324,8 +324,8 @@ def gen_ical(request):
                 event.add('summary', unify_brackets(course_status.course.name))
                 offset = timedelta(days = lesson.day - 1 + 7 * (int(recur) - 1))
                 classdate = semester.week_start + offset
-                start = univ_id.scheduleunit_set.get(number=lesson.start).start
-                end = univ_id.scheduleunit_set.get(number=lesson.end).end
+                start = university.scheduleunit_set.get(number=lesson.start).start
+                end = university.scheduleunit_set.get(number=lesson.end).end
                 event.add('dtstart', datetime.combine(classdate, start))
                 event.add('dtend', datetime.combine(classdate, end))
                 event.add('location', lesson.location)
