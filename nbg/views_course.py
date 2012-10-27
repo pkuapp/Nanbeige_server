@@ -311,7 +311,7 @@ def gen_ical(request):
         if today > s.week_start and today < s.week_end:
             semester = s
             break
-    course_statuses = (user_profile.coursestatus_set.filter(course__semester=semester))
+    course_statuses = user_profile.coursestatus_set.filter(course__semester=semester).exclude(status=CourseStatus.CANCEL)
     university = user_profile.campus.university
     for course_status in course_statuses:
         for lesson in course_status.course.lesson_set.all():
