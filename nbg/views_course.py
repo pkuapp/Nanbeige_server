@@ -264,13 +264,14 @@ def course_grab_start(request):
                 if not course:
                     course = add_to_db(c, semester)
                     course_added = True
-                course_status = CourseStatus.objects.get(user_profile=user_profile, course=course)
-                if course_status:
-                    course_status.status=CourseStatus.SELECT
-                    course_status.save()
-                else:
+                try:
+                    course_status = CourseStatus.objects.get(user_profile=user_profile, course=course)
+                except CourseStatus.DoesNotExist:
                     CourseStatus.objects.create(user_profile=user_profile,
                       course=course, status=CourseStatus.SELECT)
+                else:
+                    course_status.status=CourseStatus.SELECT
+                    course_status.save()
             if course_added:
                 cache_name = 'semester_{0}_courses'.format(semester.pk)
                 cache.delete(cache_name)
